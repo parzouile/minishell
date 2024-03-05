@@ -6,7 +6,7 @@
 #    By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 12:13:44 by aschmitt          #+#    #+#              #
-#    Updated: 2024/03/05 13:19:29 by aschmitt         ###   ########.fr        #
+#    Updated: 2024/03/05 15:45:58 by aschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBJ_DIR			= obj/
 LIBFT			= libft/libft.a
 
 CC				= cc
-CFLAGS			= -lreadline -Wall -Wextra -Werror  -I $(INC)
+CFLAGS			= -Wall -Wextra -Werror -I $(INC) 
 RM				= rm -f
 
 SRC				=	$(SRC_DIR)main.c $(SRC_DIR)parsing.c
@@ -26,7 +26,8 @@ SRC				=	$(SRC_DIR)main.c $(SRC_DIR)parsing.c
 
 OBJ 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRC))
 
-G = "\033[32m"
+B = "\033[94m"
+G = "\033[95m"
 X = "\033[0m"
 
 all: 			$(NAME)
@@ -35,7 +36,7 @@ bonus:			$(NAME)
 
 $(NAME): 		$(OBJ) $(LIBFT) $(INC)
 				@echo $(G)Compiling [$(SRC)]$(X) 
-				@$(CC) -o $(NAME) $(OBJ) $(LIBFT)
+				@$(CC) -o $(NAME) $(OBJ) $(LIBFT) -lreadline
 				@echo $(G)Compiling [$(NAME)]$(X) 
 
 $(LIBFT)	:

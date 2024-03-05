@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/05 13:19:13 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:07:57 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 void	ft_exit() 
 {
+	clear_history();
 	exit(0);
 }
 
@@ -27,14 +28,13 @@ void	display_prompt(void)
 	{
 		s = readline("\033[32;1mUser\033[0m: ");
 		add_history(s);
-		ft_putstr_fd(s, 1);
-        ft_putstr_fd("\n", 1);
 		parsing(s);
 		free(s);
+		signal(2, ft_exit);
 	}
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
