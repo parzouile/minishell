@@ -6,7 +6,7 @@
 #    By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 12:13:44 by aschmitt          #+#    #+#              #
-#    Updated: 2024/02/18 17:13:56 by aschmitt         ###   ########.fr        #
+#    Updated: 2024/03/05 13:19:29 by aschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBJ_DIR			= obj/
 LIBFT			= libft/libft.a
 
 CC				= cc
-CFLAGS			= -Wall -Wextra -Werror -I $(INC)
+CFLAGS			= -lreadline -Wall -Wextra -Werror  -I $(INC)
 RM				= rm -f
 
 SRC				=	$(SRC_DIR)main.c $(SRC_DIR)parsing.c
