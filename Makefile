@@ -6,7 +6,7 @@
 #    By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 12:13:44 by aschmitt          #+#    #+#              #
-#    Updated: 2024/03/05 15:45:58 by aschmitt         ###   ########.fr        #
+#    Updated: 2024/03/12 11:24:03 by aschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ OBJ 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRC))
 B = "\033[94m"
 G = "\033[95m"
 X = "\033[0m"
+R = "\033[31m"
 
 all: 			$(NAME)
 
@@ -48,14 +49,14 @@ $(OBJ_DIR)%.o:	$(SRC_DIR)%.c
 				@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-				@echo $(G)delete [$(OBJ)]$(X) 
+				@echo $(R)delete [$(OBJ)]$(X) 
 				@$(RM) -r $(OBJ_DIR)
 				@make clean -s -C ./libft
 
 fclean: 		clean
-				@echo $(G)delete [$(NAME)]$(X)	
+				@echo $(R)delete [$(NAME)]$(X)	
 				@$(RM) $(NAME)
-				@echo $(G)delete [LIBFT]$(X)
+				@echo $(R)delete [LIBFT]$(X)
 				@make fclean -s -C ./libft
 
 re: 			fclean all
