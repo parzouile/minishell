@@ -6,18 +6,18 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:01:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/18 16:29:37 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/19 11:30:00 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *skip_space(char *s)
+char	*skip_space(char *s)
 {
-	int i;
-	int a;
-	int j;
-	char *str;
+	int		i;
+	int		a;
+	int		j;
+	char	*str;
 
 	i = 0;
 	while (s[i] && (s[i] == ' ' || (s[i] >= 7 && s[i] <= 13)))
