@@ -6,7 +6,7 @@
 #    By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 12:13:44 by aschmitt          #+#    #+#              #
-#    Updated: 2024/03/12 11:24:03 by aschmitt         ###   ########.fr        #
+#    Updated: 2024/03/18 15:06:25 by aschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBJ_DIR			= obj/
 LIBFT			= libft/libft.a
 
 CC				= cc
-CFLAGS			= -Wall -Wextra -Werror -I $(INC) 
+CFLAGS			= -Wall -Wextra -Werror -g3 -I $(INC) 
 RM				= rm -f
 
 SRC				=	$(SRC_DIR)main.c $(SRC_DIR)parsing.c
@@ -44,7 +44,7 @@ $(LIBFT)	:
 				@echo $(G)Compiling [LIBFT]$(X) 
 				@make -s -C ./libft
 
-$(OBJ_DIR)%.o:	$(SRC_DIR)%.c
+$(OBJ_DIR)%.o:	$(SRC_DIR)%.c $(INC)*.h Makefile
 				@mkdir -p $(@D)
 				@$(CC) $(CFLAGS) -c $< -o $@
 
