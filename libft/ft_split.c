@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 14:36:16 by aschmitt          #+#    #+#             */
-/*   Updated: 2023/11/14 17:39:28 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/19 14:46:39 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	**ft_split(char const *s, char c)
 
 	if (s == NULL)
 		return (NULL);
-	result = (char **) malloc(sizeof(char *) * (nb_word(s, c) + 1));
+	result = (char **)malloc(sizeof(char *) * (nb_word(s, c) + 1));
 	if (!result)
 		return (NULL);
 	result[0] = 0;
