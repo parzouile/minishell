@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:01:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/21 11:12:31 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:23:11 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,17 +130,23 @@ int	check_pipe(char *s)
 		}
 		i++;
 	}
+	if (s[i - 1] == '|')
+	{
+		printf("Error syntax error |\n");
+		return (1);
+	}
 	return (0);
 }
 
-void	before_pipe(char *s)
+void	before_pipe(char **s)
 {
 	char	**lst_pipe;
 	int		i;
 
-	if (check_pipe(s))
+	*s = skip_space(*s);
+	if (check_pipe(*s))
 		return ;
-	lst_pipe = ft_split(s, '|');
+	lst_pipe = ft_split(*s, '|');
 	i = -1;
 	while (lst_pipe[++i])
 	{
@@ -169,7 +175,7 @@ void	parsing(char **s)
 	while (lst[++i])
 	{
 		printf("%d before pipe\n", i);
-		before_pipe(lst[i]);
+		before_pipe(&lst[i]);
 		free(lst[i]);
 	}
 	free(lst);
