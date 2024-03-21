@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_sleep                                         :+:      :+:    :+:   */
+/*   test_sleep.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:56:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/21 11:01:57 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/21 14:04:45 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
+#include "minishell.h"
 
 
 char	**find_paths(char **envp)
@@ -91,7 +92,6 @@ void	command(char *cmd, char **envp)
 
 	args = ft_split(cmd, ' ');
 	bin = find_bin(args[0], envp);
-	printf("bin = %s\n", bin);
 	execve(bin, args, envp);
 }
 
@@ -101,7 +101,7 @@ void	test_sleep(char **envp)
 	pid = fork();
 	if (pid == 0)
 	{
-		command("sleep 5", envp);
+		command("sleep 10", envp);
 	}
 	wait(&pid);
 }

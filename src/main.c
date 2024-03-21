@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/21 10:57:53 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/21 14:26:08 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	ft_ctrls(int sig)
 	/*Ne rien faire lorsque Ctrl+\ est détecté*/
 }
 
+
 void	display_prompt(char **envp)
 {
 	char	*s;
@@ -59,5 +60,6 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	(void)envp;
+
 	display_prompt(envp);
 }
