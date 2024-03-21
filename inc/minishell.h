@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/19 11:26:03 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/21 10:53:46 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include "../libft/libft.h"
 
 void	parsing(char **s);
-void	display_prompt(void);
+void	display_prompt(char **envp);
 void	ft_exit(void);
 
 #endif
