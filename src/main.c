@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/22 10:03:34 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/22 13:00:28 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,16 @@ void	ft_exit(void)
 	exit(0);
 }
 
-void	ft_ctrlc(int sig)
+void	ft_error(char *s)
 {
-	(void)sig;
-	rl_replace_line("", 0);
-	printf("\n");
-	rl_on_new_line();
-	rl_redisplay();
+	perror(s);
+	exit(1);
 }
 
 void	ft_ctrls(int sig)
 {
 	(void)sig;
-	/*Ne rien faire lorsque Ctrl+\ est détecté*/
 }
-
 
 void	display_prompt(char **envp)
 {
@@ -60,6 +55,5 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	(void)envp;
-
 	display_prompt(envp);
 }

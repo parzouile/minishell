@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 09:54:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/22 11:28:18 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/22 13:04:30 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,12 @@ char	*find_bin(char *cmd, char **envp, char **args)
 	i = 0;
 	path = find_paths(envp, args);
 	if (!path)
-		{printf("test"), ft_error("Malloc");}
+		ft_error("Malloc");
 	while (path[i])
 	{
 		bin = ft_join(path[i], cmd);
 		if (!bin)
-            (free_tab(args), free_tab(path), ft_error("Malloc"));
+			(free_tab(args), free_tab(path), ft_error("Malloc"));
 		if (access(bin, F_OK) == 0)
 		{
 			free_tab(path);
@@ -87,27 +87,6 @@ char	*find_bin(char *cmd, char **envp, char **args)
 	free_tab(path);
 	ft_error("Command not found");
 	return (NULL);
-}
-
-void	processus(int new_pipe[2], int pipefd[2], char *cmd, char **envp)
-{
-	dup2(new_pipe[1], STDOUT_FILENO);
-	dup2(pipefd[0], STDIN_FILENO);
-	close(new_pipe[0]);
-	command(cmd, envp);
-	close(pipefd[0]);
-	close(new_pipe[1]);
-	ft_error("Execution");
-}
-
-void	free_tab(char **path)
-{
-	int	i;
-
-	i = -1;
-	while (path[++i])
-		free(path[i]);
-	free(path);
 }
 
 char	*ft_join(char *s1, char *s2)

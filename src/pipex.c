@@ -6,17 +6,13 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 09:32:29 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/22 11:54:16 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/22 13:02:30 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_error(char *s)
-{
-	perror(s);
-	exit(1);
-}
+pid_t	*g_lst_pid;
 
 pid_t	first_process(char *cmd, int pipefd[2], char **envp)
 {
@@ -88,35 +84,44 @@ pid_t	last_process(char *cmd, int pipefd[2], char **envp)
 	return (pid);
 }
 
-void	add_lst(pid_t pid, pid_t **lst)
+void	ft_ctrlc(int sig)
 {
 	int	i;
 
-	i = 0;
-	while (lst[i])
-		i++;
-	(*lst)[i] = pid;
+	(void)sig;
+	if (g_lst_pid)
+	{
+		i = -1;
+		while (g_lst_pid[++i] != 0)
+			kill(g_lst_pid[i], SIGTERM);
+		return ;
+	}
+	rl_replace_line("", 0);
+	printf("\n");
+	rl_on_new_line();
+	rl_redisplay();
 }
 
 void	ft_pipe(int argc, char **lst_pipe, char **envp)
 {
 	int	pipefd[2];
 	int	i;
-	pid_t *lst_pid;
 
 	i = -1;
-	lst_pid = (pid_t*)malloc(sizeof(pid_t) * (argc + 1));
+	g_lst_pid = (pid_t *)malloc(sizeof(pid_t) * (argc + 1));
+	if (!g_lst_pid)
+		ft_error("Malloc");
 	while (++i < argc - 1)
-		lst_pid[i] = 0;
+		g_lst_pid[i] = 0;
 	if (pipe(pipefd) == -1)
 		ft_error("Pipe");
 	i = 0;
-	lst_pid[i] = first_process(lst_pipe[0], pipefd, envp);
+	g_lst_pid[i] = first_process(lst_pipe[0], pipefd, envp);
 	while (++i < argc - 1)
-		lst_pid[i] = mid_process(pipefd, lst_pipe[i], envp);
-	lst_pid[i] = last_process(lst_pipe[i], pipefd, envp);
-	lst_pid[i + 1] = 0;
+		g_lst_pid[i] = mid_process(pipefd, lst_pipe[i], envp);
+	g_lst_pid[i] = last_process(lst_pipe[i], pipefd, envp);
+	g_lst_pid[i + 1] = 0;
 	i = -1;
-	while (lst_pid[++i])
-		wait(&lst_pid[i]);
+	while (g_lst_pid[++i])
+		wait(&g_lst_pid[i]);
 }
