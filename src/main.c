@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/21 14:26:08 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/22 10:03:34 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	display_prompt(char **envp)
 		if (!s)
 			(printf("\n"), ft_exit());
 		add_history(s);
-		parsing(&s);
+		parsing(&s, envp);
 		free(s);
 	}
 }

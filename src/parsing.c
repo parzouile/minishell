@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:01:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/21 14:04:17 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/22 11:23:49 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,25 +132,40 @@ int	check_pipe(char *s)
 	return (0);
 }
 
-void	before_pipe(char **s)
+void	before_command(char *cmd, char **envp)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		ft_error("Fork");
+	else if (pid == 0)
+		command(cmd, envp);
+	wait(&pid);
+}
+
+void	before_pipe(char **s, char **envp)
 {
 	char	**lst_pipe;
 	int		i;
 
-	*s = skip_space(*s);
 	if (check_pipe(*s))
 		return ;
 	lst_pipe = ft_split(*s, '|');
+	i = ft_lentab(lst_pipe);
+	if (i == 1)
+		before_command(lst_pipe[0], envp);
+	else
+		ft_pipe(i, lst_pipe, envp);
 	i = -1;
 	while (lst_pipe[++i])
 	{
-		lst_pipe[i] = skip_space(lst_pipe[i]);
 		free(lst_pipe[i]);
 	}
 	free(lst_pipe);
 }
 
-void	parsing(char **s)
+void	parsing(char **s, char **envp)
 {
 	char	**lst;
 	int		i;
@@ -167,10 +182,9 @@ void	parsing(char **s)
 	i = -1;
 	while (lst[++i])
 	{
-		printf("%d before pipe\n", i);
-		before_pipe(&lst[i]);
+		before_pipe(&lst[i], envp);
 		free(lst[i]);
 	}
 	free(lst);
-	printf("%s\n", *s);
+	//printf("%s\n", *s);
 }

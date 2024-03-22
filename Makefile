@@ -6,7 +6,7 @@
 #    By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 12:13:44 by aschmitt          #+#    #+#              #
-#    Updated: 2024/03/21 14:03:02 by aschmitt         ###   ########.fr        #
+#    Updated: 2024/03/22 10:43:01 by aschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CC				= cc
 CFLAGS			= -Wall -Wextra -Werror -g3 -I $(INC) 
 RM				= rm -f
 
-SRC				=	$(SRC_DIR)main.c $(SRC_DIR)parsing.c $(SRC_DIR)test_sleep.c
+SRC				= $(SRC_DIR)main.c $(SRC_DIR)parsing.c $(SRC_DIR)pipex.c $(SRC_DIR)command.c $(SRC_DIR)aux.c
 
 
 OBJ 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRC))
