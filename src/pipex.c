@@ -6,13 +6,13 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 09:32:29 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/22 13:02:30 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/23 11:32:14 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-pid_t	*g_lst_pid;
+pid_t	g_lst_pid[100];
 
 pid_t	first_process(char *cmd, int pipefd[2], char **envp)
 {
@@ -89,13 +89,15 @@ void	ft_ctrlc(int sig)
 	int	i;
 
 	(void)sig;
-	if (g_lst_pid)
+	i = -1;
+	while (g_lst_pid[++i] != 0)
 	{
-		i = -1;
-		while (g_lst_pid[++i] != 0)
-			kill(g_lst_pid[i], SIGTERM);
-		return ;
+		printf("kill = %d\n", i);
+		kill(g_lst_pid[i], SIGTERM);
+		g_lst_pid[i] = 0;
 	}
+	if (i != 0)
+		return ;
 	rl_replace_line("", 0);
 	printf("\n");
 	rl_on_new_line();
@@ -106,11 +108,9 @@ void	ft_pipe(int argc, char **lst_pipe, char **envp)
 {
 	int	pipefd[2];
 	int	i;
+	int j;
 
 	i = -1;
-	g_lst_pid = (pid_t *)malloc(sizeof(pid_t) * (argc + 1));
-	if (!g_lst_pid)
-		ft_error("Malloc");
 	while (++i < argc - 1)
 		g_lst_pid[i] = 0;
 	if (pipe(pipefd) == -1)
@@ -124,4 +124,7 @@ void	ft_pipe(int argc, char **lst_pipe, char **envp)
 	i = -1;
 	while (g_lst_pid[++i])
 		wait(&g_lst_pid[i]);
+	j = -1;
+	while (++j < i)
+		g_lst_pid[j] = 0;
 }

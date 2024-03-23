@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/22 13:00:28 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/23 10:59:55 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	display_prompt(char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
-	(void)ac;
 	(void)av;
-	(void)envp;
+	if (ac != 1)
+		return (write(1, "Error args\n", 11));
 	display_prompt(envp);
 }
