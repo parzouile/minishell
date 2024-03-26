@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:01:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 13:28:42 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/26 14:21:14 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,21 @@ int	verif_line(char *s)
 
 int	check_pipe(char *s)
 {
-	int	i;
+	int		i;
+	char	c;
 
 	i = 1;
 	while (s[i - 1] && s[i])
 	{
+		if (s[i] == '\'' || s[i] == '\"')
+		{
+			c = s[i];
+			i++;
+			while (s[i] && s[i] != c)
+				i++;
+			if (!s[i])
+				return (0);
+		}
 		if (s[i - 1] == '|' && s[i] == '|')
 			return (printf("Error syntax error |\n"), 1);
 		i++;
@@ -91,11 +101,6 @@ void	before_pipe(char **s, char **envp)
 	if (check_pipe(*s))
 		return ;
 	lst_pipe = ft_split(*s, '|');
-	// i = -1;
-	// while (lst_pipe[++i])
-	// {
-	// 	printf("split | == %s\n", lst_pipe[i]);
-	// }
 	i = ft_lentab(lst_pipe);
 	if (i == 1)
 	{

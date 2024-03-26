@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 09:32:29 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/23 11:32:14 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/26 14:20:44 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	ft_pipe(int argc, char **lst_pipe, char **envp)
 {
 	int	pipefd[2];
 	int	i;
-	int j;
+	int	j;
 
 	i = -1;
 	while (++i < argc - 1)

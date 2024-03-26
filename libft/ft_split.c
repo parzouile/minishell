@@ -6,12 +6,13 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 14:36:16 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 13:26:24 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/26 14:13:10 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "libft.h"
 
 static char	*ft_line(char const *str, int a, int i)
 {
@@ -32,10 +33,9 @@ static char	*ft_line(char const *str, int a, int i)
 
 static int	nb_word(char const *s, char c)
 {
-	int		i;
-	int		a;
-	int		nb;
-	char	g;
+	int	i;
+	int	a;
+	int	nb;
 
 	nb = 0;
 	i = -1;
@@ -43,16 +43,7 @@ static int	nb_word(char const *s, char c)
 	{
 		a = i;
 		while (s[i] && s[i] != c)
-		{
-			i++;
-			if (s[i - 1] == '\'' || s[i - 1] == '\"')
-			{
-				g = s[i - 1];
-				while (s[i] && s[i] != g)
-					i++;
-				i++;
-			}
-		}
+			i = next_quote(s, i);
 		if (a != i)
 			nb ++;
 		if (!s[i])
@@ -74,10 +65,9 @@ static char	**ft_free(char **result, int n)
 
 static char	**ft_tab(char **result, char const *s, char c)
 {
-	int		i;
-	int		a;
-	int		i_tab;
-	char	g;
+	int	i;
+	int	a;
+	int	i_tab;
 
 	i_tab = 0;
 	i = -1;
@@ -85,16 +75,7 @@ static char	**ft_tab(char **result, char const *s, char c)
 	{
 		a = i;
 		while (s[i] && s[i] != c)
-		{
-			i++;
-			if (s[i - 1] == '\'' || s[i - 1] == '\"')
-			{
-				g = s[i - 1];
-				while (s[i] && s[i] != g)
-					i++;
-				i++;
-			}
-		}
+			i = next_quote(s, i);
 		if (i != a)
 		{
 			result[i_tab++] = ft_line(s, a, i);

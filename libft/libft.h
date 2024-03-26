@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 23:01:31 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/02/16 13:21:50 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/26 14:04:26 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ size_t	ft_strlen(const char *s);
 int		check_nl(char *stack);
 char	*add_to_stack(char *stack, char *buff);
 char	*ft_new_stack(char *buff);
+int		next_quote(const char *s, int i);
 
 #endif
