@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/23 10:59:55 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/26 10:48:00 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	display_prompt(char **envp)
 	{
 		s = readline("\033[32;1m$ User ->\033[0m ");
 		if (!s)
-			(printf("\n"), ft_exit());
+			ft_exit();
 		add_history(s);
 		parsing(&s, envp);
 		free(s);

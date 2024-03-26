@@ -6,7 +6,7 @@
 #    By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 12:13:44 by aschmitt          #+#    #+#              #
-#    Updated: 2024/03/22 10:43:01 by aschmitt         ###   ########.fr        #
+#    Updated: 2024/03/26 13:25:52 by aschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ INC				= inc/
 SRC_DIR			= src/
 OBJ_DIR			= obj/
 LIBFT			= libft/libft.a
+LIB				= libft/
 
 CC				= cc
 CFLAGS			= -Wall -Wextra -Werror -g3 -I $(INC) 
@@ -44,9 +45,10 @@ $(LIBFT)	:
 				@echo $(G)Compiling [LIBFT]$(X) 
 				@make -s -C ./libft
 
-$(OBJ_DIR)%.o:	$(SRC_DIR)%.c $(INC)*.h Makefile
+$(OBJ_DIR)%.o:	$(SRC_DIR)%.c $(INC)*.h $(LIB)*.h $(LIB)*.c Makefile
 				@mkdir -p $(@D)
 				@$(CC) $(CFLAGS) -c $< -o $@
+				@make -s -C ./libft
 
 clean:
 				@echo $(R)delete [$(OBJ)]$(X) 
@@ -54,7 +56,7 @@ clean:
 				@make clean -s -C ./libft
 
 fclean: 		clean
-				@echo $(R)delete [$(NAME)]$(X)	
+				@echo $(R)delete [$(NAME)]$(X)
 				@$(RM) $(NAME)
 				@echo $(R)delete [LIBFT]$(X)
 				@make fclean -s -C ./libft

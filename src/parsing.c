@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:01:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/22 12:59:27 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/26 13:28:42 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,11 @@ void	before_pipe(char **s, char **envp)
 	if (check_pipe(*s))
 		return ;
 	lst_pipe = ft_split(*s, '|');
+	// i = -1;
+	// while (lst_pipe[++i])
+	// {
+	// 	printf("split | == %s\n", lst_pipe[i]);
+	// }
 	i = ft_lentab(lst_pipe);
 	if (i == 1)
 	{
