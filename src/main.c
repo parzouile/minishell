@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 10:48:00 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/26 15:38:48 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	display_prompt(char **envp)
 	(void)envp;
 	s = NULL;
 	using_history();
-	signal(2, ft_ctrlc);
+	signal(SIGINT, ft_ctrlc);
 	signal(SIGQUIT, ft_ctrls);
 	while (1)
 	{
