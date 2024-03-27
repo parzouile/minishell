@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:01:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/27 12:47:30 by jules            ###   ########.fr       */
+/*   Updated: 2024/03/27 16:12:57 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int	verif_line(char *s)
 			if (!s[i])
 				return (0);
 		}
+		if (p < 0)
+			return (0);
 	}
 	return (p == 0);
 }
@@ -124,19 +126,19 @@ void	parsing(char **s, char **envp)
 	char	**lst;
 	int		i;
 
-	*s = skip_space(*s); //ft_strtrim ?
+	*s = skip_space(*s);
 	if (!*s || ft_strncmp("exit", *s, 5) == 0)
 		ft_exit();
 	if (verif_line(*s) == 0)
 	{
-		printf("Error missing \" or \' or )\n"); // techniquement ()) cause le même message alors qu'il manque un (
+		write(2, "Error missing \" or \' or ( or ) )\n", 33);
 		return ;
 	}
-	lst = ft_split(*s, ';'); // il est dit dans le sujet : "Not interpret unclosed quotes or special characters which are not required by the subject such as \ (backslash) or ; (semicolon)."
+	lst = ft_split(*s, ';');
 	i = -1;
 	while (lst[++i])
 	{
-		before_pipe(&lst[i], envp); // j'imagine que c'est la partie pipex qui intervient à cet endroit là
+		before_pipe(&lst[i], envp);
 		free(lst[i]);
 	}
 	free(lst);
