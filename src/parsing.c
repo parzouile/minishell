@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:01:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 14:21:14 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/27 12:47:30 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@ void	before_pipe(char **s, char **envp)
 	{
 		pid = fork();
 		if (pid == -1)
-			ft_error("Fork");
-		else if (pid == 0)
+			ft_error("Fork"); // ça pose pas des problèmes de partir sans rien fermer à cet endroit là ?
+		else if (pid == 0) // pid == 0 c'est qu'on est dans l'enfant ?
 			command(lst_pipe[0], envp);
 		wait(&pid);
 	}
@@ -124,19 +124,19 @@ void	parsing(char **s, char **envp)
 	char	**lst;
 	int		i;
 
-	*s = skip_space(*s);
+	*s = skip_space(*s); //ft_strtrim ?
 	if (!*s || ft_strncmp("exit", *s, 5) == 0)
 		ft_exit();
 	if (verif_line(*s) == 0)
 	{
-		printf("Error missing \" or \' or )\n");
+		printf("Error missing \" or \' or )\n"); // techniquement ()) cause le même message alors qu'il manque un (
 		return ;
 	}
-	lst = ft_split(*s, ';');
+	lst = ft_split(*s, ';'); // il est dit dans le sujet : "Not interpret unclosed quotes or special characters which are not required by the subject such as \ (backslash) or ; (semicolon)."
 	i = -1;
 	while (lst[++i])
 	{
-		before_pipe(&lst[i], envp);
+		before_pipe(&lst[i], envp); // j'imagine que c'est la partie pipex qui intervient à cet endroit là
 		free(lst[i]);
 	}
 	free(lst);

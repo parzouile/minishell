@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 15:38:48 by jules            ###   ########.fr       */
+/*   Updated: 2024/03/27 12:56:51 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	main(int ac, char **av, char **envp)
 {
 	(void)av;
 	if (ac != 1)
-		return (write(1, "Error args\n", 11));
+		return (write(1, "Error args\n", 11)); //fd = 2 (ERROR)
 	display_prompt(envp);
 }
+// y'a des memmory leaks mais j'ai pas réussi a trouver d'où ils viennent
+// Je ne peux pas compiler avec -fsanitize=address; a voir si y'a pas un problème avec le Makefile
