@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 23:17:32 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/02/16 12:54:52 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/28 12:57:04 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*find_line(char *stack, char *buff, int fd)
 	return (stack);
 }
 
-char	*ft_line(char *stack)
+char	*ft_lines(char *stack)
 {
 	int		size;
 	int		i;
@@ -116,7 +116,7 @@ char	*get_next_line(int fd)
 	stack = find_line(stack, buff, fd);
 	if (!stack)
 		return (NULL);
-	line = ft_line(stack);
+	line = ft_lines(stack);
 	stack = ft_restack(stack);
 	return (line);
 }

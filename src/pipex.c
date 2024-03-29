@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 09:32:29 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 14:20:44 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/28 13:58:23 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ pid_t	first_process(char *cmd, int pipefd[2], char **envp)
 {
 	int		fd;
 	pid_t	pid;
+	t_list_file	lst;
 
+	chekc_file(cmd, &lst);
 	fd = 0;
 	pid = fork();
 	if (pid == -1)
@@ -42,7 +44,9 @@ pid_t	mid_process(int pipefd[2], char *cmd, char **envp)
 {
 	pid_t	pid;
 	int		new_pipe[2];
+	t_list_file	lst;
 
+	chekc_file(cmd, &lst);
 	close(pipefd[1]);
 	if (pipe(new_pipe) == -1)
 		(close(pipefd[0]), ft_error("Pipe"));
@@ -65,7 +69,9 @@ pid_t	last_process(char *cmd, int pipefd[2], char **envp)
 {
 	pid_t	pid;
 	int		fd;
+	t_list_file	lst;
 
+	chekc_file(cmd, &lst);
 	close(pipefd[1]);
 	fd = 1;
 	if (fd == -1)

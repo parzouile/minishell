@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 14:36:16 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 14:13:10 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/28 12:50:31 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include "libft.h"
 
-static char	*ft_line(char const *str, int a, int i)
+char	*ft_line(char const *str, int a, int i)
 {
 	char	*line;
 	int		j;

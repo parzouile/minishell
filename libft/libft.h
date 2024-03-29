@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 23:01:31 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 14:04:26 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/28 12:50:43 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_list
 	struct s_list	*next;
 }					t_list;
 
+char	*ft_line(char const *str, int a, int i);
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);

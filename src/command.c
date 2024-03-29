@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 09:54:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 13:33:29 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/28 14:06:31 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,74 @@ char	*ft_join(char *s1, char *s2)
 	return (result);
 }
 
+char	*recover_filename(char *cmd, int i)
+{
+	int	a;
+
+	while (cmd[i] == ' ')
+		i++;
+	a = i;
+	if (cmd[a] == '>' || cmd[a] == '<')
+	{
+		write (2, "minishell : syntax error\n", 26);
+		return (NULL);
+	}
+	while (cmd[a])
+	{
+		if (cmd[a] == ' ' || cmd[a] == '>' || cmd[a] == '<')
+			break;
+		a = next_quote(cmd, a);
+	}
+	return (ft_line(cmd, i, a));
+}
+
+void	chekc_file(char	*cmd, t_list_file *lst)
+{
+	int		i;
+	char	*s;
+
+	(void)lst;
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '>' && cmd[i + 1] == '>')
+		{
+			i += 2;
+			s = recover_filename(cmd, i);
+			printf(">>file = %s\n", s);
+		}
+		else if (cmd[i] == '>')
+		{
+			i += 1;
+			s = recover_filename(cmd, i);
+			printf(">file = %s\n", s);
+		}
+		else if (cmd[i] == '<' && cmd[i + 1] == '<')
+		{
+			printf("%d\n",i);
+			i += 2;
+			
+			s = recover_filename(cmd, i);
+			printf("<<file = %s\n", s);
+		}
+		else if (cmd[i] == '<')
+		{
+			i += 1;
+			s = recover_filename(cmd, i);
+			printf("<file = %s\n", s);
+		}
+		
+		i++;
+	}
+}
+
 void	command(char *cmd, char **envp)
 {
 	char	**args;
 	char	*bin;
+	t_list_file	lst;
 
+	chekc_file(cmd, &lst);
 	args = ft_split(cmd, ' ');
 	if (!args)
 		ft_error("Malloc");

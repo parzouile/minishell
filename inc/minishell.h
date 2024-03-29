@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 10:17:05 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/03/28 13:54:13 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,25 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 
+typedef struct s_file
+{
+	char	*file;
+	int		type;
+}					t_file;
+/*
+type :
+	1 : >
+	2 : >>
+	3 : <
+	4 : <<
+*/
+
+typedef struct s_list_file
+{
+	t_file	*infile;
+	t_file	*outfile;
+}					t_list_file;
+
 void	parsing(char **s, char **envp);
 void	display_prompt(char **envp);
 void	ft_exit(void);
@@ -40,5 +59,6 @@ char	*ft_join(char *s1, char *s2);
 void	ft_ctrlc(int sig);
 void	free_tab(char **path);
 void	processus(int new_pipe[2], int pipefd[2], char *cmd, char **envp);
+void	chekc_file(char	*cmd, t_list_file *lst);
 
 #endif
