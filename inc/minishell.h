@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/27 15:09:35 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:29:21 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "../libft/libft.h"
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+
+# include "libft.h"
+# include "structures.h"
 
 void	parsing(char **s, char **envp);
 void	display_prompt(char **envp);

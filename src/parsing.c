@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:01:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/27 16:12:57 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:37:05 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ void	before_pipe(char **s, char **envp)
 	{
 		pid = fork();
 		if (pid == -1)
-			ft_error("Fork"); // ça pose pas des problèmes de partir sans rien fermer à cet endroit là ?
-		else if (pid == 0) // pid == 0 c'est qu'on est dans l'enfant ?
+			ft_error("Fork");
+		else if (pid == 0)
 			command(lst_pipe[0], envp);
 		wait(&pid);
 	}

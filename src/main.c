@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/27 15:10:09 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:46:07 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,22 @@ void	display_prompt(char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
+	t_minishell	mini;
+	int			exit_status;
+
 	(void)av;
 	if (ac != 1)
-		return (write(2, "Error args\n", 11));
-	display_prompt(envp);
+	{
+		write(2, "Error args\n", 11);
+		return (EXIT_FAILURE);
+	}
+	mini = create_minishell(envp);
+	if (!mini)
+	{
+		write(2, "Error during setup\n", 19);
+		return (EXIT_FAILURE);
+	}
+	exit_status = run_minishell(mini);
+	free_minishell(mini);
+	return (exit_status);
 }
