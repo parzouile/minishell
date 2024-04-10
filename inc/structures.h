@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:40:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/08 16:45:09 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/10 04:22:32 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 typedef enum e_type
 {
-	cmd;
-	arg;
+	cmd,
+	arg
 }	t_type;
 
 typedef struct s_token	*t_token;

@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/08 16:46:07 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/10 05:13:13 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	if (ac != 1)
 	{
-		write(2, "Error args\n", 11);
+		(void) write(2, "Error args\n", 11);
 		return (EXIT_FAILURE);
 	}
 	mini = create_minishell(envp);
 	if (!mini)
 	{
-		write(2, "Error during setup\n", 19);
+		(void) write(2, "Error during setup\n", 19);
 		return (EXIT_FAILURE);
 	}
 	exit_status = run_minishell(mini);
