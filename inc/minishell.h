@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/28 13:54:13 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/12 12:31:57 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,35 @@ void	ft_ctrlc(int sig);
 void	free_tab(char **path);
 void	processus(int new_pipe[2], int pipefd[2], char *cmd, char **envp);
 void	chekc_file(char	*cmd, t_list_file *lst);
+
+typedef enum e_type
+{
+	cmd,
+	arg
+}	t_type;
+
+typedef struct s_token	*t_token;
+typedef struct s_env	*t_env;
+
+struct s_token
+{
+	char	*str;
+	int		type;
+	t_token	prev;
+	t_token	next;
+};
+
+struct s_env
+{
+	char	*value;
+	t_env	next;
+};
+
+typedef struct s_minishell
+{
+	t_token	cmd_line;
+	t_env	env;
+}	*t_minishell;
+
 
 #endif
