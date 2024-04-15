@@ -4,6 +4,7 @@ SRCS = aux.c \
 		main.c \
 		parsing.c \
 		pipex.c \
+		startexe.c \
 		$(PARSING) \
 		$(SETUP)
 

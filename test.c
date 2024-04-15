@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 12:36:35 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/12 12:54:06 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:13:23 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,14 @@
 
 int main(int ac, char **av, char **envp)
 {
-    (void)ac;
-    (void)av;
-    char *s = "/bin/ls";
-    char *args[4];
-    args[0] = s;
-    args[1] = "-l";
-    args[2] = NULL;
-    
-    execve(s, args, envp);
+    int   fd;
+    if (av[1])
+        fd = open(av[1],  O_RDONLY, 0644);
+    if (fd)
+    {
+        close(fd);
+        printf("erere");
+    }
+        
+    return 0;
 }

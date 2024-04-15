@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/10 05:13:13 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/15 10:19:12 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	main(int ac, char **av, char **envp)
 		(void) write(2, "Error during setup\n", 19);
 		return (EXIT_FAILURE);
 	}
-	exit_status = run_minishell(mini);
+	exit_status = run_minishell(mini, envp);
 	free_minishell(mini);
 	return (exit_status);
 }
