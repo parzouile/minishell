@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 10:48:00 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/10 05:13:13 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	display_prompt(char **envp)
 	(void)envp;
 	s = NULL;
 	using_history();
-	signal(2, ft_ctrlc);
+	signal(SIGINT, ft_ctrlc);
 	signal(SIGQUIT, ft_ctrls);
 	while (1)
 	{
@@ -52,8 +52,22 @@ void	display_prompt(char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
+	t_minishell	mini;
+	int			exit_status;
+
 	(void)av;
 	if (ac != 1)
-		return (write(1, "Error args\n", 11));
-	display_prompt(envp);
+	{
+		(void) write(2, "Error args\n", 11);
+		return (EXIT_FAILURE);
+	}
+	mini = create_minishell(envp);
+	if (!mini)
+	{
+		(void) write(2, "Error during setup\n", 19);
+		return (EXIT_FAILURE);
+	}
+	exit_status = run_minishell(mini);
+	free_minishell(mini);
+	return (exit_status);
 }

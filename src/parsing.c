@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:01:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 14:21:14 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:37:05 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int	verif_line(char *s)
 			if (!s[i])
 				return (0);
 		}
+		if (p < 0)
+			return (0);
 	}
 	return (p == 0);
 }
@@ -129,7 +131,7 @@ void	parsing(char **s, char **envp)
 		ft_exit();
 	if (verif_line(*s) == 0)
 	{
-		printf("Error missing \" or \' or )\n");
+		write(2, "Error missing \" or \' or ( or ) )\n", 33);
 		return ;
 	}
 	lst = ft_split(*s, ';');

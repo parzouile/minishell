@@ -1,66 +1,71 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/16 12:13:44 by aschmitt          #+#    #+#              #
-#    Updated: 2024/03/26 13:25:52 by aschmitt         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME				=	minishell
 
-NAME			= minishell
+include config/srcs.mk
+SRC_PATH			=	src/
+DIR_BUILD			=	.build/
+OBJS				=	$(patsubst %.c, $(DIR_BUILD)%.o, $(SRCS))
+OBJS_TEST			=	$(patsubst %.c, $(DIR_BUILD)%.o, $(TEST))
+DEPS				=	$(patsubst %.c, $(DIR_BUILD)%.d, $(SRCS))
+DEPS_FLAGS			=	-MMD -MP
+BASE_CFLAGS			=	-Wall -Werror -Wextra -pipe
+BASE_DEBUG_CFLAGS	=	-g3
+DEBUG_CLFAGS		=	$(BASE_DEBUG_CFLAGS) -fsanitize=address
+# DEBUG_CLFAGS		=	$(BASE_DEBUG_CFLAGS) -fsanitize=memory -fsanitize-memory-track-origins
+FLAGS				=	$(BASE_CFLAGS)
+RM					=	rm -rf
+AR					=	ar rcs
+CC					=	cc
 
-INC				= inc/
-SRC_DIR			= src/
-OBJ_DIR			= obj/
-LIBFT			= libft/libft.a
-LIB				= libft/
+LIBFT_PATH		=	libft/
+LIBFT_INCLUDES	=	$(LIBFT_PATH)
+LIBFT_A			=	$(LIBFT_PATH)libft.a
+LIBFT_L 		=	$(LIBFT_A)
+MAKE_LIBFT		=	$(MAKE) -C $(LIBFT_PATH)
 
-CC				= cc
-CFLAGS			= -Wall -Wextra -Werror -g3 -I $(INC) 
-RM				= rm -f
+DIR_INCS =\
+	inc/			\
+	$(LIBFT_INCLUDES)
 
-SRC				= $(SRC_DIR)main.c $(SRC_DIR)parsing.c $(SRC_DIR)pipex.c $(SRC_DIR)command.c $(SRC_DIR)aux.c
+INCLUDES =\
+	$(addprefix -I , $(DIR_INCS))
 
+LIBS = \
+		-lreadline \
+		$(LIBFT_L)
 
-OBJ 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRC))
+DEPENDENCIES =\
+	$(LIBFT_A)
 
-B = "\033[94m"
-G = "\033[95m"
-X = "\033[0m"
-R = "\033[31m"
+.PHONY:		all
+all:
+			$(MAKE_LIBFT)
+			$(MAKE) $(NAME)
 
-all: 			$(NAME)
+test:	$(OBJS_TEST)
+	$(CC) $(FLAGS) $(INCLUDES) $(OBJS_TEST) $(LIBS) -o $(NAME)
 
-bonus:			$(NAME)
+$(NAME):	$(OBJS)
+	$(CC) $(FLAGS) $(INCLUDES) $(OBJS) $(LIBS) -o $(NAME)
 
-$(NAME): 		$(OBJ) $(LIBFT) $(INC)
-				@echo $(G)Compiling [$(SRC)]$(X) 
-				@$(CC) -o $(NAME) $(OBJ) $(LIBFT) -lreadline
-				@echo $(G)Compiling [$(NAME)]$(X) 
-
-$(LIBFT)	:
-				@echo $(G)Compiling [LIBFT]$(X) 
-				@make -s -C ./libft
-
-$(OBJ_DIR)%.o:	$(SRC_DIR)%.c $(INC)*.h $(LIB)*.h $(LIB)*.c Makefile
-				@mkdir -p $(@D)
-				@$(CC) $(CFLAGS) -c $< -o $@
-				@make -s -C ./libft
-
+.PHONY:	clean
 clean:
-				@echo $(R)delete [$(OBJ)]$(X) 
-				@$(RM) -r $(OBJ_DIR)
-				@make clean -s -C ./libft
+			$(MAKE_LIBFT) clean
+			$(RM) $(DIR_BUILD)
 
-fclean: 		clean
-				@echo $(R)delete [$(NAME)]$(X)
-				@$(RM) $(NAME)
-				@echo $(R)delete [LIBFT]$(X)
-				@make fclean -s -C ./libft
+.PHONY:	fclean
+fclean:	clean
+			$(MAKE_LIBFT) fclean
+			$(RM) $(NAME)
 
-re: 			fclean all
+.PHONY:	debug
+debug:
+			$(MAKE) -j FLAGS="$(DEBUG_CLFAGS)"
 
-.PHONY: 		all clean fclean re
+.PHONY:	re
+re:		fclean
+			$(MAKE) all
+
+-include $(DEPS)
+$(DIR_BUILD)%.o : $(SRC_PATH)%.c Makefile
+			@mkdir -p $(shell dirname $@)
+			$(CC) $(FLAGS) $(DEPS_FLAGS) $(INCLUDES) -c $< -o $@
