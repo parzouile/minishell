@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:40:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/15 13:26:02 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/16 09:50:48 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 # define ARG 2
 # define INFILE 3
 # define INFILE_HEREDOC 4
-# define 
-# define 
-# define 
+# define OUTFILE 5
+# define OUTFILE_APPEND 6
+# define PIPE 7
 
 typedef struct s_token	*t_token;
 typedef struct s_env	*t_env;
@@ -43,5 +43,7 @@ typedef struct s_minishell
 	t_token	cmd_line;
 	t_env	env;
 }	*t_minishell;
+
+char	**tenv_to_arr(t_env	env);
 
 #endif

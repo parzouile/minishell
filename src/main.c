@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/10 05:13:13 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/16 09:51:08 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,44 @@ void	display_prompt(char **envp)
 		free(s);
 	}
 }
+/*
+int	main(int ac, char **av, char **envp)
+{
+	t_minishell	mini;
+	int			exit_status;
+
+	(void)av;
+	if (ac != 1)
+	{
+		(void) write(2, "Error args\n", 11);
+		return (EXIT_FAILURE);
+	}
+	mini = create_minishell(envp);
+	if (!mini)
+	{
+		(void) write(2, "Error during setup\n", 19);
+		return (EXIT_FAILURE);
+	}
+	exit_status = run_minishell(mini);
+	free_minishell(mini);
+	return (exit_status);
+}
+*/
+void	print_env1(t_env env)
+{
+	if (!env)
+		return ;
+	printf("%s\n", env->value);
+	print_env1(env->next);
+}
+
+void	print_env2(t_env env)
+{
+	char **envp = tenv_to_arr(env);
+	for (int i = 0; envp[i]; i++)
+		printf("%s\n", envp[i]);
+	free(envp);
+}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -67,6 +105,9 @@ int	main(int ac, char **av, char **envp)
 		(void) write(2, "Error during setup\n", 19);
 		return (EXIT_FAILURE);
 	}
+	print_env1(mini->env);
+	printf("\n");
+	print_env2(mini->env);
 	exit_status = run_minishell(mini);
 	free_minishell(mini);
 	return (exit_status);
