@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 09:38:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/15 11:05:19 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/16 12:22:54 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int			setup_env(t_env *env, char **envp);
 void		free_env(t_env env);
 t_minishell	create_minishell(char **envp);
 void		free_minishell(t_minishell mini);
-int			run_minishell(t_minishell mini,char **envp);
+int			run_minishell(t_minishell mini);
 
 //the rest for now
 void		parsing(char **s, char **envp);
@@ -49,6 +49,7 @@ char		*ft_join(char *s1, char *s2);
 void		ft_ctrlc(int sig);
 void		free_tab(char **path);
 void		processus(int new_pipe[2], int pipefd[2], char *cmd, char **envp);
-void		start_exe(t_minishell mini, char **envp);
+void		start_exe(t_minishell mini);
+char		**tenv_to_arr(t_env	env);
 
 #endif

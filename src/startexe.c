@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 12:30:31 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/15 15:26:12 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/16 15:05:49 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,36 +38,50 @@
 // 		g_lst_pid[j] = 0;
 // }
 
-char	**take_args(t_token line)
+int	nb_args(t_token line)
+{
+	int	i;
+
+	i = 0;
+	while ((line->type == 2  || line->type == 1))
+	{
+		i++;
+		if (line->next == NULL)
+			break;
+		line = line->next;
+
+	}
+	return (i);
+}
+
+char	**take_args(t_token *line)
 {
 	char	**result;
 	int		i;
 	int		j;
 
-	i = 1;
-	while (line->next->type == 2)
-	{
-		i++;
-		line = line->next;
-	}
+	i = nb_args(*line);
 	result = (char **)malloc((i + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
-	result[i--] = NULL;
-	while (i >= 0)
+	j = -1;
+	while (++j < i)
 	{
-		result[i--] = line->str;
-		line->prev;
+		result[j] = (*line)->str;
+		(*line) = (*line)->next;
 	}
-	while (line->type == 2)
-		line = line->next;
+	result[i] = NULL;
 	return (result);
 }
 
-void	commande(t_command cmd, int pipefd[2])
+int	commande(t_command cmd, int pipefd[2], char **envp)
 {
 	pid_t	pid;
+	int	new_pipe[2];
 
+	close(pipefd[1]);
+	if (pipe(new_pipe) == -1)
+		return (close(pipefd[0]), 1);
 	pid = fork();
 	if (pid == -1)
 	{
@@ -76,67 +90,104 @@ void	commande(t_command cmd, int pipefd[2])
 		if (cmd.outfile != -2)
 			close(cmd.outfile);
 		close(pipefd[0]);
-		close(pipefd[1]);
-		return ;
+		close(new_pipe[0]);
+		close(new_pipe[1]);
+		return (1);
 	}
 	else if (pid == 0)
 	{
-		// dup2(pipefd[1], STDOUT_FILENO);
-		// dup2(fd, STDIN_FILENO);
+		if (cmd.infile != -2)
+			dup2(cmd.infile, STDIN_FILENO);
+		else
+			dup2(pipefd[0], STDIN_FILENO);
+		if (cmd.outfile != -2)
+			dup2(cmd.outfile, STDOUT_FILENO);
+		else
+			dup2(new_pipe[1], STDOUT_FILENO);
+		execve(cmd.cmd, cmd.args, envp);
 		// close(pipefd[0]);
 		// command(cmd, envp);
 	}
-	return (pid);
+	pipefd[0] = new_pipe[0];
+	pipefd[1] = new_pipe[1];
+	free(envp);
+	return (0);
 }
 
-void	start_command(t_token line, char **envp, int pipefd[2])
-{
-	t_command	command;
+void afficher_contenu(char **tableau) {
+    printf("tableau :\n");
+    for (int i = 0; tableau[i] != NULL; ++i) {
+        printf("%s\n", tableau[i]); // Affichage de chaque chaîne de caractères
+    }
+}
 
-	command.cmd = line->str;
-	line = line->next;
-	command.args = NULL;
+void	start_command(t_minishell mini, int pipefd[2])
+{	
+	t_command	command;
+	char	**envp;
+
+	envp = tenv_to_arr(mini->env);
+	if (!envp)
+		return ;
+	command.cmd = mini->cmd_line->str;
 	command.infile = -2;
 	command.outfile = -2;
-	if (line && line->type == 2)
-		command.args = take_args(line);
-	if (line && line->type == 3)
+	command.args = take_args(&mini->cmd_line);
+	if (mini->cmd_line && mini->cmd_line->type == 3)
 	{
-		command.infile = open(line->str, O_RDONLY, 0644);
+		command.infile = open(mini->cmd_line->str, O_RDONLY, 0644);
 		if (command.infile == -1)
 			return ;
-		line = line->next;
+		mini->cmd_line = mini->cmd_line->next;
 	}
-	else if (line && line->type == 4)
+	// else if (mini->cmd_line && mini->cmd_line->type == 4)
+	// {
+	// 	command.infile = Here_doc(mini->cmd_line->str);
+	// 	mini->cmd_line = mini->cmd_line->next;
+	// }
+	if (mini->cmd_line && mini->cmd_line->type == 5)
 	{
-		command.infile = Here_doc(line->str);
-		line = line->next;
-	}
-	if (line && line->type == 5)
-	{
-		command.outfile = open(line->str,  O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		command.outfile = open(mini->cmd_line->str,  O_WRONLY | O_CREAT | O_TRUNC, 420);
 		if (command.outfile == -1)
 			return ;
-		line = line->next;
+		mini->cmd_line = mini->cmd_line->next;
 	}
-	else if (line && line->type == 6)
+	else if (mini->cmd_line && mini->cmd_line->type == 6)
 	{
-		command.outfile = open(line->str,  O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
+		command.outfile = open(mini->cmd_line->str,  O_WRONLY | O_CREAT | O_APPEND, 420);
 		if (command.outfile == -1)
 			return ;
-		line = line->next;
+		mini->cmd_line = mini->cmd_line->next;
 	}
-	
+	if (mini->cmd_line == NULL)
+	{
+		if (command.outfile == -2)
+			command.outfile = 1;
+	}
+	else
+	{
+		if (mini->cmd_line->type == 7)
+			mini->cmd_line = mini->cmd_line->next;
+	}
+	commande(command, pipefd, envp);
 	
 }
 
-void	start_exe(t_minishell mini, char **envp)
+void	start_exe(t_minishell mini)
 {
 	int	pipefd[2];
+	pid_t	pid;
 
 	(void)mini;
-	(void)envp;
-	 if (pipe(pipefd) == -1)
+	if (pipe(pipefd) == -1)
 		ft_error("Pipe");
-	start_command(mini->cmd_line, envp, pipefd);
+	pid	= fork();
+	if (pid < 0)
+		ft_error("Fork");
+	else if (pid == 0)
+	{
+		while (mini->cmd_line != NULL)
+			start_command(mini, pipefd);
+	}
+	wait(&pid);
 }

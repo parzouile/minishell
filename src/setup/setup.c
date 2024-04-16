@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/15 10:19:30 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/16 15:12:32 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,37 @@ void	free_minishell(t_minishell mini)
 	free(mini);
 }
 
-int	run_minishell(t_minishell mini, char **envp)
+int	run_minishell(t_minishell mini)
 {
 	(void) mini;
-	start_exe(mini, envp);
+	t_token token1;
+	t_token token2;
+	t_token token3;
+	t_token token4;
+	
+	token4 = malloc(sizeof(struct s_token));
+	token1 = malloc(sizeof(struct s_token));
+	token2 = malloc(sizeof(struct s_token));
+	token3 = malloc(sizeof(struct s_token));
+	token1->str = "/bin/ls";
+	token2->str = "test";
+	token3->str = "|";
+	token4->str = "/bin/wc";
+	
+	token1->type = 1;
+	token2->type = 5;
+	token3->type = 7;
+	token4->type = 1;
+	
+	token1->prev = NULL;
+	token1->next = token2;
+	token2->prev = token1;
+	token2->next = token3;
+	token3->prev = token2;
+	token3->next = token4;
+	token4->prev = token3;
+	token4->next = NULL;
+	mini->cmd_line = token1;
+	start_exe(mini);
 	return (0);
 }
