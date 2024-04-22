@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/10 05:16:05 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/23 00:03:53 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	free_minishell(t_minishell mini)
 {
 	if (!mini)
 		return ;
+	free_tokens(mini->cmd_line);
 	free_env(mini->env);
 	free(mini);
 }

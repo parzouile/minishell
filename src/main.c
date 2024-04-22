@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/16 09:51:08 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/23 00:25:41 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,20 +72,43 @@ int	main(int ac, char **av, char **envp)
 	return (exit_status);
 }
 */
-void	print_env1(t_env env)
+void	print_type(int t)
 {
-	if (!env)
-		return ;
-	printf("%s\n", env->value);
-	print_env1(env->next);
+	switch (t)
+	{
+		case ARG:
+			printf("ARG");
+			break ;
+		case PIPE:
+			printf("PIPE");
+			break ;
+		case INFILE:
+			printf("INFILE");
+			break ;
+		case OUTFILE:
+			printf("OUTFILE");
+			break ;
+		case OUTFILE_APPEND:
+			printf("OUTFILE_APPEND");
+			break ;
+		case INFILE_HEREDOC:
+			printf("INFILE_HEREDOC");
+			break ;
+		default:
+			printf("NON RECONNU");
+	}
 }
 
-void	print_env2(t_env env)
+void print_token(t_token t)
 {
-	char **envp = tenv_to_arr(env);
-	for (int i = 0; envp[i]; i++)
-		printf("%s\n", envp[i]);
-	free(envp);
+	if (!t)
+		return ;
+	printf("TYPE : ");
+	print_type(t->type);
+	printf("\n");
+	if (t->str)
+		printf("STR : %s\\n\n\n", t->str);
+	print_token(t->next);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -94,7 +117,7 @@ int	main(int ac, char **av, char **envp)
 	int			exit_status;
 
 	(void)av;
-	if (ac != 1)
+	if (ac != 2)
 	{
 		(void) write(2, "Error args\n", 11);
 		return (EXIT_FAILURE);
@@ -105,9 +128,9 @@ int	main(int ac, char **av, char **envp)
 		(void) write(2, "Error during setup\n", 19);
 		return (EXIT_FAILURE);
 	}
-	print_env1(mini->env);
-	printf("\n");
-	print_env2(mini->env);
+	if (tokenize(&(mini->cmd_line), av[1]))
+		printf("ERROR\n");
+	print_token(mini->cmd_line);
 	exit_status = run_minishell(mini);
 	free_minishell(mini);
 	return (exit_status);
