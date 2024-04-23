@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 12:30:31 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/16 15:05:49 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/23 14:11:56 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ char	**take_args(t_token *line)
 	return (result);
 }
 
+
+
 int	commande(t_command cmd, int pipefd[2], char **envp)
 {
 	pid_t	pid;
@@ -110,7 +112,6 @@ int	commande(t_command cmd, int pipefd[2], char **envp)
 	}
 	pipefd[0] = new_pipe[0];
 	pipefd[1] = new_pipe[1];
-	free(envp);
 	return (0);
 }
 
@@ -121,6 +122,58 @@ void afficher_contenu(char **tableau) {
     }
 }
 
+void	end_command(t_command cmd, char **envp)
+{
+	free(envp);
+	free(cmd.args);
+	if (cmd.outfile != -2 && cmd.outfile != 1)
+		close(cmd.outfile);
+}
+void afficherContenuFichier(int fd) {
+    char buffer[1024]; // Un tampon de 1024 octets pour stocker les données lues du fichier
+
+    // Lire du fichier tant qu'il y a des données à lire
+    ssize_t bytes_lus;
+    while ((bytes_lus = read(fd, buffer, sizeof(buffer))) > 0) {
+        // Afficher les données lues
+        write(STDOUT_FILENO, buffer, bytes_lus);
+    }
+
+    // Vérifier s'il y a eu une erreur lors de la lecture
+    if (bytes_lus < 0) {
+        perror("Erreur lors de la lecture du fichier");
+        exit(EXIT_FAILURE);
+    }
+}
+
+int	find_file(t_command *cmd, t_token *line)
+{
+	if ((*line) && (*line)->type == 3)
+	{
+		cmd->infile = open((*line)->str, O_RDONLY, 0644);
+		(*line) = (*line)->next;
+	}
+	else if ((*line) && (*line)->type == 4)
+	{
+		cmd->infile = get_here_doc((*line)->str);
+		(*line) = (*line)->next;
+	}
+	if ((*line) && (*line)->type == 5)
+	{
+		cmd->outfile = open((*line)->str,  O_WRONLY | O_CREAT | O_TRUNC, 420);
+		(*line) = (*line)->next;
+	}
+	else if ((*line) && (*line)->type == 6)
+	{
+		cmd->outfile = open((*line)->str,  O_WRONLY | O_CREAT | O_APPEND, 420);
+		(*line) = (*line)->next;
+	}
+	if (cmd->outfile == -1 || cmd->infile == -1)
+		return (1);
+	else
+		return (0);
+}
+
 void	start_command(t_minishell mini, int pipefd[2])
 {	
 	t_command	command;
@@ -129,48 +182,23 @@ void	start_command(t_minishell mini, int pipefd[2])
 	envp = tenv_to_arr(mini->env);
 	if (!envp)
 		return ;
-	command.cmd = mini->cmd_line->str;
-	command.infile = -2;
-	command.outfile = -2;
-	command.args = take_args(&mini->cmd_line);
-	if (mini->cmd_line && mini->cmd_line->type == 3)
-	{
-		command.infile = open(mini->cmd_line->str, O_RDONLY, 0644);
-		if (command.infile == -1)
-			return ;
-		mini->cmd_line = mini->cmd_line->next;
-	}
-	// else if (mini->cmd_line && mini->cmd_line->type == 4)
-	// {
-	// 	command.infile = Here_doc(mini->cmd_line->str);
-	// 	mini->cmd_line = mini->cmd_line->next;
-	// }
-	if (mini->cmd_line && mini->cmd_line->type == 5)
-	{
-		command.outfile = open(mini->cmd_line->str,  O_WRONLY | O_CREAT | O_TRUNC, 420);
-		if (command.outfile == -1)
-			return ;
-		mini->cmd_line = mini->cmd_line->next;
-	}
-	else if (mini->cmd_line && mini->cmd_line->type == 6)
-	{
-		command.outfile = open(mini->cmd_line->str,  O_WRONLY | O_CREAT | O_APPEND, 420);
-		if (command.outfile == -1)
-			return ;
-		mini->cmd_line = mini->cmd_line->next;
-	}
-	if (mini->cmd_line == NULL)
-	{
-		if (command.outfile == -2)
-			command.outfile = 1;
-	}
+	if (mini->cmd_line->type == 0)
+		builtin(mini, pipefd, envp);
 	else
 	{
-		if (mini->cmd_line->type == 7)
+		command.cmd = mini->cmd_line->str;
+		command.infile = -2;
+		command.outfile = -2;
+		command.args = take_args(&mini->cmd_line);
+		if (find_file(&command,  &mini->cmd_line) == 1)
+			return ; // fermer fd et free
+		if (mini->cmd_line == NULL && command.outfile == -2)
+			command.outfile = 1;
+		else if (mini->cmd_line && mini->cmd_line->type == 7)
 			mini->cmd_line = mini->cmd_line->next;
+		commande(command, pipefd, envp);
+		end_command(command, envp);
 	}
-	commande(command, pipefd, envp);
-	
 }
 
 void	start_exe(t_minishell mini)

@@ -1,5 +1,5 @@
 
-SRCS = aux.c command.c  env.c  main.c parsing.c  pipex.c  startexe.c \
+SRCS = aux.c command.c  env.c  main.c parsing.c  pipex.c builtins.c here_doc.c startexe.c \
 		$(PARSING) \
 		$(SETUP)
 
