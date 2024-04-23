@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/23 00:04:29 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/23 19:24:34 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,12 @@
 # include "libft.h"
 # include "structures.h"
 
+//tokens
+t_token	new_token(char *str);
 void	free_tokens(t_token tok);
+int		push_back(t_token *tok, t_token new);
+
+//parsing
 int		tokenize(t_token *tok, char *str);
 
 //setup minishell

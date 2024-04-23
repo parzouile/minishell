@@ -6,8 +6,11 @@ SRCS = aux.c \
 		pipex.c \
 		env.c \
 		$(PARSING) \
-		$(SETUP)
+		$(SETUP) \
+		$(TOKENS_SRCS)
 
 PARSING = parsing/process_input.c
 
 SETUP = setup/setup.c
+
+TOKENS_SRCS = manage_tokens/tokens.c
