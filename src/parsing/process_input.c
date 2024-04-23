@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:53 by jules             #+#    #+#             */
-/*   Updated: 2024/04/23 00:40:10 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/23 19:15:47 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	push_back(t_token *tok, t_token new)
 	return (return_value);
 }
 
-int	double_chevron(char *str)
+int	double_chevrons(char *str)
 {
 	if ((str[0] == '<') && (str[1] == '<'))
 		return (1);
@@ -101,15 +101,10 @@ int	next_special_char(char *str)
 			quotes_char = str[i];
 			in_quotes = 1;
 		}
-		if (in_quotes && (str[i] == quotes_char))
+		else if (in_quotes && (str[i] == quotes_char))
 			in_quotes = 0;
-		if (in_quotes)
-			continue ;
-		if (ft_strchr(special_chars, str[i]) != NULL)
-		{
-			//i += double_chevron(str + i);
+		else if (!in_quotes && (ft_strchr(special_chars, str[i]) != NULL))
 			break ;
-		}
 	}
 	return (i);
 }
@@ -138,11 +133,13 @@ int	tokenize(t_token *tok, char *str)
 	{
 		i += skip_spaces(str + i);
 		tmp = next_special_char(str + i);
+		if (tmp == 0)
+			tmp = 1 + double_chevrons(str + i);
 		if (!str[i])
 			break ;
-		if (push_back(tok, new_token(ft_substr(str, i, tmp + (tmp == 0)))))
+		if (push_back(tok, new_token(ft_substr(str, i, tmp))))
 			return (1);
-		i += tmp + (tmp == 0);
+		i += tmp;
 	}
 	return (0);
 }

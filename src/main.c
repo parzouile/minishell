@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/23 00:25:41 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/23 18:21:02 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	main(int ac, char **av, char **envp)
 	int			exit_status;
 
 	(void)av;
-	if (ac != 2)
+	if (ac != 1)
 	{
 		(void) write(2, "Error args\n", 11);
 		return (EXIT_FAILURE);
@@ -128,8 +128,10 @@ int	main(int ac, char **av, char **envp)
 		(void) write(2, "Error during setup\n", 19);
 		return (EXIT_FAILURE);
 	}
-	if (tokenize(&(mini->cmd_line), av[1]))
+	char *line = get_next_line(0);
+	if (tokenize(&(mini->cmd_line), line))
 		printf("ERROR\n");
+	free(line);
 	print_token(mini->cmd_line);
 	exit_status = run_minishell(mini);
 	free_minishell(mini);
