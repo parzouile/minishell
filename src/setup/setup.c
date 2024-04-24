@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/23 13:20:46 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:05:19 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	run_minishell(t_minishell mini)
 	token2->prev = token1;
 	token2->next = NULL;//token3;
 	token3->prev = token2;
-	token3->next = NULL;// token4;
+	token3->next = NULL; // token4;
 	token4->prev = token3;
 	token4->next = NULL;
 	mini->cmd_line = token1;

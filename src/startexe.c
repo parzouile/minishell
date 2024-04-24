@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 12:30:31 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/23 14:11:56 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/24 10:51:33 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,22 +183,20 @@ void	start_command(t_minishell mini, int pipefd[2])
 	if (!envp)
 		return ;
 	if (mini->cmd_line->type == 0)
-		builtin(mini, pipefd, envp);
-	else
-	{
-		command.cmd = mini->cmd_line->str;
-		command.infile = -2;
-		command.outfile = -2;
-		command.args = take_args(&mini->cmd_line);
-		if (find_file(&command,  &mini->cmd_line) == 1)
-			return ; // fermer fd et free
-		if (mini->cmd_line == NULL && command.outfile == -2)
-			command.outfile = 1;
-		else if (mini->cmd_line && mini->cmd_line->type == 7)
-			mini->cmd_line = mini->cmd_line->next;
-		commande(command, pipefd, envp);
-		end_command(command, envp);
-	}
+		return (builtin(mini, pipefd, envp), 0);
+	command.cmd = mini->cmd_line->str;
+	command.infile = -2;
+	command.outfile = -2;
+	command.args = take_args(&mini->cmd_line);
+	if (find_file(&command,  &mini->cmd_line) == 1)
+		return (1); // fermer fd et free
+	if (mini->cmd_line == NULL && command.outfile == -2)
+		command.outfile = 1;
+	else if (mini->cmd_line && mini->cmd_line->type == 7)
+		mini->cmd_line = mini->cmd_line->next;
+	commande(command, pipefd, envp);
+	end_command(command, envp);
+	return (0);
 }
 
 void	start_exe(t_minishell mini)

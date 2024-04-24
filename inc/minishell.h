@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 09:38:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/23 10:36:10 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/24 11:10:54 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void		free_tab(char **path);
 void		processus(int new_pipe[2], int pipefd[2], char *cmd, char **envp);
 void		start_exe(t_minishell mini);
 char		**tenv_to_arr(t_env	env);
-int	        get_here_doc(char *limiter);
-
+int			get_here_doc(char *limiter);
+int			find_file(t_command *cmd, t_token *line);
+int			builtin(t_minishell mini, int pipefd[2], char **envp);
 #endif
