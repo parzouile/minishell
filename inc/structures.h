@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:40:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/16 09:50:48 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/24 23:07:02 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ struct s_token
 
 struct s_env
 {
+	char	*name;
 	char	*value;
 	t_env	next;
 };

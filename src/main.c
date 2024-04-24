@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/23 18:21:02 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/24 23:32:20 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,23 @@ void print_token(t_token t)
 	print_token(t->next);
 }
 
+void	print_tenv(t_env env)
+{
+	if (!env)
+		return ;
+	printf("%s=%s\n", env->name, env->value);
+	print_tenv(env->next);
+}
+
+void	print_envp(char **envp)
+{
+	int	i;
+
+	i = -1;
+	while (envp[++i])
+		printf("%s\n", envp[i]);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_minishell	mini;
@@ -128,11 +145,16 @@ int	main(int ac, char **av, char **envp)
 		(void) write(2, "Error during setup\n", 19);
 		return (EXIT_FAILURE);
 	}
-	char *line = get_next_line(0);
-	if (tokenize(&(mini->cmd_line), line))
-		printf("ERROR\n");
-	free(line);
-	print_token(mini->cmd_line);
+	//char *line = get_next_line(0);
+	// if (tokenize(&(mini->cmd_line), line))
+	// 	printf("ERROR\n");
+	// free(line);
+	// print_token(mini->cmd_line);
+	print_tenv(mini->env);
+	printf("\n");
+	char **env = tenv_to_arr(mini->env);
+	print_envp(env);
+	free_tab(env);
 	exit_status = run_minishell(mini);
 	free_minishell(mini);
 	return (exit_status);

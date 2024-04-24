@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:36:28 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/16 09:53:53 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/24 23:25:37 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ size_t	env_len(t_env env)
 char	**tenv_to_arr(t_env	env)
 {
 	char	**envp;
+	char	*tmp;
 	size_t	i;
 	size_t	len;
 
@@ -32,7 +33,13 @@ char	**tenv_to_arr(t_env	env)
 	i = 0;
 	while (i + 1 < len)
 	{
-		envp[i] = env->value;
+		tmp = ft_strjoin(env->name, "=");
+		if (!tmp)
+			return (NULL);
+		envp[i] = ft_strjoin(tmp, env->value);
+		if (!envp[i])
+			return (free(tmp), NULL);
+		free(tmp);
 		env = env->next;
 		i++;
 	}
