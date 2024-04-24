@@ -9,8 +9,10 @@ SRCS = aux.c \
 		$(SETUP) \
 		$(TOKENS_SRCS)
 
-PARSING = parsing/process_input.c
+PARSING = parsing/process_input.c \
+			parsing/expand_token.c
 
-SETUP = setup/setup.c
+SETUP = setup/setup.c \
+			setup/env.c
 
 TOKENS_SRCS = manage_tokens/tokens.c
