@@ -6,15 +6,13 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:32:42 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/23 13:20:16 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:49:12 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-
-int	ft_strcmp(char *s1, char *s2)
+int	ft_strcmpn(char *s1, char *s2)
 {
 	int	i;
 
@@ -33,7 +31,7 @@ void	write_here_doc(char *limiter, int fd)
 	char	*s;
 
 	s = readline(">> ");// get_next_line(0);
-	while (ft_strcmp(s, limiter) != 0)
+	while (ft_strcmpn(s, limiter) != 0)
 	{
 		write(fd, s, ft_strlen(s));
         write(fd, "\n", 1);

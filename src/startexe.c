@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 12:30:31 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/24 10:51:33 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:41:01 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	nb_args(t_token line)
 	int	i;
 
 	i = 0;
-	while ((line->type == 2  || line->type == 1))
+	while ((line->type == 2  || line->type == 1 || line->type == 0))
 	{
 		i++;
 		if (line->next == NULL)
@@ -73,8 +73,6 @@ char	**take_args(t_token *line)
 	result[i] = NULL;
 	return (result);
 }
-
-
 
 int	commande(t_command cmd, int pipefd[2], char **envp)
 {
@@ -182,38 +180,99 @@ void	start_command(t_minishell mini, int pipefd[2])
 	envp = tenv_to_arr(mini->env);
 	if (!envp)
 		return ;
-	if (mini->cmd_line->type == 0)
-		return (builtin(mini, pipefd, envp), 0);
 	command.cmd = mini->cmd_line->str;
 	command.infile = -2;
 	command.outfile = -2;
 	command.args = take_args(&mini->cmd_line);
 	if (find_file(&command,  &mini->cmd_line) == 1)
-		return (1); // fermer fd et free
+		return ; // fermer fd et free
 	if (mini->cmd_line == NULL && command.outfile == -2)
 		command.outfile = 1;
 	else if (mini->cmd_line && mini->cmd_line->type == 7)
 		mini->cmd_line = mini->cmd_line->next;
-	commande(command, pipefd, envp);
+	if (builtin(mini, command, pipefd, envp) == 1)
+		commande(command, pipefd, envp);
 	end_command(command, envp);
+}
+
+int	nb_command(t_token line)
+{
+	int	n;
+
+	n = 0;
+	while (line != NULL)
+	{
+		if (line->type == 0 || line->type == 1)
+			n++;
+		line = line->next;
+	}
+	return (n);
+}
+
+int	exec_one_commande(t_command cmd, char **envp)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		if (cmd.infile != -2)
+			close(cmd.infile);
+		if (cmd.outfile != -2)
+			close(cmd.outfile);
+		return (1);
+	}
+	else if (pid == 0)
+		execve(cmd.cmd, cmd.args, envp);
 	return (0);
+}
+
+void	one_command(t_minishell mini)
+{
+	t_command	command;
+	char	**envp;
+
+	envp = tenv_to_arr(mini->env);
+	if (!envp)
+		return ;
+	command.cmd = mini->cmd_line->str;
+	command.infile = -2;
+	command.outfile = -2;
+	command.args = take_args(&mini->cmd_line);
+	if (find_file(&command,  &mini->cmd_line) == 1)
+		return ; // fermer fd et free
+	if (mini->cmd_line == NULL && command.outfile == -2)
+		command.outfile = 1;
+	if (command.infile != -2)
+		dup2(command.infile, STDIN_FILENO);
+	if (command.outfile != -2)
+		dup2(command.outfile, STDOUT_FILENO);
+	if (one_builtin(mini, command, envp) == 1)
+		exec_one_commande(command, envp);
+	end_command(command, envp);
 }
 
 void	start_exe(t_minishell mini)
 {
-	int	pipefd[2];
+	int		pipefd[2];
 	pid_t	pid;
 
-	(void)mini;
-	if (pipe(pipefd) == -1)
-		ft_error("Pipe");
-	pid	= fork();
-	if (pid < 0)
-		ft_error("Fork");
-	else if (pid == 0)
+	if (nb_command(mini->cmd_line) == 1)
+		one_command(mini);
+	else
 	{
-		while (mini->cmd_line != NULL)
-			start_command(mini, pipefd);
+		if (pipe(pipefd) == -1)
+			ft_error("Pipe");
+		pid	= fork();
+		if (pid < 0)
+			ft_error("Fork");
+		else if (pid == 0)
+		{
+			while (mini->cmd_line != NULL){
+				printf("line = %s\n", mini->cmd_line->str);
+				start_command(mini, pipefd);
+			}
+		}
 	}
 	wait(&pid);
 }
