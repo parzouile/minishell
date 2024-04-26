@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/23 19:24:34 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/26 06:28:05 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,17 @@ t_token	new_token(char *str);
 void	free_tokens(t_token tok);
 int		push_back(t_token *tok, t_token new);
 
-//parsing
-int		tokenize(t_token *tok, char *str);
-
 //setup minishell
 int			setup_env(t_env *env, char **envp);
 void		free_env(t_env env);
+char		*get_value(t_env env, char *str);
 t_minishell	create_minishell(char **envp);
 void		free_minishell(t_minishell mini);
 int			run_minishell(t_minishell mini);
+
+//parsing
+char	*expand_str(t_minishell mini, char *str);
+int		tokenize(t_token *tok, char *str);
 
 //the rest for now
 void		parsing(char **s, char **envp);

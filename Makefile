@@ -44,7 +44,7 @@ all:
 test:	$(OBJS_TEST)
 	$(CC) $(FLAGS) $(INCLUDES) $(OBJS_TEST) $(LIBS) -o $(NAME)
 
-$(NAME):	$(OBJS)
+$(NAME):	$(OBJS) $(DEPENDENCIES)
 	$(CC) $(FLAGS) $(INCLUDES) $(OBJS) $(LIBS) -o $(NAME)
 
 .PHONY:	clean
@@ -65,6 +65,10 @@ debug:
 re:		fclean
 			$(MAKE) all
 
+.PHONY: valgrind
+valgrind:
+	$(MAKE) $(NAME)
+	valgrind --suppressions=valgrind_ignore_leaks.txt --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --show-mismatched-frees=yes --read-var-info=yes ./$(NAME)
 -include $(DEPS)
 $(DIR_BUILD)%.o : $(SRC_PATH)%.c Makefile
 			@mkdir -p $(shell dirname $@)

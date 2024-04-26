@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:07:49 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/24 23:55:37 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/26 06:30:25 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	setup_env(t_env *env, char **envp)
 		return (0);
 	if (add_value(env, envp[0]))
 	{
-		printf("%s\n", envp[0]);
 		return (1);
 	}
 	return (setup_env(&((*env)->next), envp + 1));
@@ -67,10 +66,13 @@ void	free_env(t_env env)
 	free_env(next);
 }
 
-// char	*get_value(t_env env, char *str)
-// {
-// 	if (!env)
-// 		return (ft_calloc(1, sizeof(char)));
-// 	if (ft_strcmp(env->name, str) == 0)
-// 		return (ft_strdup(env->value));
-// }
+char	*get_value(t_env env, char *str)
+{
+	if (!str)
+		return (NULL);
+	if (!env)
+		return (ft_calloc(1, sizeof(char)));
+	if (ft_strcmp(env->name, str) == 0)
+		return (ft_strdup(env->value));
+	return (get_value(env->next, str));
+}
