@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 18:47:34 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/26 12:11:17 by jules            ###   ########.fr       */
+/*   Created: 2024/04/26 23:48:49 by jules             #+#    #+#             */
+/*   Updated: 2024/04/26 23:58:06 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-t_list	*ft_lstnew(void *content)
+void	ft_error(char *s)
 {
-	t_list	*res;
+	perror(s);
+	exit(1);
+}
 
-	res = malloc(sizeof(t_list));
-	if (!res)
-		return (NULL);
-	res->content = content;
-	res->next = NULL;
-	return (res);
+int	error_msg(char *s)
+{
+	if (!s)
+		return (EXIT_FAILURE);
+	(void) write(2, s, ft_strlen(s));
+	return (EXIT_FAILURE);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_input.c                                    :+:      :+:    :+:   */
+/*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:53 by jules             #+#    #+#             */
-/*   Updated: 2024/04/23 19:26:12 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 00:57:43 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int	tokenize(t_token *tok, char *str)
 	int		tmp;
 
 	i = 0;
+	if (!str)
+		return (1);
 	while (str[i])
 	{
 		i += skip_spaces(str + i);
@@ -78,4 +80,14 @@ int	tokenize(t_token *tok, char *str)
 		i += tmp;
 	}
 	return (0);
+}
+/**
+ * a droite d'une redirection
+ *  : ARG
+ *  
+*/
+void	put_cmd_types(t_token tok)
+{
+	(void) tok;
+	return ;
 }

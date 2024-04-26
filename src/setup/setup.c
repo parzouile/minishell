@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/24 13:08:11 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/27 01:32:50 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ t_minishell	create_minishell(char **envp)
 		free(mini);
 		return (NULL);
 	}
+	if (incr_shlvl(mini->env))
+		printf("INCREMENT SHLVL FAILED\n");
 	return (mini);
 }
 
@@ -39,10 +41,4 @@ void	free_minishell(t_minishell mini)
 	free_tokens(mini->cmd_line);
 	free_env(mini->env);
 	free(mini);
-}
-
-int	run_minishell(t_minishell mini)
-{
-	(void) mini;
-	return (0);
 }

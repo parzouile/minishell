@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:40:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/24 23:07:02 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/26 12:23:58 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,5 @@ typedef struct s_minishell
 	t_token	cmd_line;
 	t_env	env;
 }	*t_minishell;
-
-char	**tenv_to_arr(t_env	env);
 
 #endif

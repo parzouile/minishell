@@ -3,41 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expand_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:00:38 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/26 07:35:48 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/26 23:58:12 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_valid_char(char c)
-{
-	return ((c == '_') || ft_isalnum(c));
-}
-
-int	next_dollar_sign(char *str, int *in_dquotes)
-{
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' && !(*in_dquotes))
-		{
-		    i++;
-			while (str[i] && (str[i] != '\''))
-				i++;
-		}
-		if (str[i] == '\"')
-			*in_dquotes = !(*in_dquotes);
-		if (str[i] == '$')
-			break;
-		i++;
-	}
-	return (i);
-}
 
 int	value_length(char *str, int in_dquotes)
 {
@@ -47,7 +20,7 @@ int	value_length(char *str, int in_dquotes)
 		return (in_dquotes - 1);
 	if (ft_isdigit(str[1]))
 		return (2);
-    i = 1;
+	i = 1;
 	while (str[i] && is_valid_char(str[i]))
 		i++;
 	return (i);
@@ -77,35 +50,29 @@ char	*get_expanded_value(t_minishell mini, char *str, int len_var)
 	return (value);
 }
 
-int	lst_full_length(t_list *lst)
+int	add_next_node(t_minishell mini, t_list **lst, char *str, int *in_dquotes)
 {
-	if (!lst)
-		return (0);
-	return (ft_strlen(lst->content) + lst_full_length(lst->next));
-}
+	int		next;
+	int		len_var;
+	t_list	*new_node;
+	char	*new_str;
 
-char *lst_to_str(t_list *lst)
-{
-	int		fl;
-	char	*res;
-	int		i;
-	int		j;
-
-	fl = lst_full_length(lst);
-	res = malloc(sizeof(char) * (fl + 1));
-	if (!res)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (lst)
+	next = next_dollar_sign(str, in_dquotes);
+	len_var = 0;
+	if (next)
+		new_str = ft_substr(str, 0, next);
+	else
 	{
-		j = -1;
-		while (((char *)lst->content)[++j])
-			res[i++] = ((char *)lst->content)[j];
-		lst = lst->next;
+		len_var = value_length(str, *in_dquotes);
+		new_str = get_expanded_value(mini, str, len_var);
 	}
-	res[i] = 0;
-	return (res);
+	if (!new_str)
+		return (-1);
+	new_node = ft_lstnew(new_str);
+	if (!new_node)
+		return (free(new_str), -1);
+	ft_lstadd_back(lst, new_node);
+	return (next + (len_var > 0) * len_var + 1 * (next == 0) * (len_var <= 0));
 }
 
 char	*expand_str(t_minishell mini, char *str)
@@ -113,25 +80,18 @@ char	*expand_str(t_minishell mini, char *str)
 	t_list	*expanded_lst;
 	char	*expanded_str;
 	int		in_dquotes;
-	int		next;
-	int		len_var;
+	int		i;
+	int		step;
 
 	expanded_lst = NULL;
 	in_dquotes = 0;
-	while (*str)
+	i = 0;
+	while (str[i])
 	{
-		next = next_dollar_sign(str, &in_dquotes);
-		len_var = 0;
-		if (next)
-			ft_lstadd_back(&expanded_lst, ft_lstnew(ft_substr(str, 0, next)));
-		else
-		{
-			len_var = value_length(str, in_dquotes);
-			ft_lstadd_back(&expanded_lst, \
-				ft_lstnew(get_expanded_value(mini, str, len_var)));
-		}
-		str = str + next + (len_var > 0) * len_var + \
-			1 * (next == 0) * (len_var <= 0);
+		step = add_next_node(mini, &expanded_lst, str + i, &in_dquotes);
+		if (step == -1)
+			return (ft_lstclear(&expanded_lst, free), NULL);
+		i += step;
 	}
 	expanded_str = lst_to_str(expanded_lst);
 	ft_lstclear(&expanded_lst, free);

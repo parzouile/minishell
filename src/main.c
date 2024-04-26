@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/26 07:32:58 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/27 01:02:09 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,6 @@ void	ft_exit(void)
 	rl_clear_history();
 	printf("\033[31;1mBye\033[0m\n");
 	exit(0);
-}
-
-void	ft_error(char *s)
-{
-	perror(s);
-	exit(1);
 }
 
 void	ft_ctrls(int sig)
@@ -49,83 +43,25 @@ void	display_prompt(char **envp)
 		free(s);
 	}
 }
-/*
-int	main(int ac, char **av, char **envp)
-{
-	t_minishell	mini;
-	int			exit_status;
 
-	(void)av;
-	if (ac != 1)
+int	run_minishell(t_minishell mini)
+{
+	char	*s;
+
+	using_history();
+	s = readline("\033[32;1m$ User ->\033[0m ");
+	while (s)
 	{
-		(void) write(2, "Error args\n", 11);
-		return (EXIT_FAILURE);
+		if (parse(mini, s))
+			return (free(s), 1);
+		free(s);
+		//exec(mini);
+		print_token(mini->cmd_line);
+		free_tokens(mini->cmd_line);
+		mini->cmd_line = NULL;
+		s = readline("\033[32;1m$ User ->\033[0m ");
 	}
-	mini = create_minishell(envp);
-	if (!mini)
-	{
-		(void) write(2, "Error during setup\n", 19);
-		return (EXIT_FAILURE);
-	}
-	exit_status = run_minishell(mini);
-	free_minishell(mini);
-	return (exit_status);
-}
-*/
-void	print_type(int t)
-{
-	switch (t)
-	{
-		case ARG:
-			printf("ARG");
-			break ;
-		case PIPE:
-			printf("PIPE");
-			break ;
-		case INFILE:
-			printf("INFILE");
-			break ;
-		case OUTFILE:
-			printf("OUTFILE");
-			break ;
-		case OUTFILE_APPEND:
-			printf("OUTFILE_APPEND");
-			break ;
-		case INFILE_HEREDOC:
-			printf("INFILE_HEREDOC");
-			break ;
-		default:
-			printf("NON RECONNU");
-	}
-}
-
-void print_token(t_token t)
-{
-	if (!t)
-		return ;
-	printf("TYPE : ");
-	print_type(t->type);
-	printf("\n");
-	if (t->str)
-		printf("STR : %s\\n\n\n", t->str);
-	print_token(t->next);
-}
-
-void	print_tenv(t_env env)
-{
-	if (!env)
-		return ;
-	printf("%s=%s\n", env->name, env->value);
-	print_tenv(env->next);
-}
-
-void	print_envp(char **envp)
-{
-	int	i;
-
-	i = -1;
-	while (envp[++i])
-		printf("%s\n", envp[i]);
+	return (0);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -135,27 +71,10 @@ int	main(int ac, char **av, char **envp)
 
 	(void)av;
 	if (ac != 1)
-	{
-		(void) write(2, "Error args\n", 11);
-		return (EXIT_FAILURE);
-	}
+		return (error_msg("Error args\n"));
 	mini = create_minishell(envp);
 	if (!mini)
-	{
-		(void) write(2, "Error during setup\n", 19);
-		return (EXIT_FAILURE);
-	}
-	char *line = get_next_line(0);
-	char *expanded = expand_str(mini, line);
-	free(line);
-	if (tokenize(&(mini->cmd_line), expanded))
-		printf("ERROR\n");
-	print_token(mini->cmd_line);
-	// print_tenv(mini->env);
-	// printf("\n");
-	// char **env = tenv_to_arr(mini->env);
-	// print_envp(env);
-	// free_tab(env);
+		return (error_msg("Error during setup\n"));
 	exit_status = run_minishell(mini);
 	free_minishell(mini);
 	return (exit_status);

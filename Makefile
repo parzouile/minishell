@@ -67,7 +67,7 @@ re:		fclean
 
 .PHONY: valgrind
 valgrind:
-	$(MAKE) $(NAME)
+	$(MAKE) all
 	valgrind --suppressions=valgrind_ignore_leaks.txt --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --show-mismatched-frees=yes --read-var-info=yes ./$(NAME)
 -include $(DEPS)
 $(DIR_BUILD)%.o : $(SRC_PATH)%.c Makefile

@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 15:01:43 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/22 19:18:57 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/26 11:49:43 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		i ++;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
+
 int	ft_strcmp(const char *s1, const char *s2)
 {
 	int	i;
