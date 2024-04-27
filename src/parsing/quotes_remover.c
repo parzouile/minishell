@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 12:08:31 by jules             #+#    #+#             */
-/*   Updated: 2024/04/26 23:58:14 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 02:07:23 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,5 @@ int	remove_tokens_quotes(t_token tok)
 		return (1);
 	free(tok->str);
 	tok->str = n_str;
-	return (remove_tokens_quotes(tok->next));	
+	return (remove_tokens_quotes(tok->next));
 }

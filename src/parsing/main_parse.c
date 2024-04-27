@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:41:16 by jules             #+#    #+#             */
-/*   Updated: 2024/04/27 01:00:10 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 02:07:09 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	is_redirection(int type)
 		return (1);
 	if (type == OUTFILE_APPEND)
 		return (1);
-	return (0);	
+	return (0);
 }
 
 //check for 2 pipes and 2 redirections next to eachothers

@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/27 01:28:55 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 02:08:31 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,12 @@ int			push_back(t_token *tok, t_token new);
 //env
 int			add_value(t_env *env, char *str);
 void		free_env(t_env env);
-t_env 		remove_from_env(t_env env, char *key);
+t_env		remove_from_env(t_env env, char *key);
 char		*get_value(t_env env, char *key);
 char		**tenv_to_arr(t_env	env);
 
 //setup minishell
 int			setup_env(t_env *env, char **envp);
-// int			incr_shlvl(t_minishell mini);
 int			incr_shlvl(t_env env);
 
 t_minishell	create_minishell(char **envp);

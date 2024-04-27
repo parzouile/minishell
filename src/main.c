@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/27 01:02:09 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 01:39:54 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	run_minishell(t_minishell mini)
 	s = readline("\033[32;1m$ User ->\033[0m ");
 	while (s)
 	{
+		add_history(s);
 		if (parse(mini, s))
 			return (free(s), 1);
 		free(s);

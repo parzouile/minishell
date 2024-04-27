@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:12:57 by jules             #+#    #+#             */
-/*   Updated: 2024/04/26 23:58:10 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 02:08:04 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,23 @@
 
 void	print_type(int t)
 {
-	switch (t)
-	{
-		case ARG:
-			printf("ARG");
-			break ;
-		case PIPE:
-			printf("PIPE");
-			break ;
-		case INFILE:
-			printf("INFILE");
-			break ;
-		case OUTFILE:
-			printf("OUTFILE");
-			break ;
-		case OUTFILE_APPEND:
-			printf("OUTFILE_APPEND");
-			break ;
-		case INFILE_HEREDOC:
-			printf("INFILE_HEREDOC");
-			break ;
-		default:
-			printf("NON RECONNU");
-	}
+	if (t == ARG)
+		printf("ARG");
+	else if (t == PIPE)
+		printf("PIPE");
+	else if (t == INFILE)
+		printf("INFILE");
+	else if (t == OUTFILE)
+		printf("OUTFILE");
+	else if (t == OUTFILE_APPEND)
+		printf("OUTFILE_APPEND");
+	else if (t == INFILE_HEREDOC)
+		printf("INFILE_HEREDOC");
+	else
+		printf("NON RECONNU");
 }
 
-void print_token(t_token t)
+void	print_token(t_token t)
 {
 	if (!t)
 		return ;
