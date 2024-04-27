@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:40:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/26 12:23:58 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 16:36:07 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,13 @@ typedef struct s_minishell
 	t_token	cmd_line;
 	t_env	env;
 }	*t_minishell;
+
+typedef struct s_command
+{
+	char	*cmd;
+	char	**args;
+	int		infile;
+	int		outfile;
+}					t_command;
 
 #endif

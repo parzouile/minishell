@@ -1,9 +1,5 @@
 
-SRCS = aux.c \
-		command.c \
-		main.c \
-		parsing.c \
-		pipex.c \
+SRCS = main.c start_exe.c builtins.c here_doc.c find_bin.c command.c \
 		error.c \
 		$(PARSING) \
 		$(SETUP) \

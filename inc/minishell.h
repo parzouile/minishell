@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/27 14:05:41 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/27 19:11:21 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,22 @@ void		ft_exit(void);
 void		ft_pipe(int argc, char **argv, char **envp);
 void		command(char *cmd, char **envp);
 void		processus(int new_pipe[2], int pipefd[2], char *cmd, char **envp);
-char		**find_paths(char **envp, char **args);
 int			ft_lentab(char **tab);
 void		ft_error(char *s);
 void		free_tab(char **path);
 char		*ft_join(char *s1, char *s2);
 void		ft_ctrlc(int sig);
+
+// exec
+void    	start_exe(t_minishell mini);
+int     	one_builtin(t_minishell mini, t_command command, char **envp);
+int     	builtin(t_minishell mini, t_command command, char **envp);
+int	        get_here_doc(char *limiter);
+char	    *find_bin(char *cmd, char **env);
+char	    **take_args(t_token *line, t_command *command);
+int	        redirection(t_command *cmd, t_token *line);
+void	    first_command(t_minishell mini, int pipefd[2]);
+int     	mid_command(t_minishell mini, int pipefd[2]);
+int	        last_command(t_minishell mini, int pipefd[2]);
 
 #endif

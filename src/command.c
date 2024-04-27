@@ -5,127 +5,168 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/22 09:54:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/03/26 13:33:29 by aschmitt         ###   ########.fr       */
+/*   Created: 2024/04/27 18:10:51 by aschmitt          #+#    #+#             */
+/*   Updated: 2024/04/27 19:14:42 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*args_path(char *args)
+void	ft_exec(t_minishell mini, t_command command, char **envp, int pipefd[2])
 {
-	int		i;
-	int		a;
-	char	*s;
+	pid_t	pid;
 
-	i = -1;
-	a = 0;
-	while (args[++i])
+	pid = fork();
+	if (pid == -1)
+		return ;// error
+	else if (pid == 0)
 	{
-		if (args[i] == '/')
-			a = i;
-	}
-	s = malloc(sizeof(char) * (i - a));
-	if (!s)
-		return (NULL);
-	i = -1;
-	while (args[++a])
-		s[++i] = args[a];
-	s[++i] = 0;
-	free (args);
-	return (s);
-}
-
-char	**find_paths(char **envp, char **args)
-{
-	int		i;
-	int		a;
-	char	*s;
-
-	i = -1;
-	s = "PATH=";
-	while (envp[++i])
-	{
-		a = 0;
-		while (envp[i][a] && s[a] && envp[i][a] == s[a])
-			a ++;
-		if (a == 5)
-			break ;
-	}
-	if (a == 5)
-		return (ft_split(envp[i] + 5, ':'));
-	free_tab(args);
-	write(2, "Error Path\n", 12);
-	exit(1);
-	return (NULL);
-}
-
-char	*find_bin(char *cmd, char **envp, char **args)
-{
-	char	**path;
-	char	*bin;
-	int		i;
-
-	i = 0;
-	path = find_paths(envp, args);
-	if (!path)
-		ft_error("Malloc");
-	while (path[i])
-	{
-		bin = ft_join(path[i], cmd);
-		if (!bin)
-			(free_tab(args), free_tab(path), ft_error("Malloc"));
-		if (access(bin, F_OK) == 0)
+		if (command.infile != -2)
+			dup2(command.infile, STDIN_FILENO);
+		if (command.outfile != -2)
+			dup2(command.outfile, STDOUT_FILENO);
+		else
+			dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[0]);
+		if (builtin(mini, command, envp) == 1) // pas sur p-e modifie  envp ???
 		{
-			free_tab(path);
-			return (bin);
+			if (command.cmd[0] != '/' && command.cmd[0] != '.')
+				command.cmd = find_bin(command.cmd, envp); // free this later
+			execve(command.cmd, command.args, envp);
+			error_msg("minishell: command not found\n");
+			exit(0);
 		}
-		free(bin);
-		i++;
 	}
-	free_tab(args);
-	free_tab(path);
-	ft_error("Command not found");
-	return (NULL);
 }
 
-char	*ft_join(char *s1, char *s2)
+void	command_end(t_command cmd, char **envp)
 {
-	char	*result;
-	size_t	i;
-	size_t	j;
+	int	i;
 
-	if (!s1 || !s2)
-		return (NULL);
-	result = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 2));
-	if (!result)
-		return (NULL);
 	i = -1;
-	while (s1[++i])
-		result[i] = s1[i];
-	result[i++] = '/';
-	j = -1;
-	while (s2[++j])
-		result[i + j] = s2[j];
-	result[i + j] = '\0';
-	return (result);
+	while (envp[++i])
+		free(envp[i]);
+	free(envp);
+	free(cmd.args);
+	if (cmd.outfile != -2 && cmd.outfile != 1)
+		close(cmd.outfile);
+	if (cmd.infile != -2)
+		close(cmd.infile);
 }
 
-void	command(char *cmd, char **envp)
+void	first_command(t_minishell mini, int pipefd[2])
 {
-	char	**args;
-	char	*bin;
+	t_command	command;
+	char		**envp;
 
-	args = ft_split(cmd, ' ');
-	if (!args)
-		ft_error("Malloc");
-	if (cmd[0] == '/' || cmd[0] == '.')
+	envp = tenv_to_arr(mini->env); // a double free
+	if (!envp)
+		return ;
+	command.args = take_args(&mini->cmd_line, &command);
+	if (redirection(&command,  &mini->cmd_line) == 0)
+		return ; // fermer fd et free
+	if (mini->cmd_line && mini->cmd_line->type == 7)
+		mini->cmd_line = mini->cmd_line->next;
+	ft_exec(mini, command, envp, pipefd);
+	command_end(command, envp);
+}
+
+void	ft_exec2(t_minishell mini, t_command cmd, char **envp)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		return ;// error
+	else if (pid == 0)
 	{
-		bin = ft_strdup(args[0]);
-		args[0] = args_path(args[0]);
+		dup2(cmd.infile, STDIN_FILENO);
+		dup2(cmd.outfile, STDOUT_FILENO);
+		if (builtin(mini, cmd, envp) == 1) // pas sur p-e modifie  envp ???
+		{
+			if (cmd.cmd[0] != '/' && cmd.cmd[0] != '.')
+				cmd.cmd = find_bin(cmd.cmd, envp);
+			execve(cmd.cmd, cmd.args, envp);
+			error_msg("minishell: command not found\n");
+			exit(0);
+		}
 	}
+}
+
+int	mid_command(t_minishell mini, int pipefd[2])
+{
+	t_command	command;
+	char		**envp;
+	int		newpipe[2];
+
+	close(pipefd[1]);
+	envp = tenv_to_arr(mini->env); // a double free
+	if (!envp)
+		return (1);
+	if (pipe(newpipe) == -1)
+		return (close(pipefd[0]), 1);
+	command.args = take_args(&mini->cmd_line, &command);
+	if (redirection(&command,  &mini->cmd_line) == 0)
+		return (1); // fermer fd et free
+	if (command.infile == -2)
+		command.infile = pipefd[0];
 	else
-		bin = find_bin(args[0], envp, args);
-	if (execve(bin, args, envp) == -1)
-		ft_error("Execution");
+		close(pipefd[0]);
+	if (command.outfile == -2)
+		command.outfile = newpipe[0];
+	else
+		close(newpipe[0]);
+	if (mini->cmd_line && mini->cmd_line->type == 7)
+		mini->cmd_line = mini->cmd_line->next;
+	ft_exec2(mini, command, envp);
+	command_end(command, envp);
+	pipefd[0] = newpipe[0];
+	pipefd[1] = newpipe[1];
+	return (0);
+}
+
+void	ft_exec3(t_minishell mini, t_command cmd, char **envp)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		return ;
+	else if (pid == 0)
+	{
+		dup2(cmd.infile, STDIN_FILENO);
+		dup2(cmd.outfile, STDOUT_FILENO);
+		if (builtin(mini, cmd, envp) == 1) // pas sur p-e modifie  envp ???
+		{
+			if (cmd.cmd[0] != '/' && cmd.cmd[0] != '.')
+				cmd.cmd = find_bin(cmd.cmd, envp); // a faire avant de fork
+			execve(cmd.cmd, cmd.args, envp);
+			error_msg("minishell: command not found\n");
+			exit(0);
+		}
+	}
+}
+
+int	last_command(t_minishell mini, int pipefd[2])
+{
+	t_command	command;
+	char		**envp;
+
+	close(pipefd[1]);
+	envp = tenv_to_arr(mini->env); // a double free
+	if (!envp)
+		return (1);
+	command.args = take_args(&mini->cmd_line, &command);
+	if (redirection(&command,  &mini->cmd_line) == 0)
+		return (1); // fermer fd et free
+	if (command.infile == -2)
+		command.infile = pipefd[0];
+	else
+		close(pipefd[0]);
+	if (command.outfile == -2)
+		command.outfile = 1;
+	// verifie NULL 
+	ft_exec3(mini, command, envp);
+	command_end(command, envp);
+	return  (0);
 }
