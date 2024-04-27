@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_parse.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:41:16 by jules             #+#    #+#             */
-/*   Updated: 2024/04/27 02:07:09 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 11:12:32 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	verif_syntaxe(t_token tok)
 	{
 		if (!(tok->prev) || !(tok->next))
 			return (error_msg("Missing features around pipe\n"));
-		if ((tok->next->type == PIPE))
+		if (tok->next->type == PIPE)
 			return (error_msg("Two consecutive pipes\n"));
 	}
 	if (is_redirection(tok->type))

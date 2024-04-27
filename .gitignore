@@ -1,0 +1,6 @@
+.vscode
+.build
+*.txt
+*.a
+obj/
+minishell
