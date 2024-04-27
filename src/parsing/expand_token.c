@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:00:38 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/26 23:58:12 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 12:16:17 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,21 @@ int	value_length(char *str, int in_dquotes)
 {
 	int	i;
 
+	if (!str[1] || (str[1] == '\"') || (str[1] == ' '))
+		return (0);
+	if (ft_isdigit(str[1]) || str[1] == '?')
+		return (2);
 	if (!is_valid_char(str[1]))
 		return (in_dquotes - 1);
-	if (ft_isdigit(str[1]))
-		return (2);
 	i = 1;
 	while (str[i] && is_valid_char(str[i]))
 		i++;
 	return (i);
+}
+
+char	*handle_question_mark(void)
+{
+	return (ft_strdup("-\?\?\?\?-"));
 }
 
 char	*get_expanded_value(t_minishell mini, char *str, int len_var)
@@ -41,6 +48,8 @@ char	*get_expanded_value(t_minishell mini, char *str, int len_var)
 		value[0] = '$';
 		return (value);
 	}
+	if (str[1] == '?')
+		return (handle_question_mark());
 	var_name = ft_substr(str, 1, len_var - 1);
 	value = get_value(mini->env, var_name);
 	if (var_name)

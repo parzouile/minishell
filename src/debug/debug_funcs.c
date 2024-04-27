@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_funcs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:12:57 by jules             #+#    #+#             */
-/*   Updated: 2024/04/27 02:08:04 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 11:31:44 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 void	print_type(int t)
 {
-	if (t == ARG)
+	if (t == CMD)
+		printf("CMD");
+	else if (t == ARG)
 		printf("ARG");
 	else if (t == PIPE)
 		printf("PIPE");
@@ -27,7 +29,7 @@ void	print_type(int t)
 	else if (t == INFILE_HEREDOC)
 		printf("INFILE_HEREDOC");
 	else
-		printf("NON RECONNU");
+		printf("NON RECONNU %d\n", t);
 }
 
 void	print_token(t_token t)

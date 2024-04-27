@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/27 02:08:31 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 11:17:55 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int			remove_tokens_quotes(t_token tok);
 int			tokenize(t_token *tok, char *str);
 void		put_cmd_types(t_token tok);
 
+int			is_redirection(int type);
 int			parse(t_minishell mini, char *str);
 
 //DEBUG

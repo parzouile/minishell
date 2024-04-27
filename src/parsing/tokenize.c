@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:53 by jules             #+#    #+#             */
-/*   Updated: 2024/04/27 02:07:49 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 11:38:50 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,19 @@ int	tokenize(t_token *tok, char *str)
 */
 void	put_cmd_types(t_token tok)
 {
-	(void) tok;
-	return ;
+	t_token	prev;
+
+	if (!tok)
+		return ;
+	if (tok->type != ARG)
+		return (put_cmd_types(tok->next));
+	if (!tok->prev || (tok->prev->type == PIPE))
+		tok->type = CMD;
+	if (tok->prev && (tok->prev->type == ARG))
+	{
+		prev = tok->prev;
+		if (prev->prev && is_redirection(prev->prev->type))
+			tok->type = CMD;
+	}
+	return (put_cmd_types(tok->next));
 }
