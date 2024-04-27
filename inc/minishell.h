@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 09:38:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/25 14:42:05 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:21:19 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void		start_exe(t_minishell mini);
 char		**tenv_to_arr(t_env	env);
 int			get_here_doc(char *limiter);
 int			find_file(t_command *cmd, t_token *line);
-int	        builtin(t_minishell mini, t_command command, int pipefd[2], char **envp)
 char		**take_args(t_token *line);
-int         one_builtin(t_minishell mini, t_command command, char **envp);
+int			one_builtin(t_minishell mini, t_command command, char **envp);
+int			builtin(t_minishell mini, t_command command, int pipefd[2], char **envp);
 
 #endif

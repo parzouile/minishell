@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 12:30:31 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/25 14:41:01 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:25:20 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,7 @@ int	commande(t_command cmd, int pipefd[2], char **envp)
 	}
 	else if (pid == 0)
 	{
-		if (cmd.infile != -2)
-			dup2(cmd.infile, STDIN_FILENO);
-		else
-			dup2(pipefd[0], STDIN_FILENO);
-		if (cmd.outfile != -2)
-			dup2(cmd.outfile, STDOUT_FILENO);
-		else
-			dup2(new_pipe[1], STDOUT_FILENO);
+		
 		execve(cmd.cmd, cmd.args, envp);
 		// close(pipefd[0]);
 		// command(cmd, envp);
@@ -126,6 +119,7 @@ void	end_command(t_command cmd, char **envp)
 	free(cmd.args);
 	if (cmd.outfile != -2 && cmd.outfile != 1)
 		close(cmd.outfile);
+	if ()
 }
 void afficherContenuFichier(int fd) {
     char buffer[1024]; // Un tampon de 1024 octets pour stocker les données lues du fichier
@@ -175,7 +169,7 @@ int	find_file(t_command *cmd, t_token *line)
 void	start_command(t_minishell mini, int pipefd[2])
 {	
 	t_command	command;
-	char	**envp;
+	char		**envp;
 
 	envp = tenv_to_arr(mini->env);
 	if (!envp)
@@ -269,10 +263,9 @@ void	start_exe(t_minishell mini)
 		else if (pid == 0)
 		{
 			while (mini->cmd_line != NULL){
-				printf("line = %s\n", mini->cmd_line->str);
 				start_command(mini, pipefd);
 			}
 		}
+		wait(&pid);
 	}
-	wait(&pid);
 }
