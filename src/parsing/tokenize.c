@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:53 by jules             #+#    #+#             */
-/*   Updated: 2024/04/27 11:38:50 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/27 13:02:00 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,6 @@ int	tokenize(t_token *tok, char *str)
 	return (0);
 }
 
-/**
- * a droite d'une redirection
- *  : ARG
- *  
-*/
 void	put_cmd_types(t_token tok)
 {
 	t_token	prev;

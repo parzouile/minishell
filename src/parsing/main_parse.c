@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:41:16 by jules             #+#    #+#             */
-/*   Updated: 2024/04/27 11:12:32 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/27 14:10:08 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	verif_syntaxe(t_token tok)
 	}
 	if (is_redirection(tok->type))
 	{
-		if (!(tok->next))
+		if (!(tok->next) || (tok->next->type == PIPE))
 			return (error_msg("Missing redirection file\n"));
 		if (is_redirection(tok->next->type))
 			return (error_msg("Two consecutive redirections\n"));
@@ -74,6 +74,7 @@ int	verif_syntaxe(t_token tok)
 //tokenize
 //rem " " && ' '
 //check syntaxe
+// put cmd types
 //
 int	parse(t_minishell mini, char *str)
 {
@@ -91,6 +92,7 @@ int	parse(t_minishell mini, char *str)
 		return (error_msg("Error during the removal of quotes\n"));
 	if (verif_syntaxe(mini->cmd_line))
 		return (error_msg("Syntaxe Error\n"));
+	mini->cmd_line = contract_and_move_redirections(mini->cmd_line);
 	put_cmd_types(mini->cmd_line);
 	return (0);
 }

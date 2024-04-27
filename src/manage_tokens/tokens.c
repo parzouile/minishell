@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 19:23:23 by jules             #+#    #+#             */
-/*   Updated: 2024/04/23 19:23:49 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 14:00:31 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void	free_token(t_token tok)
 {
 	if (!tok)
 		return ;
-	free(tok->str);
+	if (tok->str)
+		free(tok->str);
 	free(tok);
 }
 
@@ -55,6 +56,10 @@ void	free_tokens(t_token tok)
 {
 	if (!tok)
 		return ;
+	if (tok->prev)
+		return (free_tokens(tok->prev));
+	if (tok->next)
+		tok->next->prev = NULL;
 	free_tokens(tok->next);
 	free_token(tok);
 }

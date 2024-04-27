@@ -15,7 +15,8 @@ PARSING = parsing/tokenize.c \
 			parsing/expand_token.c \
 			parsing/expand_utils.c \
 			parsing/quotes_remover.c \
-			parsing/main_parse.c
+			parsing/main_parse.c \
+			parsing/manage_redirections.c
 
 SETUP = setup/setup.c \
 			setup/env_setup.c

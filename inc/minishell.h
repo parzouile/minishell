@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/27 11:17:55 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/27 14:05:41 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int			error_msg(char *s);
 
 //tokens
 t_token		new_token(char *str);
+void		free_token(t_token tok);
 void		free_tokens(t_token tok);
 int			push_back(t_token *tok, t_token new);
 
@@ -59,6 +60,7 @@ char		*lst_to_str(t_list *lst);
 char		*expand_str(t_minishell mini, char *str);
 int			remove_tokens_quotes(t_token tok);
 int			tokenize(t_token *tok, char *str);
+t_token		contract_and_move_redirections(t_token tok);
 void		put_cmd_types(t_token tok);
 
 int			is_redirection(int type);
