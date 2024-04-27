@@ -6,7 +6,7 @@
 /*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:07:49 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/26 23:58:10 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/27 20:43:06 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,4 +119,21 @@ char	**tenv_to_arr(t_env	env)
 	}
 	envp[i] = NULL;
 	return (envp);
+}
+
+int	is_valid_name(char *str)
+{
+	int	i;
+
+	i = -1;
+	if (!str || !is_valid_char(str[0]) || ft_isdigit(str[0]))
+		return (0);
+	while (str[++i])
+	{
+		if (str[i] == '=')
+			break ;
+		if (!is_valid_char(str[i]))
+			return (0);
+	}
+	return (1);
 }
