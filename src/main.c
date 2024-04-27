@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/27 15:29:02 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/27 15:54:14 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	run_minishell(t_minishell mini)
 		if (!parse(mini, s))
 		{
 			//exec(mini);
-			printf("FINAL----------\n\n\n");
 			print_token(mini->cmd_line);
 		}
 		free_tokens(mini->cmd_line);

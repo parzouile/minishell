@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 13:52:08 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/27 15:52:25 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/27 15:53:47 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ int	move_one_step(t_token *tok)
 	int		moved;
 	t_token	next;
 
-	printf("STEP--------------\n\n");
-	print_token(*tok);
 	if (!tok || !(*tok))
 		return (0);
 	moved = 0;
