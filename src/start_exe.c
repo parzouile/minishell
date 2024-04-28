@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:32:27 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/28 01:27:57 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/28 18:24:57 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,6 @@ void afficherContenuFichier(int fd) {
         // Afficher les données lues
         write(STDOUT_FILENO, buffer, bytes_lus);
     }
-
     // Vérifier s'il y a eu une erreur lors de la lecture
     if (bytes_lus < 0) {
         perror("Erreur lors de la lecture du fichier");
@@ -225,9 +224,10 @@ void afficherContenuFichier(int fd) {
 void	start_exe(t_minishell mini)
 {
 	int		pipefd[2];
-	pid_t	pid;
 	int			sauvegarde_stdout;
 	int			sauvegarde_stdin;
+	pid_t 	g_lst_pid[100];
+	int		i;
 
     sauvegarde_stdout = dup(STDOUT_FILENO);
 	sauvegarde_stdin = dup(STDIN_FILENO);
@@ -236,21 +236,18 @@ void	start_exe(t_minishell mini)
 		one_command(mini);
 	else
 	{
+		i = -1;
 		if (pipe(pipefd) == -1)
 			ft_error("Pipe");
-		pid	= fork();
-		if (pid < 0)
-			ft_error("Fork");
-		else if (pid == 0)
-		{
-			first_command(mini, pipefd);
-			// close(pipefd[0]);
-			// while (nb_command(mini->cmd_line) >= 2){
-			// 	mid_command(mini, pipefd);
-			// }
-			last_command(mini, pipefd);
+		g_lst_pid[++i] = first_command(mini, pipefd);
+		while (nb_command(mini->cmd_line) >= 2){
+			g_lst_pid[++i] = mid_command(mini, pipefd);
 		}
-		wait(&pid);
+		g_lst_pid[++i] = last_command(mini, pipefd);
+		g_lst_pid[++i] = 0;
+		i = -1;
+		while (g_lst_pid[++i])
+			wait(&g_lst_pid[i]);
 	}
 	dup2(sauvegarde_stdin, STDIN_FILENO);
 	dup2(sauvegarde_stdout, STDOUT_FILENO);

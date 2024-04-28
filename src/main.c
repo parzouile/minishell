@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/28 01:07:06 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/28 18:23:59 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ int	run_minishell(t_minishell mini)
 		add_history(s);
 		if (!parse(mini, s))
 		{
-			start_exe(mini);
+			// print_token(mini->cmd_line);
+			if (mini->cmd_line)
+				start_exe(mini);
 		}
 		free_tokens(mini->cmd_line);
 		mini->cmd_line = NULL;

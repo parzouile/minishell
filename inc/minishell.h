@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/28 01:24:53 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/28 12:55:00 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ int	        get_here_doc(char *limiter);
 char	    *find_bin(char *cmd, char **env);
 char	    **take_args(t_token *line, t_command *command);
 int	        redirection(t_command *cmd, t_token *line);
-void	    first_command(t_minishell mini, int pipefd[2]);
+pid_t	    first_command(t_minishell mini, int pipefd[2]);
 int     	mid_command(t_minishell mini, int pipefd[2]);
-void        last_command(t_minishell mini, int pipefd[2]);
+pid_t        last_command(t_minishell mini, int pipefd[2]);
 
 #endif

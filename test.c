@@ -31,27 +31,10 @@ void effectuerRedirections(int fichier_sortie, int fichier_erreur) {
 int main() {
     // Ouvrir ou créer les fichiers de sortie
     int fichier_sortie = open("sortie.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fichier_sortie == -1) {
-        perror("Erreur lors de l'ouverture ou la création du fichier de sortie");
-        exit(EXIT_FAILURE);
-    }
-
-    int fichier_erreur = open("erreur.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fichier_erreur == -1) {
-        perror("Erreur lors de l'ouverture ou la création du fichier d'erreur");
-        exit(EXIT_FAILURE);
-    }
-
-    // Appeler la fonction pour effectuer les redirections
-    effectuerRedirections(fichier_sortie, fichier_erreur);
-
-    // Utiliser les redirections pour effectuer des opérations de sortie
-    printf("Ceci est redirigé vers sortie.txt.\n");
-    fprintf(stderr, "Ceci est redirigé vers erreur.txt.\n");
 
     // Fermer les fichiers
     close(fichier_sortie);
-    close(fichier_erreur);
+    close(fichier_sortie);
 
     return 0;
 }
