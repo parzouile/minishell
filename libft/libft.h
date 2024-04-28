@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 23:01:31 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/25 11:43:15 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/23 00:06:12 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ typedef struct s_list
 	struct s_list	*next;
 }					t_list;
 
-char	*ft_line(char const *str, int a, int i);
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -43,8 +42,8 @@ int		ft_toupper(int c);
 int		ft_tolower(int c);
 char	*ft_strchr(const char *str, int c);
 char	*ft_strrchr(const char *str, int c);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_strcmp(const char *s1, const char *s2);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	*ft_memchr(const void *str, int n, size_t size);
 int		ft_memcmp(const void *p1, const void *p2, size_t size);
 char	*ft_strnstr(const char	*big, const char *little, size_t len);
@@ -75,7 +74,6 @@ void	ft_lstadd_front(t_list **lst, t_list *new);
 void	ft_lstadd_back(t_list **lst, t_list *new);
 
 char	*get_next_line(int fd);
-size_t	ft_strlen(const char *s);
 int		check_nl(char *stack);
 char	*add_to_stack(char *stack, char *buff);
 char	*ft_new_stack(char *buff);

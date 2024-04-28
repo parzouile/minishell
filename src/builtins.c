@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 14:08:54 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/26 17:20:43 by aschmitt         ###   ########.fr       */
+/*   Created: 2024/04/27 16:33:10 by aschmitt          #+#    #+#             */
+/*   Updated: 2024/04/28 00:39:31 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,39 @@ void	ft_envp(char **envp)
 		printf("%s\n", envp[i]);
 }
 
-void	ft_echo(t_command command)
+int	is_echon(char *s)
 {
 	int	i;
 
-	i = 0;
-	while (command.args[++i])
+	i = 1;
+	if (!s)
+		return (0);
+	if (s[0] == '-')
+	{
+		while (s[i] == 'n')
+			i++;
+		if (!s[i])
+			return (1);
+	}
+	return (0);
+}
+
+void	ft_echo(t_command command)
+{
+	int	i;
+	int	n;
+
+	i = 1;
+	while (is_echon(command.args[i]))
+		i++;
+	n = i == 1;
+	while (command.args[i])
+	{
 		printf("%s", command.args[i]);
+		i++;
+	}
+	if (n)
+		printf("\n");
 }
 
 void	find_bultins(t_minishell mini, char **envp, t_command command)
@@ -133,40 +159,27 @@ void	error_pid(int pipefd[2], int new_pipe[2])
 	perror("minishell : fork:");
 }
 
-int	builtin(t_minishell mini, t_command command, int pipefd[2], char **envp)
+int	builtin(t_minishell mini, t_command command, char **envp)
 {
-	pid_t	pid;
-	int	new_pipe[2];
-
 	if (builtin_null(command) == 0)
 		return (0);
 	if (not_bultins(command))
 		return (1);
-	close(pipefd[1]);
-	if (pipe(new_pipe) == -1)
-		return (close(pipefd[0]), 1);
-	pid = fork();
-	if (pid == -1)
-		return (error_pid(pipefd, new_pipe), 0);
-	else if (pid == 0)
-	{
-		to_dup2(command, pipefd, new_pipe);
-		find_bultins(mini, envp, command);
-	}
-	pipefd[0] = new_pipe[0];
-	pipefd[1] = new_pipe[1];
+	find_bultins(mini, envp, command);
 	return (0);
 }
 
 int	one_builtin(t_minishell mini, t_command command, char **envp)
 {
-	if (ft_strcmp(command.cmd, "cd") == 0)
+	if (ft_strcmp(command.cmd, "echo") == 0)
+		return (ft_echo(command), 0);
+	else if (ft_strcmp(command.cmd, "cd") == 0)
 		return (ft_cd(command, mini), 0);
-	else if (ft_strcmp(command.cmd, "exit") == 0)
-		return (ft_exit(), 0);
 	else if (ft_strcmp(command.cmd, "pwd") == 0)
 		return (ft_pwd(), 0);
 	else if (ft_strcmp(command.cmd, "env") == 0)
 		return (ft_envp(envp), 0);
+	else if (ft_strcmp(command.cmd, "exit") == 0)
+		return (ft_exit(), 0);
 	return (1);
 }

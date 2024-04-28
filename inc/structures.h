@@ -6,18 +6,20 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:40:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/15 15:01:13 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/27 16:36:07 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTURES_H
 # define STRUCTURES_H
 
-typedef enum e_type
-{
-	cmd,
-	arg
-}	t_type;
+# define CMD 1
+# define ARG 2
+# define INFILE 3
+# define INFILE_HEREDOC 4
+# define OUTFILE 5
+# define OUTFILE_APPEND 6
+# define PIPE 7
 
 typedef struct s_token	*t_token;
 typedef struct s_env	*t_env;
@@ -32,6 +34,7 @@ struct s_token
 
 struct s_env
 {
+	char	*name;
 	char	*value;
 	t_env	next;
 };
@@ -41,19 +44,6 @@ typedef struct s_minishell
 	t_token	cmd_line;
 	t_env	env;
 }	*t_minishell;
-
-typedef struct s_file
-{
-	int		*fd;
-	int		type;
-}					t_file;
-/*
-type :
-	1 : >
-	2 : >>
-	3 : <
-	4 : <<
-*/
 
 typedef struct s_command
 {

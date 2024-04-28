@@ -1,8 +1,24 @@
 
-SRCS = aux.c command.c  env.c  main.c parsing.c  pipex.c builtins.c here_doc.c startexe.c \
+SRCS = main.c start_exe.c builtins.c here_doc.c find_bin.c command.c \
+		error.c \
 		$(PARSING) \
-		$(SETUP)
+		$(SETUP) \
+		$(TOKENS_SRCS) \
+		$(ENV) \
+		$(DEBUG)
 
-PARSING = parsing/process_input.c
+PARSING = parsing/tokenize.c \
+			parsing/expand_token.c \
+			parsing/expand_utils.c \
+			parsing/quotes_remover.c \
+			parsing/main_parse.c \
+			parsing/manage_redirections.c
 
-SETUP = setup/setup.c
+SETUP = setup/setup.c \
+			setup/env_setup.c
+
+ENV = env/env.c
+
+TOKENS_SRCS = manage_tokens/tokens.c
+
+DEBUG = debug/debug_funcs.c

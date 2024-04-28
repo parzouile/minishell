@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   startexe.c                                         :+:      :+:    :+:   */
+/*   start_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/12 12:30:31 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/26 17:25:20 by aschmitt         ###   ########.fr       */
+/*   Created: 2024/04/27 16:32:27 by aschmitt          #+#    #+#             */
+/*   Updated: 2024/04/28 01:27:57 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,23 @@ int	nb_args(t_token line)
 	int	i;
 
 	i = 0;
-	while ((line->type == 2  || line->type == 1 || line->type == 0))
+	while ((line->type == 2 || line->type == 1))
 	{
 		i++;
 		if (line->next == NULL)
 			break;
 		line = line->next;
-
 	}
 	return (i);
 }
 
-char	**take_args(t_token *line)
+char	**take_args(t_token *line, t_command *command)
 {
 	char	**result;
 	int		i;
 	int		j;
 
+	(*command).cmd = (*line)->str;
 	i = nb_args(*line);
 	result = (char **)malloc((i + 1) * sizeof(char *));
 	if (!result)
@@ -74,119 +74,74 @@ char	**take_args(t_token *line)
 	return (result);
 }
 
-int	commande(t_command cmd, int pipefd[2], char **envp)
-{
-	pid_t	pid;
-	int	new_pipe[2];
-
-	close(pipefd[1]);
-	if (pipe(new_pipe) == -1)
-		return (close(pipefd[0]), 1);
-	pid = fork();
-	if (pid == -1)
-	{
-		if (cmd.infile != -2)
-			close(cmd.infile);
-		if (cmd.outfile != -2)
-			close(cmd.outfile);
-		close(pipefd[0]);
-		close(new_pipe[0]);
-		close(new_pipe[1]);
-		return (1);
-	}
-	else if (pid == 0)
-	{
-		
-		execve(cmd.cmd, cmd.args, envp);
-		// close(pipefd[0]);
-		// command(cmd, envp);
-	}
-	pipefd[0] = new_pipe[0];
-	pipefd[1] = new_pipe[1];
-	return (0);
-}
-
-void afficher_contenu(char **tableau) {
-    printf("tableau :\n");
-    for (int i = 0; tableau[i] != NULL; ++i) {
-        printf("%s\n", tableau[i]); // Affichage de chaque chaîne de caractères
-    }
-}
-
 void	end_command(t_command cmd, char **envp)
 {
+	int	i;
+
+	i = -1;
+	while (envp[++i])
+		free(envp[i]);
 	free(envp);
 	free(cmd.args);
 	if (cmd.outfile != -2 && cmd.outfile != 1)
 		close(cmd.outfile);
-	if ()
-}
-void afficherContenuFichier(int fd) {
-    char buffer[1024]; // Un tampon de 1024 octets pour stocker les données lues du fichier
-
-    // Lire du fichier tant qu'il y a des données à lire
-    ssize_t bytes_lus;
-    while ((bytes_lus = read(fd, buffer, sizeof(buffer))) > 0) {
-        // Afficher les données lues
-        write(STDOUT_FILENO, buffer, bytes_lus);
-    }
-
-    // Vérifier s'il y a eu une erreur lors de la lecture
-    if (bytes_lus < 0) {
-        perror("Erreur lors de la lecture du fichier");
-        exit(EXIT_FAILURE);
-    }
+	if (cmd.infile != -2)
+		close(cmd.infile);
 }
 
-int	find_file(t_command *cmd, t_token *line)
+void	open_file(t_command *cmd, t_token *line)
 {
 	if ((*line) && (*line)->type == 3)
 	{
+		if (cmd->infile != -2)
+			close(cmd->infile);
 		cmd->infile = open((*line)->str, O_RDONLY, 0644);
-		(*line) = (*line)->next;
 	}
 	else if ((*line) && (*line)->type == 4)
 	{
+		if (cmd->infile != -2)
+			close(cmd->infile);
 		cmd->infile = get_here_doc((*line)->str);
-		(*line) = (*line)->next;
 	}
-	if ((*line) && (*line)->type == 5)
+	else if ((*line) && (*line)->type == 5)
 	{
+		if (cmd->outfile != -2)
+			close(cmd->outfile);
 		cmd->outfile = open((*line)->str,  O_WRONLY | O_CREAT | O_TRUNC, 420);
-		(*line) = (*line)->next;
 	}
+		
 	else if ((*line) && (*line)->type == 6)
 	{
+		if (cmd->outfile != -2)
+			close(cmd->outfile);
 		cmd->outfile = open((*line)->str,  O_WRONLY | O_CREAT | O_APPEND, 420);
-		(*line) = (*line)->next;
 	}
-	if (cmd->outfile == -1 || cmd->infile == -1)
-		return (1);
-	else
-		return (0);
 }
 
-void	start_command(t_minishell mini, int pipefd[2])
-{	
-	t_command	command;
-	char		**envp;
-
-	envp = tenv_to_arr(mini->env);
-	if (!envp)
-		return ;
-	command.cmd = mini->cmd_line->str;
-	command.infile = -2;
-	command.outfile = -2;
-	command.args = take_args(&mini->cmd_line);
-	if (find_file(&command,  &mini->cmd_line) == 1)
-		return ; // fermer fd et free
-	if (mini->cmd_line == NULL && command.outfile == -2)
-		command.outfile = 1;
-	else if (mini->cmd_line && mini->cmd_line->type == 7)
-		mini->cmd_line = mini->cmd_line->next;
-	if (builtin(mini, command, pipefd, envp) == 1)
-		commande(command, pipefd, envp);
-	end_command(command, envp);
+int	redirection(t_command *cmd, t_token *line)
+{
+    cmd->infile = -2;
+	cmd->outfile = -2;
+	while ((*line) && ((*line)->type == 3 || (*line)->type == 4 || (*line)->type == 5 || (*line)->type == 6))
+	{
+		open_file(cmd, line);
+		if (cmd->infile == -1)
+		{
+			if (cmd->outfile)
+				close(cmd->outfile);
+			error_msg("minishell: Error file\n");
+			return (0);
+		}
+		if (cmd->outfile == -1)
+		{
+			if (cmd->infile)
+				close(cmd->infile);
+			error_msg("minishell: Error file\n");
+			return (0);
+		}
+		(*line) = (*line)->next;
+	}
+	return (1);
 }
 
 int	nb_command(t_token line)
@@ -196,7 +151,7 @@ int	nb_command(t_token line)
 	n = 0;
 	while (line != NULL)
 	{
-		if (line->type == 0 || line->type == 1)
+		if (line->type == 1)
 			n++;
 		line = line->next;
 	}
@@ -217,26 +172,28 @@ int	exec_one_commande(t_command cmd, char **envp)
 		return (1);
 	}
 	else if (pid == 0)
+    {
+        if (cmd.cmd[0] != '/' && cmd.cmd[0] != '.')
+			cmd.cmd = find_bin(cmd.cmd, envp);
 		execve(cmd.cmd, cmd.args, envp);
+		error_msg("minishell: command not found\n");
+		exit(0);
+    }
+	wait(&pid);
 	return (0);
 }
 
 void	one_command(t_minishell mini)
 {
 	t_command	command;
-	char	**envp;
-
-	envp = tenv_to_arr(mini->env);
+	char		**envp;
+	
+	envp = tenv_to_arr(mini->env); // a double free
 	if (!envp)
 		return ;
-	command.cmd = mini->cmd_line->str;
-	command.infile = -2;
-	command.outfile = -2;
-	command.args = take_args(&mini->cmd_line);
-	if (find_file(&command,  &mini->cmd_line) == 1)
+	command.args = take_args(&mini->cmd_line, &command);
+	if (redirection(&command,  &mini->cmd_line) == 0)
 		return ; // fermer fd et free
-	if (mini->cmd_line == NULL && command.outfile == -2)
-		command.outfile = 1;
 	if (command.infile != -2)
 		dup2(command.infile, STDIN_FILENO);
 	if (command.outfile != -2)
@@ -246,11 +203,35 @@ void	one_command(t_minishell mini)
 	end_command(command, envp);
 }
 
+
+void afficherContenuFichier(int fd) {
+    char buffer[1024]; // Un tampon de 1024 octets pour stocker les données lues du fichier
+
+	printf("debut lecture--------------\n");
+    // Lire du fichier tant qu'il y a des données à lire
+    ssize_t bytes_lus;
+    while ((bytes_lus = read(fd, buffer, sizeof(buffer))) > 0) {
+        // Afficher les données lues
+        write(STDOUT_FILENO, buffer, bytes_lus);
+    }
+
+    // Vérifier s'il y a eu une erreur lors de la lecture
+    if (bytes_lus < 0) {
+        perror("Erreur lors de la lecture du fichier");
+        exit(EXIT_FAILURE);
+    }
+}
+
 void	start_exe(t_minishell mini)
 {
 	int		pipefd[2];
 	pid_t	pid;
+	int			sauvegarde_stdout;
+	int			sauvegarde_stdin;
 
+    sauvegarde_stdout = dup(STDOUT_FILENO);
+	sauvegarde_stdin = dup(STDIN_FILENO);
+	
 	if (nb_command(mini->cmd_line) == 1)
 		one_command(mini);
 	else
@@ -262,10 +243,17 @@ void	start_exe(t_minishell mini)
 			ft_error("Fork");
 		else if (pid == 0)
 		{
-			while (mini->cmd_line != NULL){
-				start_command(mini, pipefd);
-			}
+			first_command(mini, pipefd);
+			// close(pipefd[0]);
+			// while (nb_command(mini->cmd_line) >= 2){
+			// 	mid_command(mini, pipefd);
+			// }
+			last_command(mini, pipefd);
 		}
 		wait(&pid);
 	}
+	dup2(sauvegarde_stdin, STDIN_FILENO);
+	dup2(sauvegarde_stdout, STDOUT_FILENO);
 }
+
+

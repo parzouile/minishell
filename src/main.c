@@ -6,12 +6,15 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/16 12:24:22 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/28 01:07:06 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * to complete
+*/
 void	ft_exit(void)
 {
 	rl_clear_history();
@@ -19,35 +22,31 @@ void	ft_exit(void)
 	exit(0);
 }
 
-void	ft_error(char *s)
-{
-	perror(s);
-	exit(1);
-}
-
 void	ft_ctrls(int sig)
 {
 	(void)sig;
 }
 
-void	display_prompt(char **envp)
+
+int	run_minishell(t_minishell mini)
 {
 	char	*s;
 
-	(void)envp;
-	s = NULL;
 	using_history();
-	signal(SIGINT, ft_ctrlc);
-	signal(SIGQUIT, ft_ctrls);
-	while (1)
+	s = readline("\033[32;1m$ User ->\033[0m ");
+	while (s)
 	{
-		s = readline("\033[32;1m$ User ->\033[0m ");
-		if (!s)
-			ft_exit();
 		add_history(s);
-		parsing(&s, envp);
+		if (!parse(mini, s))
+		{
+			start_exe(mini);
+		}
+		free_tokens(mini->cmd_line);
+		mini->cmd_line = NULL;
 		free(s);
+		s = readline("\033[32;1m$ User ->\033[0m ");
 	}
+	return (0);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -57,17 +56,13 @@ int	main(int ac, char **av, char **envp)
 
 	(void)av;
 	if (ac != 1)
-	{
-		(void) write(2, "Error args\n", 11);
-		return (EXIT_FAILURE);
-	}
+		return (error_msg("Error args\n"));
 	mini = create_minishell(envp);
 	if (!mini)
-	{
-		(void) write(2, "Error during setup\n", 19);
-		return (EXIT_FAILURE);
-	}
+		return (error_msg("Error during setup\n"));
 	exit_status = run_minishell(mini);
+	
 	free_minishell(mini);
+	rl_clear_history();
 	return (exit_status);
 }
