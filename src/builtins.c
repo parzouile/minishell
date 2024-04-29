@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:33:10 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/28 17:42:07 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/29 11:52:42 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,11 @@ void	ft_echo(t_command command)
 	while (is_echon(command.args[i]))
 		i++;
 	n = i == 1;
-	while (command.args[i])
-	{
+	if (command.args[i])
 		printf("%s", command.args[i]);
-		i++;
+	while (command.args[i] && command.args[++i])
+	{
+		printf(" %s", command.args[i]);
 	}
 	if (n)
 		printf("\n");
@@ -208,6 +209,6 @@ int	one_builtin(t_minishell mini, t_command command, char **envp)
 	else if (ft_strcmp(command.cmd, "env") == 0)
 		return (ft_envp(envp), 0);
 	else if (ft_strcmp(command.cmd, "exit") == 0)
-		return (ft_exit(), 0);
+		return (mini->exit = 0, 0);
 	return (1);
 }
