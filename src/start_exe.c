@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:32:27 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/29 11:28:58 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/29 22:41:40 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,20 +68,18 @@ char	**take_args(t_token *line, t_command *command)
 	while (++j < i)
 	{
 		result[j] = (*line)->str;
-		(*line) = (*line)->next;
+		if ((*line)->next)
+			(*line) = (*line)->next;
 	}
 	result[i] = NULL;
 	return (result);
 }
 
-void	end_command(t_command cmd, char **envp)
+void	end_command(t_command cmd)
 {
 	int	i;
 
 	i = -1;
-	while (envp[++i])
-		free(envp[i]);
-	free(envp);
 	free(cmd.args);
 	if (cmd.outfile != -2 && cmd.outfile != 1)
 		close(cmd.outfile);
@@ -139,6 +137,8 @@ int	redirection(t_command *cmd, t_token *line)
 			error_msg("minishell: Error file\n");
 			return (0);
 		}
+		if ((*line)->next)
+			break ;
 		(*line) = (*line)->next;
 	}
 	return (1);
@@ -173,8 +173,6 @@ int	exec_one_commande(t_command cmd, char **envp)
 	}
 	else if (pid == 0)
     {
-        if (cmd.cmd[0] != '/' && cmd.cmd[0] != '.')
-			cmd.cmd = find_bin(cmd.cmd, envp);
 		execve(cmd.cmd, cmd.args, envp);
 		error_msg("minishell: command not found\n");
 		exit(0);
@@ -186,11 +184,7 @@ int	exec_one_commande(t_command cmd, char **envp)
 void	one_command(t_minishell mini)
 {
 	t_command	command;
-	char		**envp;
-	
-	envp = tenv_to_arr(mini->env); // a double free
-	if (!envp)
-		return ;
+
 	command.args = take_args(&mini->cmd_line, &command);
 	if (redirection(&command,  &mini->cmd_line) == 0)
 		return ; // fermer fd et free
@@ -198,9 +192,9 @@ void	one_command(t_minishell mini)
 		dup2(command.infile, STDIN_FILENO);
 	if (command.outfile != -2)
 		dup2(command.outfile, STDOUT_FILENO);
-	if (one_builtin(mini, command, envp) == 1)
-		exec_one_commande(command, envp);
-	end_command(command, envp);
+	if (one_builtin(mini, command, mini->envp) == 1)
+		exec_one_commande(command, mini->envp);
+	end_command(command);
 }
 
 
@@ -229,9 +223,11 @@ void	start_exe(t_minishell mini)
 	pid_t 	g_lst_pid[100];
 	int		i;
 
-    sauvegarde_stdout = dup(STDOUT_FILENO);
+	mini->envp = tenv_to_arr(mini->env);
+	if (!mini->envp)
+		return ;
+	sauvegarde_stdout = dup(STDOUT_FILENO);
 	sauvegarde_stdin = dup(STDIN_FILENO);
-	
 	if (nb_command(mini->cmd_line) == 1)
 		one_command(mini);
 	else
@@ -249,6 +245,7 @@ void	start_exe(t_minishell mini)
 		while (g_lst_pid[++i])
 			wait(&g_lst_pid[i]);
 	}
+	free_tab(mini->envp);
 	dup2(sauvegarde_stdin, STDIN_FILENO);
 	dup2(sauvegarde_stdout, STDOUT_FILENO);
 }

@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/28 12:55:00 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/29 22:43:23 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,17 +83,19 @@ void		ft_error(char *s);
 void		free_tab(char **path);
 char		*ft_join(char *s1, char *s2);
 void		ft_ctrlc(int sig);
+int 		is_builtin(char *s);
 
 // exec
-void    	start_exe(t_minishell mini);
-int     	one_builtin(t_minishell mini, t_command command, char **envp);
-int     	builtin(t_minishell mini, t_command command, char **envp);
-int	        get_here_doc(char *limiter);
-char	    *find_bin(char *cmd, char **env);
-char	    **take_args(t_token *line, t_command *command);
-int	        redirection(t_command *cmd, t_token *line);
-pid_t	    first_command(t_minishell mini, int pipefd[2]);
-int     	mid_command(t_minishell mini, int pipefd[2]);
-pid_t        last_command(t_minishell mini, int pipefd[2]);
+void		start_exe(t_minishell mini);
+int			one_builtin(t_minishell mini, t_command command, char **envp);
+int			builtin(t_minishell mini, t_command command, char **envp);
+int			get_here_doc(char *limiter);
+char		*find_bin(char *cmd, t_env env);
+char		**take_args(t_token *line, t_command *command);
+int			redirection(t_command *cmd, t_token *line);
+pid_t		first_command(t_minishell mini, int pipefd[2]);
+int			mid_command(t_minishell mini, int pipefd[2]);
+pid_t		last_command(t_minishell mini, int pipefd[2]);
+void		end_command(t_command cmd);
 
 #endif

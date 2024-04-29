@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/29 11:42:30 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/29 22:56:33 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,24 @@ void	ft_ctrls(int sig)
 	(void)sig;
 }
 
+void	find_cmd(t_minishell mini)
+{
+	t_token runner;
+
+	runner = (mini->cmd_line);
+	while (runner)
+	{
+		if (runner->type == CMD)
+		{
+			if (!is_builtin(runner->str))
+			{
+				if (runner->str[0] != '/' && runner->str[0] != '.')
+					runner->str = find_bin(runner->str, mini->env);
+			}
+		}
+		runner = runner->next;
+	}
+}
 
 int	run_minishell(t_minishell mini)
 {
@@ -39,6 +57,7 @@ int	run_minishell(t_minishell mini)
 		if (!parse(mini, s))
 		{
 			// print_token(mini->cmd_line);
+			find_cmd(mini);
 			if (mini->cmd_line)
 				start_exe(mini);
 			// print_token(mini->cmd_line);
@@ -67,7 +86,6 @@ int	main(int ac, char **av, char **envp)
 	if (!mini)
 		return (error_msg("Error during setup\n"));
 	exit_status = run_minishell(mini);
-	
 	free_minishell(mini);
 	rl_clear_history();
 	return (exit_status);
