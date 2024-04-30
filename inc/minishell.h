@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/29 22:43:23 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 10:19:00 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,13 @@ pid_t		first_command(t_minishell mini, int pipefd[2]);
 int			mid_command(t_minishell mini, int pipefd[2]);
 pid_t		last_command(t_minishell mini, int pipefd[2]);
 void		end_command(t_command cmd);
+pid_t		ft_exec2(t_minishell mini, t_command cmd);
+
+// builtins
+void	ft_echo(t_command command);
+void	ft_envp(char **envp);
+void	ft_pwd(void);
+int		ft_cd(t_command command, t_minishell mini);
+void	change_pwd(t_minishell mini);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/29 22:56:33 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 10:07:37 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	ft_ctrls(int sig)
 
 void	find_cmd(t_minishell mini)
 {
-	t_token runner;
+	t_token	runner;
 
 	runner = (mini->cmd_line);
 	while (runner)
@@ -56,12 +56,9 @@ int	run_minishell(t_minishell mini)
 		add_history(s);
 		if (!parse(mini, s))
 		{
-			// print_token(mini->cmd_line);
 			find_cmd(mini);
 			if (mini->cmd_line)
 				start_exe(mini);
-			// print_token(mini->cmd_line);
-			// printf("exit : %d\n", mini->exit);
 		}
 		free_tokens(mini->cmd_line);
 		mini->cmd_line = NULL;

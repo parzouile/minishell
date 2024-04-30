@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 00:59:49 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/29 22:55:58 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 10:06:18 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,10 @@ pid_t	ft_exec(t_minishell mini, t_command command, int pipefd[2])
 		if (command.infile)
 			dup2(command.infile, STDIN_FILENO);
 		close(pipefd[0]);
-		if (builtin(mini, command, mini->envp) == 1) // pas sur p-e modifie  envp ???
+		if (builtin(mini, command, mini->envp) == 1)
 		{
 			execve(command.cmd, command.args, mini->envp);
-			error_msg(command.cmd);
-			error_msg("minishell: command not found\n");	
+			error_msg("minishell: command not found\n");
 		}
 		exit(0);
 	}
@@ -42,7 +41,7 @@ pid_t	first_command(t_minishell mini, int pipefd[2])
 	t_command	command;
 
 	command.args = take_args(&mini->cmd_line, &command);
-	if (redirection(&command,  &mini->cmd_line) == 0)
+	if (redirection(&command, &mini->cmd_line) == 0)
 		return (0);// fermer fd et free
 	if (command.outfile == -2)
 		command.outfile = pipefd[1];
@@ -61,16 +60,15 @@ pid_t	ft_exec3(t_minishell mini, t_command command, int pipefd[2])
 	close(pipefd[1]);
 	pid = fork();
 	if (pid == -1)
-		return (0);// error
+		return (0); // error
 	else if (pid == 0)
 	{
 		dup2(command.outfile, STDOUT_FILENO);
 		dup2(command.infile, STDIN_FILENO);
-		if (builtin(mini, command, mini->envp) == 1) // pas sur p-e modifie  envp ???
+		if (builtin(mini, command, mini->envp) == 1)
 		{
 			execve(command.cmd, command.args, mini->envp);
-			error_msg(command.cmd);
-			error_msg("minishell: command not found\n");	
+			error_msg("minishell: command not found\n");
 		}
 		exit(0);
 	}
@@ -84,52 +82,28 @@ pid_t	last_command(t_minishell mini, int pipefd[2])
 	t_command	command;
 
 	command.args = take_args(&mini->cmd_line, &command);
-	if (redirection(&command,  &mini->cmd_line) == 0)
+	if (redirection(&command, &mini->cmd_line) == 0)
 		return (0); // fermer fd et free
-	
 	if (command.infile == -2)
 		command.infile = pipefd[0];
 	else
 		close(pipefd[0]);
 	if (command.outfile == -2)
 		command.outfile = 1;
-	// verifie NULL 
 	return (ft_exec3(mini, command, pipefd));
-}
-
-pid_t	ft_exec2(t_minishell mini, t_command cmd)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-		return (0);// error
-	else if (pid == 0)
-	{
-		dup2(cmd.infile, STDIN_FILENO);
-		dup2(cmd.outfile, STDOUT_FILENO);
-		if (builtin(mini, cmd, mini->envp) == 1) // pas sur p-e modifie  envp ???
-		{
-			execve(cmd.cmd, cmd.args, mini->envp);
-			error_msg(cmd.cmd);
-			error_msg("minishell: command not found\n");
-		}
-		exit(0);
-	}
-	return (pid);
 }
 
 pid_t	mid_command(t_minishell mini, int pipefd[2])
 {
 	t_command	command;
-	int		newpipe[2];
+	int			newpipe[2];
 	pid_t		pid;
-	
+
 	close(pipefd[1]);
 	if (pipe(newpipe) == -1)
 		return (close(pipefd[0]), 1);
 	command.args = take_args(&mini->cmd_line, &command);
-	if (redirection(&command,  &mini->cmd_line) == 0)
+	if (redirection(&command, &mini->cmd_line) == 0)
 		return (0); // fermer fd et free
 	if (command.infile == -2)
 		command.infile = pipefd[0];
@@ -137,8 +111,6 @@ pid_t	mid_command(t_minishell mini, int pipefd[2])
 		close(pipefd[0]);
 	if (command.outfile == -2)
 		command.outfile = newpipe[1];
-	else
-		close(newpipe[1]);
 	while (mini->cmd_line && mini->cmd_line->type != 7)
 		mini->cmd_line = mini->cmd_line->next;
 	mini->cmd_line = mini->cmd_line->next;

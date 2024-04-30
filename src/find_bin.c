@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:38:09 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/29 21:36:30 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 09:53:29 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,57 +43,6 @@ char	*ft_join(char *s1, char *s2)
 	result[i + j] = '\0';
 	return (result);
 }
-
-// char	**find_paths(char **envp)
-// {
-// 	int		i;
-// 	int		a;
-// 	char	*s;
-
-// 	i = -1;
-// 	s = "PATH=";
-// 	while (envp[++i])
-// 	{
-// 		a = 0;
-// 		while (envp[i][a] && s[a] && envp[i][a] == s[a])
-// 			a ++;
-// 		if (a == 5)
-// 			break ;
-// 	}
-// 	if (a == 5)
-// 		return (ft_split(envp[i] + 5, ':'));
-// 	write(2, "Error Path\n", 12);
-// 	return (NULL);
-// }
-
-// char	*find_bin(char *cmd, char **env)
-// {
-// 	char	**path;
-// 	char	*bin;
-// 	int		i;
-
-// 	i = 0;
-// 	path = find_paths(env);
-// 	if (!path)
-// 		return (NULL);
-// 	while (path[i])
-// 	{
-// 		bin = ft_join(path[i], cmd);
-// 		if (!bin)
-// 			return (free_tab(path), NULL);
-// 		if (access(bin, F_OK) == 0)
-// 		{
-// 			free_tab(path);
-// 			return (bin);
-// 		}
-// 		free(bin);
-// 		i++;
-// 	}
-// 	free_tab(path);
-// 	write(2, "Command not found\n", 19);
-// 	return (NULL);
-// }
-
 
 char	**find_paths(t_env env)
 {
