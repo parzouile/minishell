@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:00:38 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/30 15:24:21 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/30 20:38:42 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	value_length(char *str, int in_dquotes)
 {
 	int	i;
 
-	if (!str[1] || (str[1] == '\"') || (str[1] == ' '))
+	if (!str[1] || (str[1] == ' '))
 		return (0);
 	if (ft_isdigit(str[1]) || str[1] == '?')
 		return (2);
