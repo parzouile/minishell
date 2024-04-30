@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 17:04:07 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:05:25 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	run_minishell(t_minishell mini)
 	char	*s;
 
 	using_history();
+	assign_sig_handler(SIG_MAIN);
 	s = readline("\033[32;1m$ User ->\033[0m ");
 	while (s && mini->exit == -1)
 	{
