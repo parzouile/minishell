@@ -31,6 +31,7 @@ void effectuerRedirections(int fichier_sortie, int fichier_erreur) {
 int main() {
     // Ouvrir ou créer les fichiers de sortie
     int fichier_sortie = open("sortie.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+<<<<<<< HEAD
     if (fichier_sortie == -1) {
         perror("Erreur lors de l'ouverture ou la création du fichier de sortie");
         exit(EXIT_FAILURE);
@@ -52,6 +53,12 @@ int main() {
     // Fermer les fichiers
     close(fichier_sortie);
     close(fichier_erreur);
+=======
+
+    // Fermer les fichiers
+    close(fichier_sortie);
+    close(fichier_sortie);
+>>>>>>> alban
 
     return 0;
 }

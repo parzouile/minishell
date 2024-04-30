@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/28 18:23:08 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/30 10:39:29 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ char		*get_value(t_env env, char *key);
 char		**tenv_to_arr(t_env	env);
 t_env		get_node(t_env env, char *key);
 int			modify_node_value(t_env env, char *key, char *new_value);
+
 
 //setup minishell
 int			setup_env(t_env *env, char **envp);
@@ -86,17 +87,27 @@ void		ft_error(char *s);
 void		free_tab(char **path);
 char		*ft_join(char *s1, char *s2);
 void		ft_ctrlc(int sig);
+int 		is_builtin(char *s);
 
 // exec
-void    	start_exe(t_minishell mini);
-int     	one_builtin(t_minishell mini, t_command command, char **envp);
-int     	builtin(t_minishell mini, t_command command, char **envp);
-int	        get_here_doc(char *limiter);
-char	    *find_bin(char *cmd, char **env);
-char	    **take_args(t_token *line, t_command *command);
-int	        redirection(t_command *cmd, t_token *line);
-void	    first_command(t_minishell mini, int pipefd[2]);
-int     	mid_command(t_minishell mini, int pipefd[2]);
-int	        last_command(t_minishell mini, int pipefd[2]);
+void		start_exe(t_minishell mini);
+int			one_builtin(t_minishell mini, t_command command, char **envp);
+int			builtin(t_minishell mini, t_command command, char **envp);
+int			get_here_doc(char *limiter);
+char		*find_bin(char *cmd, t_env env);
+char		**take_args(t_token *line, t_command *command);
+int			redirection(t_command *cmd, t_token *line);
+pid_t		first_command(t_minishell mini, int pipefd[2]);
+int			mid_command(t_minishell mini, int pipefd[2]);
+pid_t		last_command(t_minishell mini, int pipefd[2]);
+void		end_command(t_command cmd);
+pid_t		ft_exec2(t_minishell mini, t_command cmd);
+
+// builtins
+void	ft_echo(t_command command);
+void	ft_envp(char **envp);
+void	ft_pwd(void);
+int		ft_cd(t_command command, t_minishell mini);
+void	change_pwd(t_minishell mini);
 
 #endif

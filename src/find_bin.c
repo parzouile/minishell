@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:38:09 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/27 16:44:42 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 10:30:07 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,29 +44,23 @@ char	*ft_join(char *s1, char *s2)
 	return (result);
 }
 
-char	**find_paths(char **envp)
+char	**find_paths(t_env env)
 {
-	int		i;
-	int		a;
 	char	*s;
+	char	**path;
 
-	i = -1;
-	s = "PATH=";
-	while (envp[++i])
+	s = get_value(env, "PATH");
+	if (s)
 	{
-		a = 0;
-		while (envp[i][a] && s[a] && envp[i][a] == s[a])
-			a ++;
-		if (a == 5)
-			break ;
+		path = ft_split(s, ':');
+		free(s);
+		return (path);
 	}
-	if (a == 5)
-		return (ft_split(envp[i] + 5, ':'));
 	write(2, "Error Path\n", 12);
 	return (NULL);
 }
 
-char	*find_bin(char *cmd, char **env)
+char	*find_bin(char *cmd, t_env env)
 {
 	char	**path;
 	char	*bin;
@@ -75,14 +69,15 @@ char	*find_bin(char *cmd, char **env)
 	i = 0;
 	path = find_paths(env);
 	if (!path)
-		return (NULL);
+		return (cmd);
 	while (path[i])
 	{
 		bin = ft_join(path[i], cmd);
 		if (!bin)
-			return (free_tab(path), NULL);
+			return (free_tab(path), cmd);
 		if (access(bin, F_OK) == 0)
 		{
+			free(cmd);
 			free_tab(path);
 			return (bin);
 		}
@@ -90,6 +85,5 @@ char	*find_bin(char *cmd, char **env)
 		i++;
 	}
 	free_tab(path);
-	write(2, "Command not found\n", 19);
-	return (NULL);
+	return (cmd);
 }

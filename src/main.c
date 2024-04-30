@@ -6,19 +6,15 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/27 17:10:43 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 10:41:26 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * to complete
-*/
 void	ft_exit(void)
 {
 	rl_clear_history();
-	printf("\033[31;1mBye\033[0m\n");
 	exit(0);
 }
 
@@ -27,6 +23,24 @@ void	ft_ctrls(int sig)
 	(void)sig;
 }
 
+void	find_cmd(t_minishell mini)
+{
+	t_token	runner;
+
+	runner = (mini->cmd_line);
+	while (runner)
+	{
+		if (runner->type == CMD)
+		{
+			if (!is_builtin(runner->str))
+			{
+				if (runner->str[0] != '/' && runner->str[0] != '.')
+					runner->str = find_bin(runner->str, mini->env);
+			}
+		}
+		runner = runner->next;
+	}
+}
 
 int	run_minishell(t_minishell mini)
 {
@@ -34,22 +48,24 @@ int	run_minishell(t_minishell mini)
 
 	using_history();
 	s = readline("\033[32;1m$ User ->\033[0m ");
-	while (s)
+	while (s && mini->exit == -1)
 	{
 		add_history(s);
 		if (!parse(mini, s))
 		{
-			print_token(mini->cmd_line);
-			printf("\nDEBUT EXE ---------------\n\n");
-			start_exe(mini);
-			printf("\nFIN EXE ---------------\n");
+			find_cmd(mini);
+			if (mini->cmd_line)
+				start_exe(mini);
 		}
 		free_tokens(mini->cmd_line);
 		mini->cmd_line = NULL;
 		free(s);
-		s = readline("\033[32;1m$ User ->\033[0m ");
+		if (mini->exit == -1)
+			s = readline("\033[32;1m$ User ->\033[0m ");
 	}
-	return (0);
+	if (mini->exit == -1)
+		mini->exit = 0;
+	return (mini->exit);
 }
 
 int	main(int ac, char **av, char **envp)

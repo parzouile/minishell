@@ -1,5 +1,5 @@
 
-SRCS = main.c start_exe.c builtins.c here_doc.c find_bin.c command.c \
+SRCS = main.c start_exe.c builtins.c here_doc.c find_bin.c command.c aux_exe.c aux_builtins.c\
 		error.c \
 		$(PARSING) \
 		$(SETUP) \

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/01 18:40:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/27 16:36:07 by aschmitt         ###   ########.fr       */
+/*   Created: 2024/04/30 10:38:06 by aschmitt          #+#    #+#             */
+/*   Updated: 2024/04/30 10:38:11 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ typedef struct s_minishell
 {
 	t_token	cmd_line;
 	t_env	env;
+	int		exit;
+	char	**envp;
 }	*t_minishell;
 
 typedef struct s_command

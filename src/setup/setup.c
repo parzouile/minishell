@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/27 01:32:50 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/30 10:41:52 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_minishell	create_minishell(char **envp)
 	}
 	if (incr_shlvl(mini->env))
 		printf("INCREMENT SHLVL FAILED\n");
+	mini->exit = -1;
 	return (mini);
 }
 
