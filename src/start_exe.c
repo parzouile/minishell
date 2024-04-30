@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:32:27 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 10:26:50 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:43:55 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ int	exec_one_commande(t_command cmd, char **envp)
 	else if (pid == 0)
 	{
 		execve(cmd.cmd, cmd.args, envp);
-		error_msg("minishell: command not found\n");
+		perror("minishell");
+		// error_msg("minishell: command not found\n");
 		exit(0);
 	}
 	wait(&pid);
@@ -58,6 +59,8 @@ void	one_command(t_minishell mini)
 	sauvegarde_stdout = dup(STDOUT_FILENO);
 	sauvegarde_stdin = dup(STDIN_FILENO);
 	command.args = take_args(&mini->cmd_line, &command);
+	if (command.args == NULL)
+		return ;
 	if (redirection(&command, &mini->cmd_line) == 0)
 		return ;// fermer fd et free
 	if (command.infile != -2)

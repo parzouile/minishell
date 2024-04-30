@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 09:41:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 13:47:57 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:46:17 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	**take_args(t_token *line, t_command *command)
 	i = nb_args(*line);
 	result = (char **)malloc((i + 1) * sizeof(char *));
 	if (!result)
-		return (NULL);
+		return (perror("minishell"), NULL);
 	j = -1;
 	while (++j < i)
 	{
@@ -101,15 +101,15 @@ int	redirection(t_command *cmd, t_token *line)
 		{
 			if (cmd->outfile != -2)
 				close(cmd->outfile);
-			error_msg("minishell: Error file\n");
-			return (0);
+			error_msg("minishell: ");
+			return (perror((*line)->str), 0);
 		}
 		if (cmd->outfile == -1)
 		{
 			if (cmd->infile != -2)
 				close(cmd->infile);
-			error_msg("minishell: Error file\n");
-			return (0);
+			error_msg("minishell: ");
+			return (perror((*line)->str), 0);
 		}
 		if (!(*line)->next)
 			break ;
