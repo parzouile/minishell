@@ -5,7 +5,9 @@ SRCS = main.c start_exe.c builtins.c here_doc.c find_bin.c command.c aux_exe.c a
 		$(SETUP) \
 		$(TOKENS_SRCS) \
 		$(ENV) \
-		$(DEBUG)
+		$(DEBUG) \
+		$(SIGNALS_SRCS) \
+		$(HEREDOC_SRCS)
 
 PARSING = parsing/tokenize.c \
 			parsing/expand_token.c \
@@ -23,3 +25,7 @@ ENV = env/env.c \
 TOKENS_SRCS = manage_tokens/tokens.c
 
 DEBUG = debug/debug_funcs.c
+
+SIGNALS_SRCS = signals/signals.c
+
+HEREDOC_SRCS = heredoc/expand_heredoc.c

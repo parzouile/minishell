@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_remover.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 12:08:31 by jules             #+#    #+#             */
-/*   Updated: 2024/04/27 02:07:23 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/30 09:58:06 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,6 @@ int	remove_tokens_quotes(t_token tok)
 		return (1);
 	free(tok->str);
 	tok->str = n_str;
+	treat_quote_expanded(tok->str, 1);
 	return (remove_tokens_quotes(tok->next));
 }

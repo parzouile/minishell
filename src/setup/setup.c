@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/30 10:41:52 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:04:28 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_minishell	create_minishell(char **envp)
 	t_minishell	mini;
 	int			error;
 
+	g_current_status = 0;
 	mini = malloc(sizeof(struct s_minishell));
 	if (!mini)
 		return (NULL);

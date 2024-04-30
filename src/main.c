@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 10:41:26 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:04:07 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_current_status;
 
 void	ft_exit(void)
 {
@@ -50,6 +52,7 @@ int	run_minishell(t_minishell mini)
 	s = readline("\033[32;1m$ User ->\033[0m ");
 	while (s && mini->exit == -1)
 	{
+		assign_sig_handler(SIG_MAIN);
 		add_history(s);
 		if (!parse(mini, s))
 		{
