@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 09:41:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 09:45:23 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 11:02:43 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	redirection(t_command *cmd, t_token *line)
 			error_msg("minishell: Error file\n");
 			return (0);
 		}
-		if ((*line)->next)
+		if (!(*line)->next)
 			break ;
 		(*line) = (*line)->next;
 	}

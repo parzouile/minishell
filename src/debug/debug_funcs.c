@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:12:57 by jules             #+#    #+#             */
-/*   Updated: 2024/04/28 16:08:41 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 10:37:42 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	print_token(t_token t)
 	print_type(t->type);
 	printf("\n");
 	if (t->str)
-		printf("STR : %s\n\n", t->str);
+		printf("STR : %s\\n\n\n", t->str);
 	print_token(t->next);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:07:49 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/26 23:58:10 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/30 10:37:21 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,39 +84,4 @@ char	*get_value(t_env env, char *key)
 	if (ft_strcmp(env->name, key) == 0)
 		return (ft_strdup(env->value));
 	return (get_value(env->next, key));
-}
-
-size_t	env_len(t_env env)
-{
-	if (!env)
-		return (0);
-	return (1 + env_len(env->next));
-}
-
-char	**tenv_to_arr(t_env	env)
-{
-	char	**envp;
-	char	*tmp;
-	size_t	i;
-	size_t	len;
-
-	len = env_len(env) + 1;
-	envp = malloc(sizeof(char *) * len);
-	if (!envp)
-		return (NULL);
-	i = 0;
-	while (i + 1 < len)
-	{
-		tmp = ft_strjoin(env->name, "=");
-		if (!tmp)
-			return (NULL);
-		envp[i] = ft_strjoin(tmp, env->value);
-		if (!envp[i])
-			return (free(tmp), NULL);
-		free(tmp);
-		env = env->next;
-		i++;
-	}
-	envp[i] = NULL;
-	return (envp);
 }

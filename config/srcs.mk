@@ -17,7 +17,8 @@ PARSING = parsing/tokenize.c \
 SETUP = setup/setup.c \
 			setup/env_setup.c
 
-ENV = env/env.c
+ENV = env/env.c \
+		env/env2.c
 
 TOKENS_SRCS = manage_tokens/tokens.c
 

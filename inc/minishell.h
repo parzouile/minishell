@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 10:19:00 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 10:39:29 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ void		free_env(t_env env);
 t_env		remove_from_env(t_env env, char *key);
 char		*get_value(t_env env, char *key);
 char		**tenv_to_arr(t_env	env);
+t_env		get_node(t_env env, char *key);
+int			modify_node_value(t_env env, char *key, char *new_value);
+
 
 //setup minishell
 int			setup_env(t_env *env, char **envp);
@@ -54,6 +57,7 @@ int			run_minishell(t_minishell mini);
 
 //parsing
 int			is_valid_char(char c);
+int			is_valid_name(char *str);
 int			next_dollar_sign(char *str, int *in_dquotes);
 char		*lst_to_str(t_list *lst);
 

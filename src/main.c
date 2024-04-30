@@ -6,15 +6,12 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 10:07:37 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 10:41:26 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * to complete
-*/
 void	ft_exit(void)
 {
 	rl_clear_history();
@@ -83,6 +80,7 @@ int	main(int ac, char **av, char **envp)
 	if (!mini)
 		return (error_msg("Error during setup\n"));
 	exit_status = run_minishell(mini);
+	
 	free_minishell(mini);
 	rl_clear_history();
 	return (exit_status);
