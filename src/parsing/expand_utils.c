@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 11:56:08 by jules             #+#    #+#             */
-/*   Updated: 2024/04/26 23:58:13 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/30 10:11:37 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,23 @@ char	*lst_to_str(t_list *lst)
 	}
 	res[i] = 0;
 	return (res);
+}
+
+void	treat_quote_expanded(char *s, int restore)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (!restore && ((s[i] == '\'') || (s[i] == '"')))
+		{
+			s[i] = -s[i];
+		}
+		if (restore && (s[i] < 0))
+		{
+			s[i] = -s[i];
+		}
+		i++;
+	}
 }

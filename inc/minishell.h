@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/28 18:12:46 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/30 09:55:32 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int			is_valid_char(char c);
 int			is_valid_name(char *str);
 int			next_dollar_sign(char *str, int *in_dquotes);
 char		*lst_to_str(t_list *lst);
+void		treat_quote_expanded(char *s, int restore);
 
 char		*expand_str(t_minishell mini, char *str);
 int			remove_tokens_quotes(t_token tok);

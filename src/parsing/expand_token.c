@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:00:38 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/27 12:16:17 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/30 10:11:40 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ char	*get_expanded_value(t_minishell mini, char *str, int len_var)
 		free(var_name);
 	if (!value)
 		return (NULL);
+	treat_quote_expanded(value, 0);
 	return (value);
 }
 
