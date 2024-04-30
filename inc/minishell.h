@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 10:39:29 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 13:56:56 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,8 @@ void	ft_envp(char **envp);
 void	ft_pwd(void);
 int		ft_cd(t_command command, t_minishell mini);
 void	change_pwd(t_minishell mini);
+void	ft_export(t_minishell mini, t_command cmd);
+void	ft_unset(t_minishell mini, t_command cmd);
+
 
 #endif

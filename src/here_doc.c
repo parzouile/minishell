@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:37:01 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 10:29:04 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 14:34:41 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	write_here_doc(char *limiter, int fd)
 	char	*s;
 
 	s = readline(">> ");
-	while (ft_strcmpn(s, limiter) != 0)
+	while (ft_strcmpn(s, limiter) != 0) // crtl +d + expand
 	{
 		write(fd, s, ft_strlen(s));
 		write(fd, "\n", 1);
@@ -52,25 +52,4 @@ int	get_here_doc(char *limiter)
 		ft_error("Pipe");
 	write_here_doc(limiter, pipefd[1]);
 	return (pipefd[0]);
-}
-
-pid_t	ft_exec2(t_minishell mini, t_command cmd)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-		return (0); // error
-	else if (pid == 0)
-	{
-		dup2(cmd.infile, STDIN_FILENO);
-		dup2(cmd.outfile, STDOUT_FILENO);
-		if (builtin(mini, cmd, mini->envp) == 1)
-		{
-			execve(cmd.cmd, cmd.args, mini->envp);
-			error_msg("minishell: command not found\n");
-		}
-		exit(0);
-	}
-	return (pid);
 }

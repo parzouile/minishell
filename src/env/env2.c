@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 18:16:08 by jules             #+#    #+#             */
-/*   Updated: 2024/04/28 18:17:17 by jules            ###   ########.fr       */
+/*   Updated: 2024/04/30 14:11:57 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	is_valid_name(char *str)
 		if (!is_valid_char(str[i]))
 			return (0);
 	}
-	return (1);
+	return (i);
 }
 
 t_env	get_node(t_env env, char *key)

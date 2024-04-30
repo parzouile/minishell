@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 09:41:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 11:02:43 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 13:47:57 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,14 @@ int	redirection(t_command *cmd, t_token *line)
 		open_file(cmd, line);
 		if (cmd->infile == -1)
 		{
-			if (cmd->outfile)
+			if (cmd->outfile != -2)
 				close(cmd->outfile);
 			error_msg("minishell: Error file\n");
 			return (0);
 		}
 		if (cmd->outfile == -1)
 		{
-			if (cmd->infile)
+			if (cmd->infile != -2)
 				close(cmd->infile);
 			error_msg("minishell: Error file\n");
 			return (0);

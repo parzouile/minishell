@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:33:10 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 10:41:41 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 13:40:40 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,9 @@ int	one_builtin(t_minishell mini, t_command command, char **envp)
 		return (ft_envp(envp), 0);
 	else if (ft_strcmp(command.cmd, "exit") == 0)
 		return (mini->exit = 0, 0);
+	else if (ft_strcmp(command.cmd, "unset") == 0)
+		return (ft_unset(mini, command), 0);
+	else if (ft_strcmp(command.cmd, "export") == 0)
+		return (ft_export(mini, command), 0);
 	return (1);
 }
