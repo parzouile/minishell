@@ -6,11 +6,13 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/27 15:54:14 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:19:13 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_current_status;
 
 /**
  * to complete
@@ -36,6 +38,7 @@ int	run_minishell(t_minishell mini)
 	s = readline("\033[32;1m$ User ->\033[0m ");
 	while (s)
 	{
+		assign_sig_handler(SIG_MAIN);
 		add_history(s);
 		if (!parse(mini, s))
 		{

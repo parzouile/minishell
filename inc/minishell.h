@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 09:55:32 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:19:22 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@
 
 # include "libft.h"
 # include "structures.h"
+
+# define SIG_MAIN 0
+# define SIG_FORK 1
+# define SIG_HEREDOC 2
+
+extern int	g_current_status;
 
 //errors
 void		ft_error(char *s);
@@ -61,6 +67,8 @@ int			next_dollar_sign(char *str, int *in_dquotes);
 char		*lst_to_str(t_list *lst);
 void		treat_quote_expanded(char *s, int restore);
 
+int			value_length(char *str, int in_dquotes);
+char		*get_expanded_value(t_minishell mini, char *str, int len_var);
 char		*expand_str(t_minishell mini, char *str);
 int			remove_tokens_quotes(t_token tok);
 int			tokenize(t_token *tok, char *str);
@@ -69,6 +77,12 @@ void		put_cmd_types(t_token tok);
 
 int			is_redirection(int type);
 int			parse(t_minishell mini, char *str);
+
+//HEREDOC
+char		*expand_heredoc(t_minishell mini, char *str);
+
+//SIGNALS
+void		assign_sig_handler(int mod);
 
 //DEBUG
 void		print_token(t_token t);
