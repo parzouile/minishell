@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:14:03 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 10:16:28 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 14:17:20 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	change_pwd(t_minishell mini)
 	if (!tmp)
 		return ;
 	add_value(&(mini->env), tmp);
-	free(tmp);
+	if (tmp)
+		free(tmp);
 	mini->env = remove_from_env(mini->env, "PWD");
 	getcwd(buffer, 2048);
 	tmp = ft_strjoin("PWD=", buffer);
@@ -105,4 +106,41 @@ void	ft_echo(t_command command)
 	}
 	if (n)
 		printf("\n");
+}
+
+void	ft_unset(t_minishell mini, t_command cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd.args[++i])
+		mini->env = remove_from_env(mini->env, cmd.args[i]);
+}
+
+void	ft_export(t_minishell mini, t_command cmd)
+{
+	int		i;
+	int		j;
+	char	*key;
+
+	i = 0;
+	while (cmd.args[++i])
+	{
+		j = is_valid_name(cmd.args[i]);
+		if (!j)
+		{
+			error_msg("minishell: export: '");
+			error_msg(cmd.args[i]);
+			error_msg("': not a valid identifier\n");
+			continue ;
+		}
+		if (!cmd.args[i][j])
+			continue ;
+		key = ft_substr(cmd.args[i], 0, i);
+		if (!key)
+			continue ;
+		mini->env = remove_from_env(mini->env,  key);
+		free(key);
+		add_value(&(mini->env), cmd.args[i]);
+	}
 }

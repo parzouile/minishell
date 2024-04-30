@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 09:41:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 09:45:23 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:08:27 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	**take_args(t_token *line, t_command *command)
 	i = nb_args(*line);
 	result = (char **)malloc((i + 1) * sizeof(char *));
 	if (!result)
-		return (NULL);
+		return (perror("minishell"), NULL);
 	j = -1;
 	while (++j < i)
 	{
@@ -51,9 +51,6 @@ char	**take_args(t_token *line, t_command *command)
 
 void	end_command(t_command cmd)
 {
-	int	i;
-
-	i = -1;
 	free(cmd.args);
 	if (cmd.outfile != -2 && cmd.outfile != 1)
 		close(cmd.outfile);
@@ -99,19 +96,19 @@ int	redirection(t_command *cmd, t_token *line)
 		open_file(cmd, line);
 		if (cmd->infile == -1)
 		{
-			if (cmd->outfile)
+			if (cmd->outfile != -2)
 				close(cmd->outfile);
-			error_msg("minishell: Error file\n");
-			return (0);
+			error_msg("minishell: ");
+			return (perror((*line)->str), 0);
 		}
 		if (cmd->outfile == -1)
 		{
-			if (cmd->infile)
+			if (cmd->infile != -2)
 				close(cmd->infile);
-			error_msg("minishell: Error file\n");
-			return (0);
+			error_msg("minishell: ");
+			return (perror((*line)->str), 0);
 		}
-		if ((*line)->next)
+		if (!(*line)->next)
 			break ;
 		(*line) = (*line)->next;
 	}

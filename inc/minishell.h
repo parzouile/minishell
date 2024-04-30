@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 17:01:41 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:03:20 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,5 +124,8 @@ void	ft_envp(char **envp);
 void	ft_pwd(void);
 int		ft_cd(t_command command, t_minishell mini);
 void	change_pwd(t_minishell mini);
+void	ft_export(t_minishell mini, t_command cmd);
+void	ft_unset(t_minishell mini, t_command cmd);
+
 
 #endif
