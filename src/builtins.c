@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:33:10 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 18:05:23 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:02:32 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	find_bultins(t_minishell mini, char **envp, t_command command)
 		ft_pwd();
 	else if (ft_strcmp(command.cmd, "env") == 0)
 		ft_envp(envp);
+	else if (ft_strcmp(command.cmd, "export") == 0)
+		ft_export(mini, command);
 }
 
 int	builtin_null(t_command command)
@@ -75,7 +77,7 @@ int	one_builtin(t_minishell mini, t_command command, char **envp)
 	else if (ft_strcmp(command.cmd, "env") == 0)
 		return (ft_envp(envp), 0);
 	else if (ft_strcmp(command.cmd, "exit") == 0)
-		return (mini->exit = 0, 0);
+		return (ft_exit(command, mini), 0);
 	else if (ft_strcmp(command.cmd, "unset") == 0)
 		return (ft_unset(mini, command), 0);
 	else if (ft_strcmp(command.cmd, "export") == 0)

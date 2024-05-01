@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   setup.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:51 by jules             #+#    #+#             */
-/*   Updated: 2024/04/30 18:07:09 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 16:49:25 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_minishell(t_minishell mini)
+{
+	if (!mini)
+		return ;
+	free_tokens(mini->cmd_line);
+	free_env(mini->env);
+	if (mini->s)
+		free(mini->s);
+	free(mini);
+}
 
 t_minishell	create_minishell(char **envp)
 {
@@ -23,24 +34,11 @@ t_minishell	create_minishell(char **envp)
 		return (NULL);
 	mini->cmd_line = NULL;
 	mini->env = NULL;
+	mini->s = NULL;
 	error = setup_env(&(mini->env), envp);
 	if (error)
-	{
-		free_env(mini->env);
-		free(mini);
-		return (NULL);
-	}
+		return (free_minishell(mini), NULL);
 	if (incr_shlvl(mini->env))
-		printf("INCREMENT SHLVL FAILED\n");
-	mini->exit = -1;
+		return (free_minishell(mini), NULL);
 	return (mini);
-}
-
-void	free_minishell(t_minishell mini)
-{
-	if (!mini)
-		return ;
-	free_tokens(mini->cmd_line);
-	free_env(mini->env);
-	free(mini);
 }

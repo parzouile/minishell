@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 14:42:32 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:53:30 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ void		print_envp(char **envp);
 //the rest for now
 void		parsing(char **s, char **envp);
 void		display_prompt(char **envp);
-void		ft_exit(void);
 void		ft_pipe(int argc, char **argv, char **envp);
 void		command(char *cmd, char **envp);
 void		processus(int new_pipe[2], int pipefd[2], char *cmd, char **envp);
@@ -119,13 +118,14 @@ void		end_command(t_command cmd);
 pid_t		ft_exec2(t_minishell mini, t_command cmd);
 
 // builtins
-void	ft_echo(t_command command);
-void	ft_envp(char **envp);
-void	ft_pwd(void);
-int		ft_cd(t_command command, t_minishell mini);
-void	change_pwd(t_minishell mini);
-void	ft_export(t_minishell mini, t_command cmd);
-void	ft_unset(t_minishell mini, t_command cmd);
+void		ft_echo(t_command command);
+void		ft_envp(char **envp);
+void		ft_pwd(void);
+int			ft_cd(t_command command, t_minishell mini);
+void		change_pwd(t_minishell mini);
+void		ft_export(t_minishell mini, t_command cmd);
+void		ft_unset(t_minishell mini, t_command cmd);
+void		ft_exit(t_command cmd, t_minishell mini);
 
 
 #endif

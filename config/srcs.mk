@@ -1,6 +1,6 @@
 
 SRCS = main.c start_exe.c builtins.c here_doc.c find_bin.c command.c aux_exe.c aux_builtins.c\
-		error.c \
+		error.c ft_exit.c\
 		$(PARSING) \
 		$(SETUP) \
 		$(TOKENS_SRCS) \

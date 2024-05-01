@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:26:18 by jules             #+#    #+#             */
-/*   Updated: 2024/05/01 14:34:21 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/01 16:45:53 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,4 @@ int	incr_shlvl(t_env env)
 	free(env->value);
 	env->value = n_shlvl;
 	return (0);
-
 }

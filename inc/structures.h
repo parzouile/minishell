@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:38:06 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 14:36:13 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/01 16:49:30 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_minishell
 {
 	t_token	cmd_line;
 	t_env	env;
-	int		exit;
+	char	*s;
 	char	**envp;
 }	*t_minishell;
 
