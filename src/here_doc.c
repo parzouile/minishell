@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:01:03 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 22:42:58 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:59:44 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	zero_command(t_minishell mini)
 {
 	t_command command;
 
+	command.exec = 0;
 	if (redirection(&command, &mini->cmd_line, mini) == 0)
 		return (go_next_pipe(mini));
 	go_next_pipe(mini);

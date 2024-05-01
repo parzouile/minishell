@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 00:59:49 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 22:32:56 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:58:52 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ pid_t	first_command(t_minishell mini, int pipefd[2])
 	// print_token(mini->cmd_line);
 	if (nb_command(mini->cmd_line) == 0)
 	{
-		printf("first no cmd\n");
+		// printf("first no cmd\n");
 		return (zero_command(mini), 0);
 	}
 	command.args = take_args(&mini->cmd_line, &command);	
@@ -117,17 +117,18 @@ pid_t	mid_command(t_minishell mini, int pipefd[2])
 	close(pipefd[1]);
 	// printf("mid\n");
 	// print_token(mini->cmd_line);
+	command.exec = 0;
 	if (pipe(newpipe) == -1)
 		return (close(pipefd[0]), 1);
 	if (nb_command(mini->cmd_line) == 0)
 	{
-		printf("mid no cmd\n");
+		// printf("mid no cmd\n");
 		close(pipefd[0]);
 		pipefd[0] = newpipe[0];
 		pipefd[1] = newpipe[1];
 		return (zero_command(mini), 0);
 	}
-	command.exec = 0;
+	
 	command.args = take_args(&mini->cmd_line, &command);
 	if (command.args == NULL)
 		return (go_next_pipe(mini), 0);
@@ -156,13 +157,13 @@ pid_t	last_command(t_minishell mini, int pipefd[2])
 	// printf("last\n");
 	// print_token(mini->cmd_line);
 	// printf("last nb command %d\n", nb_command(mini->cmd_line));
+	cmd.exec = 0;
 	if (nb_command(mini->cmd_line) == 0)
 	{
-		printf("last no cmd\n");
+		// printf("last no cmd\n");
 		close(pipefd[0]);
 		return (zero_command(mini), 0);
 	}
-	cmd.exec = 0;
 	cmd.args = take_args(&mini->cmd_line, &cmd);
 	if (cmd.args == NULL)
 		return (0);
