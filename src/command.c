@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 00:59:49 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 18:09:06 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:32:56 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,15 @@ pid_t	ft_exec3(t_minishell mini, t_command command)
 	end_command(command);
 	return (pid);
 }
+
 void	go_next_pipe(t_minishell mini)
 {
 	while (mini->cmd_line && mini->cmd_line->type != 7)
+	{
+		if (!mini->cmd_line->next)
+			break ;
 		mini->cmd_line = mini->cmd_line->next;
+	}
 	if (mini->cmd_line && mini->cmd_line->type == 7)
 		mini->cmd_line = mini->cmd_line->next;
 }
@@ -81,7 +86,14 @@ pid_t	first_command(t_minishell mini, int pipefd[2])
 
 	g_current_status = 0;
 	command.exec = 0;
-	command.args = take_args(&mini->cmd_line, &command);
+	// printf("first\n");
+	// print_token(mini->cmd_line);
+	if (nb_command(mini->cmd_line) == 0)
+	{
+		printf("first no cmd\n");
+		return (zero_command(mini), 0);
+	}
+	command.args = take_args(&mini->cmd_line, &command);	
 	if (command.args == NULL)
 		return (go_next_pipe(mini), 0);
 	if (redirection(&command, &mini->cmd_line, mini) == 0 || command.exec)
@@ -103,8 +115,18 @@ pid_t	mid_command(t_minishell mini, int pipefd[2])
 	pid_t		pid;
 
 	close(pipefd[1]);
+	// printf("mid\n");
+	// print_token(mini->cmd_line);
 	if (pipe(newpipe) == -1)
 		return (close(pipefd[0]), 1);
+	if (nb_command(mini->cmd_line) == 0)
+	{
+		printf("mid no cmd\n");
+		close(pipefd[0]);
+		pipefd[0] = newpipe[0];
+		pipefd[1] = newpipe[1];
+		return (zero_command(mini), 0);
+	}
 	command.exec = 0;
 	command.args = take_args(&mini->cmd_line, &command);
 	if (command.args == NULL)
@@ -131,6 +153,15 @@ pid_t	last_command(t_minishell mini, int pipefd[2])
 	t_command	cmd;
 
 	close(pipefd[1]);
+	// printf("last\n");
+	// print_token(mini->cmd_line);
+	// printf("last nb command %d\n", nb_command(mini->cmd_line));
+	if (nb_command(mini->cmd_line) == 0)
+	{
+		printf("last no cmd\n");
+		close(pipefd[0]);
+		return (zero_command(mini), 0);
+	}
 	cmd.exec = 0;
 	cmd.args = take_args(&mini->cmd_line, &cmd);
 	if (cmd.args == NULL)

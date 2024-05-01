@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 18:23:03 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:11:54 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	nb_command(t_token line)
 	int	n;
 
 	n = 0;
-	while (line != NULL)
+	while (line != NULL && line->type != 7)
 	{
 		if (line->type == 1)
 			n++;
@@ -26,7 +26,19 @@ int	nb_command(t_token line)
 	return (n);
 }
 
+int	nb_pipe(t_token line)
+{
+	int	n;
 
+	n = 0;
+	while (line != NULL)
+	{
+		if (line->type == 7)
+			n++;
+		line = line->next;
+	}
+	return (n + 1);
+}
 
 int	exec_one_commande(t_command cmd, char **envp)
 {
@@ -73,7 +85,7 @@ void	one_command(t_minishell mini)
 	if (command.args == NULL)
 		return ;
 	if (redirection(&command, &mini->cmd_line, mini) == 0 || command.exec)
-		return ;// fermer fd et free
+		return (free(command.args));// fermer fd et free
 	if (command.infile != -2)
 		dup2(command.infile, STDIN_FILENO);
 	if (command.outfile != -2)
@@ -112,20 +124,20 @@ void	start_exe(t_minishell mini)
 	mini->envp = tenv_to_arr(mini->env);
 	if (!mini->envp)
 		return ;
-	if (nb_command(mini->cmd_line) <= 1)
+	if (nb_pipe(mini->cmd_line) == 1)
 		one_command(mini);
 	else
 	{
-		lst = ft_calloc(sizeof(pid_t), (n = nb_command(mini->cmd_line)) + 1);
+		lst = ft_calloc(sizeof(pid_t), (n = nb_pipe(mini->cmd_line)));
 		if (!lst)
 			return (free_tab(mini->envp));
-		i = -1;
+		i = 0;
 		if (pipe(pipefd) == -1)
 			return (free_tab(mini->envp));
-		lst[++i] = first_command(mini, pipefd);
-		while (nb_command(mini->cmd_line) >= 2)
-			lst[++i] = mid_command(mini, pipefd);
-		lst[++i] = last_command(mini, pipefd);
+		lst[i++] = first_command(mini, pipefd);
+		while (i + 1 < n)
+			lst[i++] = mid_command(mini, pipefd);
+		lst[i++] = last_command(mini, pipefd);
 		wait_child(lst, n);
 	}
 	assign_sig_handler(SIG_MAIN);
