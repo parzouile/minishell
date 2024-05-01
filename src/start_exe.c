@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 18:23:03 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:03:46 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,10 +118,18 @@ void	start_exe(t_minishell mini)
 	{
 		lst = ft_calloc(sizeof(pid_t), (n = nb_command(mini->cmd_line)) + 1);
 		if (!lst)
-			return (free_tab(mini->envp));
+		{
+			free_tab(mini->envp);
+			mini->envp = NULL;
+			return ;
+		}
 		i = -1;
 		if (pipe(pipefd) == -1)
-			return (free_tab(mini->envp));
+		{
+			free_tab(mini->envp);
+			mini->envp = NULL;
+			return ;
+		}
 		lst[++i] = first_command(mini, pipefd);
 		while (nb_command(mini->cmd_line) >= 2)
 			lst[++i] = mid_command(mini, pipefd);

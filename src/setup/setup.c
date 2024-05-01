@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:51 by jules             #+#    #+#             */
-/*   Updated: 2024/05/01 18:20:05 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:01:06 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	free_minishell(t_minishell mini)
 	free_env(mini->env);
 	if (mini->s)
 		free(mini->s);
+	if (mini->envp)
+		free_tab(mini->envp);
 	free(mini);
 }
 
