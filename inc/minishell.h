@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 17:53:30 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/01 18:16:03 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ extern int	g_current_status;
 //errors
 void		ft_error(char *s);
 int			error_msg(char *s);
+void		ft_denied(char *s);
 
 //tokens
 t_token		new_token(char *str);
@@ -81,6 +82,7 @@ int			parse(t_minishell mini, char *str);
 
 //HEREDOC
 char		*expand_heredoc(t_minishell mini, char *str);
+int			get_here_doc(char *limiter, t_minishell mini, t_command *cmd);
 
 //SIGNALS
 void		assign_sig_handler(int mod);
@@ -107,15 +109,15 @@ int 		is_builtin(char *s);
 void		start_exe(t_minishell mini);
 int			one_builtin(t_minishell mini, t_command command, char **envp);
 int			builtin(t_minishell mini, t_command command, char **envp);
-int			get_here_doc(char *limiter);
 char		*find_bin(char *cmd, t_env env);
 char		**take_args(t_token *line, t_command *command);
-int			redirection(t_command *cmd, t_token *line);
+int			redirection(t_command *cmd, t_token *line, t_minishell mini);
 pid_t		first_command(t_minishell mini, int pipefd[2]);
 int			mid_command(t_minishell mini, int pipefd[2]);
 pid_t		last_command(t_minishell mini, int pipefd[2]);
 void		end_command(t_command cmd);
 pid_t		ft_exec2(t_minishell mini, t_command cmd);
+void		zero_command(t_minishell mini);
 
 // builtins
 void		ft_echo(t_command command);

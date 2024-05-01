@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 17:52:52 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/01 18:19:22 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	find_cmd(t_minishell mini)
 	runner = (mini->cmd_line);
 	while (runner)
 	{
-		if (runner->type == CMD)
+		if (runner->type == CMD && runner->str && runner->str[0])
 		{
 			if (!is_builtin(runner->str))
 			{

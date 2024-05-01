@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:33:10 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 17:02:32 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/01 18:18:28 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	one_builtin(t_minishell mini, t_command command, char **envp)
 		return (ft_exit(command, mini), 0);
 	else if (ft_strcmp(command.cmd, "unset") == 0)
 		return (ft_unset(mini, command), 0);
-	else if (ft_strcmp(command.cmd, "export") == 0)
+	else if (ft_strcmp(command.cmd, "export") == 0) /// return 1
 		return (ft_export(mini, command), 0);
 	return (1);
 }

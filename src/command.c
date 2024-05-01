@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 00:59:49 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 18:01:30 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 18:09:06 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@ pid_t	ft_exec(t_minishell mini, t_command command, int pipefd[2])
 {
 	pid_t	pid;
 
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
-		return (0); // error
+		return (perror("minishell"), end_command(command), 0);
 	else if (pid == 0)
 	{
+		assign_sig_handler(SIG_FORK);
 		dup2(command.outfile, STDOUT_FILENO);
 		if (command.infile)
 			dup2(command.infile, STDIN_FILENO);
@@ -28,8 +30,10 @@ pid_t	ft_exec(t_minishell mini, t_command command, int pipefd[2])
 		if (builtin(mini, command, mini->envp) == 1)
 		{
 			execve(command.cmd, command.args, mini->envp);
-			perror("minishell");
-			// error_msg("minishell: command not found\n");
+			if (access(command.cmd, F_OK) == 0)
+				ft_denied(command.cmd);
+			error_msg("minishell: command not found\n");
+			exit(127);
 		}
 		exit(0);
 	}
@@ -41,34 +45,47 @@ pid_t	ft_exec3(t_minishell mini, t_command command)
 {
 	pid_t	pid;
 
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
-		return (0); // error
+		return (perror("minishell"), end_command(command), 0);
 	else if (pid == 0)
 	{
+		assign_sig_handler(SIG_FORK);
 		dup2(command.outfile, STDOUT_FILENO);
 		dup2(command.infile, STDIN_FILENO);
 		if (builtin(mini, command, mini->envp) == 1)
 		{
 			execve(command.cmd, command.args, mini->envp);
-			perror("minishell");
-			// error_msg("minishell: command not found\n");
+			if (access(command.cmd, F_OK) == 0)
+				ft_denied(command.cmd);
+			error_msg("minishell: command not found\n");
+			exit(127);
 		}
 		exit(0);
 	}
 	end_command(command);
 	return (pid);
 }
+void	go_next_pipe(t_minishell mini)
+{
+	while (mini->cmd_line && mini->cmd_line->type != 7)
+		mini->cmd_line = mini->cmd_line->next;
+	if (mini->cmd_line && mini->cmd_line->type == 7)
+		mini->cmd_line = mini->cmd_line->next;
+}
 
 pid_t	first_command(t_minishell mini, int pipefd[2])
 {
 	t_command	command;
 
+	g_current_status = 0;
+	command.exec = 0;
 	command.args = take_args(&mini->cmd_line, &command);
 	if (command.args == NULL)
-		return (0);
-	if (redirection(&command, &mini->cmd_line) == 0)
-		return (0);// fermer fd et free
+		return (go_next_pipe(mini), 0);
+	if (redirection(&command, &mini->cmd_line, mini) == 0 || command.exec)
+		return (go_next_pipe(mini), free(command.args), 0);
 	if (command.outfile == -2)
 		command.outfile = pipefd[1];
 	else
@@ -88,11 +105,12 @@ pid_t	mid_command(t_minishell mini, int pipefd[2])
 	close(pipefd[1]);
 	if (pipe(newpipe) == -1)
 		return (close(pipefd[0]), 1);
+	command.exec = 0;
 	command.args = take_args(&mini->cmd_line, &command);
 	if (command.args == NULL)
-		return (0);
-	if (redirection(&command, &mini->cmd_line) == 0)
-		return (0); // fermer fd et free
+		return (go_next_pipe(mini), 0);
+	if (redirection(&command, &mini->cmd_line, mini) == 0 || command.exec)
+		return (go_next_pipe(mini), free(command.args), 0);
 	if (command.infile == -2)
 		command.infile = pipefd[0];
 	else
@@ -110,19 +128,20 @@ pid_t	mid_command(t_minishell mini, int pipefd[2])
 
 pid_t	last_command(t_minishell mini, int pipefd[2])
 {
-	t_command	command;
+	t_command	cmd;
 
 	close(pipefd[1]);
-	command.args = take_args(&mini->cmd_line, &command);
-	if (command.args == NULL)
+	cmd.exec = 0;
+	cmd.args = take_args(&mini->cmd_line, &cmd);
+	if (cmd.args == NULL)
 		return (0);
-	if (redirection(&command, &mini->cmd_line) == 0)
-		return (0); // fermer fd et free
-	if (command.infile == -2)
-		command.infile = pipefd[0];
+	if (redirection(&cmd, &mini->cmd_line, mini) == 0 || cmd.exec)
+		return (free(cmd.args), 0); // fermer fd et free
+	if (cmd.infile == -2)
+		cmd.infile = pipefd[0];
 	else
 		close(pipefd[0]);
-	if (command.outfile == -2)
-		command.outfile = 1;
-	return (ft_exec3(mini, command));
+	if (cmd.outfile == -2)
+		cmd.outfile = 1;
+	return (ft_exec3(mini, cmd));
 }

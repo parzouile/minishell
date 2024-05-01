@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:38:06 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 16:49:30 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/01 18:17:26 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_command
 	char	**args;
 	int		infile;
 	int		outfile;
+	int		exec;
 }					t_command;
 
 #endif

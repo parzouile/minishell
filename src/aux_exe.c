@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 09:41:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 18:08:27 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 18:06:09 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	end_command(t_command cmd)
 		close(cmd.infile);
 }
 
-void	open_file(t_command *cmd, t_token *line)
+void	open_file(t_command *cmd, t_token *line, t_minishell mini)
 {
 	if ((*line) && (*line)->type == 3)
 	{
@@ -70,7 +70,8 @@ void	open_file(t_command *cmd, t_token *line)
 	{
 		if (cmd->infile != -2)
 			close(cmd->infile);
-		cmd->infile = get_here_doc((*line)->str);
+		
+		cmd->infile = get_here_doc((*line)->str, mini, cmd);
 	}
 	else if ((*line) && (*line)->type == 5)
 	{
@@ -86,29 +87,29 @@ void	open_file(t_command *cmd, t_token *line)
 	}
 }
 
-int	redirection(t_command *cmd, t_token *line)
+int	redirection(t_command *cmd, t_token *line, t_minishell mini)
 {
 	cmd->infile = -2;
 	cmd->outfile = -2;
 	while ((*line) && ((*line)->type == 3 || (*line)->type == 4
 			|| (*line)->type == 5 || (*line)->type == 6))
 	{
-		open_file(cmd, line);
+		open_file(cmd, line, mini);
 		if (cmd->infile == -1)
 		{
 			if (cmd->outfile != -2)
 				close(cmd->outfile);
-			error_msg("minishell: ");
+			g_current_status = 1, error_msg("minishell: ");
 			return (perror((*line)->str), 0);
 		}
 		if (cmd->outfile == -1)
 		{
 			if (cmd->infile != -2)
 				close(cmd->infile);
-			error_msg("minishell: ");
+			g_current_status = 1, error_msg("minishell: ");
 			return (perror((*line)->str), 0);
 		}
-		if (!(*line)->next)
+		if (!(*line)->next || cmd->exec == 1)
 			break ;
 		(*line) = (*line)->next;
 	}
