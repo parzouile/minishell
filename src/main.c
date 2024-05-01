@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 18:00:39 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:42:12 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	find_cmd(t_minishell mini)
 	runner = (mini->cmd_line);
 	while (runner)
 	{
-		if (runner->type == CMD)
+		if (runner->type == CMD && runner->str && runner->str[0])
 		{
 			if (!is_builtin(runner->str))
 			{
@@ -53,7 +53,7 @@ int	run_minishell(t_minishell mini)
 	s = readline("\033[32;1m$ User ->\033[0m ");
 	while (s && mini->exit == -1)
 	{
-		assign_sig_handler(SIG_MAIN);
+		
 		add_history(s);
 		if (!parse(mini, s))
 		{
@@ -61,6 +61,7 @@ int	run_minishell(t_minishell mini)
 			if (mini->cmd_line)
 				start_exe(mini);
 		}
+		assign_sig_handler(SIG_MAIN);
 		free_tokens(mini->cmd_line);
 		mini->cmd_line = NULL;
 		free(s);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:54:37 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/30 15:21:02 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:44:38 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,12 @@ void	sig_fork_handle(int signal)
 void	sig_heredoc_handle(int signal)
 {
 	if (signal == SIGINT)
-		ctrl_c_action();
+	{
+		g_current_status = 130;
+		write(2, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+	}
 }
 
 void	assign_sig_handler(int mod)
@@ -72,3 +77,6 @@ void	assign_sig_handler(int mod)
 	}
 	sigaction(SIGINT, &sa, NULL);
 }
+
+// signal(SIGINT, SIG_IGN);
+// assign_sig_handler(SIG_FORK)

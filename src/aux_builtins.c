@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:14:03 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 14:17:20 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 17:11:34 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,16 @@ void	change_pwd(t_minishell mini)
 {
 	char	buffer[2048];
 	char	*tmp;
+	char	*s;
 
 	getcwd(buffer, 2048);
 	mini->env = remove_from_env(mini->env, "OLDPWD");
-	tmp = ft_strjoin("OLDPWD=", get_value(mini->env, "PWD"));
+	s = get_value(mini->env, "PWD");
+	tmp = ft_strjoin("OLDPWD=", s);
 	if (!tmp)
 		return ;
+	if (s)
+		free(s);
 	add_value(&(mini->env), tmp);
 	if (tmp)
 		free(tmp);
@@ -34,22 +38,42 @@ void	change_pwd(t_minishell mini)
 	free(tmp);
 }
 
+int	cd_home(t_minishell mini)
+{
+	char	*s;
+
+	s = get_value(mini->env, "HOME");
+	if (chdir(s) != 0)
+	{
+		g_current_status = 1;
+		perror("minishell: cd");
+		if (s)
+			free(s);
+		return (1);
+	}
+	else
+		free(s);
+	change_pwd(mini);
+	return (0);
+}
+
 int	ft_cd(t_command command, t_minishell mini)
 {
 	if (!command.args[1])
+		return (cd_home(mini));
+	if (command.args[2])
 	{
-		command.args[1] = get_value(mini->env, "HOME");
-		if (chdir(command.args[1]) != 0)
-			perror("minishell: cd");
-		else
-			free(command.args[1]);
-	}
-	else if (command.args[2])
+		g_current_status = 1;
 		return (write(2, "minishell: cd: too many arguments\n", 35), 1);
-	else
+	}
+		
+	if (ft_strcmp(command.args[1], "~/") == 0
+		|| ft_strcmp(command.args[1], "~") == 0)
+		return (cd_home(mini));
+	else if (chdir(command.args[1]) != 0)
 	{
-		if (chdir(command.args[1]) != 0)
-			perror("minishell: cd");
+		g_current_status = 1;
+		return (perror("minishell: cd"), 1);
 	}
 	change_pwd(mini);
 	return (0);
@@ -129,6 +153,7 @@ void	ft_export(t_minishell mini, t_command cmd)
 		j = is_valid_name(cmd.args[i]);
 		if (!j)
 		{
+			g_current_status = 1;
 			error_msg("minishell: export: '");
 			error_msg(cmd.args[i]);
 			error_msg("': not a valid identifier\n");
@@ -136,10 +161,10 @@ void	ft_export(t_minishell mini, t_command cmd)
 		}
 		if (!cmd.args[i][j])
 			continue ;
-		key = ft_substr(cmd.args[i], 0, i);
+		key = ft_substr(cmd.args[i], 0, j);
 		if (!key)
 			continue ;
-		mini->env = remove_from_env(mini->env,  key);
+		mini->env = remove_from_env(mini->env, key);
 		free(key);
 		add_value(&(mini->env), cmd.args[i]);
 	}
