@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 18:00:39 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 14:24:56 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,15 @@ int	run_minishell(t_minishell mini)
 			if (mini->cmd_line)
 				start_exe(mini);
 		}
+		else
+			g_current_status = 2;
 		free_tokens(mini->cmd_line);
 		mini->cmd_line = NULL;
 		free(s);
 		if (mini->exit == -1)
 			s = readline("\033[32;1m$ User ->\033[0m ");
 	}
-	if (mini->exit == -1)
-		mini->exit = 0;
-	return (mini->exit);
+	return (g_current_status);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -84,7 +84,6 @@ int	main(int ac, char **av, char **envp)
 	if (!mini)
 		return (error_msg("Error during setup\n"));
 	exit_status = run_minishell(mini);
-	
 	free_minishell(mini);
 	rl_clear_history();
 	return (exit_status);

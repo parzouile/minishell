@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_setup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:26:18 by jules             #+#    #+#             */
-/*   Updated: 2024/04/30 18:02:14 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 14:34:21 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 // TODO - Setup empty env -> set PWD, SHLVL=0
 int	setup_empty_env(t_env *env)
 {
-	(void) env;
+	if (add_value(env, "SHLVL=0"))
+		return (1);
 	return (0);
 }
 
