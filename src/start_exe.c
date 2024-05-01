@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 18:00:16 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:55:51 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ void	one_command(t_minishell mini)
 	end_command(command);
 	dup2(sauvegarde_stdin, STDIN_FILENO);
 	dup2(sauvegarde_stdout, STDOUT_FILENO);
+	close(sauvegarde_stdout);
+	close(sauvegarde_stdin);
 }
 
 void	wait_child(pid_t *g_lst_pid)

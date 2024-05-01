@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aux_builtins.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:14:03 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/04/30 14:17:20 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:39:23 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void	ft_export(t_minishell mini, t_command cmd)
 		}
 		if (!cmd.args[i][j])
 			continue ;
-		key = ft_substr(cmd.args[i], 0, i);
+		key = ft_substr(cmd.args[i], 0, j);
 		if (!key)
 			continue ;
 		mini->env = remove_from_env(mini->env,  key);
