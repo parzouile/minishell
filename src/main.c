@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 18:19:22 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 18:22:01 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	run_minishell(t_minishell mini)
 	mini->s = readline("\033[32;1m$ User ->\033[0m ");
 	while (mini->s)
 	{
-		assign_sig_handler(SIG_MAIN);
+		
 		add_history(mini->s);
 		if (!parse(mini, mini->s))
 		{
@@ -55,6 +55,7 @@ int	run_minishell(t_minishell mini)
 		}
 		else
 			g_current_status = 2;
+		assign_sig_handler(SIG_MAIN);
 		free_tokens(mini->cmd_line);
 		mini->cmd_line = NULL;
 		free(mini->s);

@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:54:37 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/05/01 17:44:38 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 18:27:02 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ void	sig_main_handle(int signal)
 void	sig_fork_handle(int signal)
 {
 	if (signal == SIGINT)
+	{
 		ctrl_c_action();
+	}
+		
 	if (signal == SIGQUIT)
 		ctrl_s_action();
 }

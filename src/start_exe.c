@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 18:19:50 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/01 18:23:03 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,6 @@ void	start_exe(t_minishell mini)
 		lst[++i] = last_command(mini, pipefd);
 		wait_child(lst, n);
 	}
+	assign_sig_handler(SIG_MAIN);
 	free_tab(mini->envp);
 }
