@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 11:06:53 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 13:21:30 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ void		free_minishell(t_minishell mini);
 int			run_minishell(t_minishell mini);
 
 //parsing
+int			double_chevrons(char *str);
+int			skip_spaces(char *str);
+int			next_special_char(char *str);
 int			is_valid_char(char c);
 int			is_valid_name(char *str);
 int			next_dollar_sign(char *str, int *in_dquotes);

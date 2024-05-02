@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:00:38 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/05/01 18:19:59 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:33:16 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*get_expanded_value(t_minishell mini, char *str, int len_var)
 	return (value);
 }
 
-int	add_next_node_hd(t_minishell mini, t_list **lst, char *str, int *in_dquotes)
+int	add_next_node(t_minishell mini, t_list **lst, char *str, int *in_dquotes)
 {
 	int		next;
 	int		len_var;
@@ -98,7 +98,7 @@ char	*expand_str(t_minishell mini, char *str)
 	i = 0;
 	while (str[i])
 	{
-		step = add_next_node_hd(mini, &expanded_lst, str + i, &in_dquotes);
+		step = add_next_node(mini, &expanded_lst, str + i, &in_dquotes);
 		if (step == -1)
 			return (ft_lstclear(&expanded_lst, free), NULL);
 		i += step;

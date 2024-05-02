@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:41:16 by jules             #+#    #+#             */
-/*   Updated: 2024/05/01 14:22:41 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 13:05:46 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	is_redirection(int type)
 	if (type == OUTFILE)
 		return (1);
 	if (type == OUTFILE_APPEND)
+		return (1);
+	if (type == INFILE_HEREDOC_NO_EXPAND)
 		return (1);
 	return (0);
 }
@@ -88,11 +90,11 @@ int	parse(t_minishell mini, char *str)
 	if (tokenize(&(mini->cmd_line), expanded_str))
 		return (free(expanded_str), error_msg("Error during tokenization\n"));
 	free(expanded_str);
-	if (remove_tokens_quotes(mini->cmd_line))
-		return (error_msg("Error during the removal of quotes\n"));
 	if (verif_syntaxe(mini->cmd_line))
 		return (error_msg("Syntaxe Error\n"));
 	mini->cmd_line = contract_and_move_redirections(mini->cmd_line);
+	if (remove_tokens_quotes(mini->cmd_line))
+		return (error_msg("Error during the removal of quotes\n"));
 	put_cmd_types(mini->cmd_line);
 	return (0);
 }
