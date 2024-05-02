@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 15:25:32 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:19:16 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void		ft_error(char *s);
 int			error_msg(char *s);
 void		ft_denied(t_command cmd, t_minishell mini);
 void		quit(t_command cmd, t_minishell mini, int n);
+void		error_here_doc(char *s);
 
 //tokens
 t_token		new_token(char *str);
@@ -128,6 +129,9 @@ void		zero_command(t_minishell mini);
 int			nb_pipe(t_token line);
 int			nb_command(t_token line);
 void		go_next_pipe(t_minishell mini);
+pid_t		ft_exec3(t_minishell mini, t_command command);
+pid_t		ft_exec(t_minishell mini, t_command command, int pipefd[2]);
+void		one_command(t_minishell mini);
 
 // builtins
 void		ft_echo(t_command command);

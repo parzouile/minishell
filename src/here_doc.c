@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:01:03 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 15:35:04 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:17:01 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,7 @@ int	write_here_doc(char *limiter, int fd, t_minishell mini, int n)
 	if (s)
 		free(s);
 	else
-	{
-		error_msg("minishell: warning: here-document at line 1 delimited");
-		error_msg("by end-of-file (wanted `");
-		error_msg(limiter);
-		error_msg("')\n");
-	}
+		error_here_doc(limiter);
 	return (0);
 }
 

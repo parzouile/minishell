@@ -1,5 +1,5 @@
 
-SRCS = main.c start_exe.c here_doc.c find_bin.c command.c aux_exe.c \
+SRCS = main.c start_exe.c here_doc.c find_bin.c command.c aux_exe.c one_command.c \
 		error.c \
 		$(PARSING) \
 		$(SETUP) \
@@ -34,4 +34,6 @@ HEREDOC_SRCS = heredoc/expand_heredoc.c
 
 BUILTINS_SRCS = builtins/ft_exit.c \
 					builtins/aux_builtins.c \
-					builtins/builtins.c
+					builtins/builtins.c \
+					builtins/aux_2_builtins.c \
+					builtins/ft_cd.c
