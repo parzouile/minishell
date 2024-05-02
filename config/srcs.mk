@@ -26,6 +26,7 @@ TOKENS_SRCS = manage_tokens/tokens.c
 
 DEBUG = debug/debug_funcs.c
 
-SIGNALS_SRCS = signals/signals.c
+SIGNALS_SRCS = signals/signals.c \
+				signals/signals_funcs.c
 
 HEREDOC_SRCS = heredoc/expand_heredoc.c

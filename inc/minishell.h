@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 14:41:53 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:25:32 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ extern int	g_current_status;
 //errors
 void		ft_error(char *s);
 int			error_msg(char *s);
-void	    ft_denied(t_command cmd, t_minishell mini);
-void	    quit(t_command cmd, t_minishell mini, int n);
+void		ft_denied(t_command cmd, t_minishell mini);
+void		quit(t_command cmd, t_minishell mini, int n);
 
 //tokens
 t_token		new_token(char *str);
@@ -53,7 +53,6 @@ char		*get_value(t_env env, char *key);
 char		**tenv_to_arr(t_env	env);
 t_env		get_node(t_env env, char *key);
 int			modify_node_value(t_env env, char *key, char *new_value);
-
 
 //setup minishell
 int			setup_env(t_env *env, char **envp);
@@ -86,11 +85,14 @@ int			parse(t_minishell mini, char *str);
 
 //HEREDOC
 char		*expand_heredoc(t_minishell mini, char *str);
-int	        get_here_doc(char *limiter, t_minishell mini, t_command *cmd, int n);
+int			get_here_doc(char *lim, t_minishell mini, t_command *cmd, int n);
 
 //SIGNALS
+void		sig_main_handle(int signal);
+void		sig_fork_handle(int signal);
+void		sig_heredoc_handle(int signal);
 void		assign_sig_handler(int mod);
-void	    child(int sig);
+void		child(int sig);
 
 //DEBUG
 void		print_token(t_token t);
@@ -108,7 +110,7 @@ void		ft_error(char *s);
 void		free_tab(char **path);
 char		*ft_join(char *s1, char *s2);
 void		ft_ctrlc(int sig);
-int 		is_builtin(char *s);
+int			is_builtin(char *s);
 
 // exec
 void		start_exe(t_minishell mini);
@@ -122,10 +124,10 @@ int			mid_command(t_minishell mini, int pipefd[2]);
 pid_t		last_command(t_minishell mini, int pipefd[2]);
 void		end_command(t_command cmd);
 pid_t		ft_exec2(t_minishell mini, t_command cmd);
-void 		zero_command(t_minishell mini);
-int	        nb_pipe(t_token line);
-int	        nb_command(t_token line);
-void	    go_next_pipe(t_minishell mini);
+void		zero_command(t_minishell mini);
+int			nb_pipe(t_token line);
+int			nb_command(t_token line);
+void		go_next_pipe(t_minishell mini);
 
 // builtins
 void		ft_echo(t_command command);
@@ -136,6 +138,5 @@ void		change_pwd(t_minishell mini);
 void		ft_export(t_minishell mini, t_command cmd);
 void		ft_unset(t_minishell mini, t_command cmd);
 void		ft_exit(t_command cmd, t_minishell mini);
-
 
 #endif
