@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 19:20:00 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 19:34:25 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ void	wait_child(pid_t *g_lst_pid, int n)
 				g_current_status = WTERMSIG(g_current_status) + 128;
 		}
 	}
-	// if (g_lst_pid[n - 1] != 0)
-	// 	g_current_status = t;
 	signal(SIGCHLD, child);
 }
 
