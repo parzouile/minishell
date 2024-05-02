@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:33:10 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 16:06:26 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 17:37:01 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,6 @@ void	find_bultins(t_minishell mini, char **envp, t_command command)
 		ft_envp(envp);
 	else if (ft_strcmp(command.cmd, "export") == 0)
 		ft_export(mini, command);
-}
-
-int	builtin_null(t_command command)
-{
-	if (ft_strcmp(command.cmd, "export") == 0)
-		return (0);
-	else if (ft_strcmp(command.cmd, "exit") == 0)
-		return (0);
-	else if (ft_strcmp(command.cmd, "unset") == 0)
-		return (0);
-	return (1);
 }
 
 int	is_builtin(char *s)
@@ -58,10 +47,9 @@ int	is_builtin(char *s)
 
 int	builtin(t_minishell mini, t_command command, char **envp)
 {
-	if (builtin_null(command) == 0)
-		return (0);
 	if (!is_builtin(command.cmd))
 		return (1);
+	g_current_status = 0;
 	find_bultins(mini, envp, command);
 	return (0);
 }

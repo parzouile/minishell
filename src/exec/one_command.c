@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   one_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:11:26 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 16:15:21 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 18:20:43 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ pid_t	ft_exec(t_minishell mini, t_command command, int pipefd[2])
 		if (builtin(mini, command, mini->envp) == 1)
 		{
 			execve(command.cmd, command.args, mini->envp);
-			if (access(command.cmd, F_OK) == 0)
+			if (command.cmd[0] == '.')
 				ft_denied(command, mini);
 			error_msg("minishell: command not found\n");
 			quit(command, mini, 127);
@@ -57,7 +57,7 @@ pid_t	ft_exec3(t_minishell mini, t_command command)
 		if (builtin(mini, command, mini->envp) == 1)
 		{
 			execve(command.cmd, command.args, mini->envp);
-			if (access(command.cmd, F_OK) == 0)
+			if (command.cmd[0] == '.')
 				ft_denied(command, mini);
 			error_msg("minishell: command not found\n");
 			quit(command, mini, 127);
@@ -94,7 +94,7 @@ int	exec_one_commande(t_command cmd, t_minishell mini)
 	{
 		assign_sig_handler(SIG_FORK);
 		execve(cmd.cmd, cmd.args, mini->envp);
-		if (access(cmd.cmd, F_OK) == 0)
+		if (cmd.cmd[0] == '.')
 			ft_denied(cmd, mini);
 		error_msg("minishell: command not found\n");
 		quit(cmd, mini, 127);
