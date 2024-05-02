@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 22:11:54 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:26:45 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,13 @@ int	nb_pipe(t_token line)
 	return (n + 1);
 }
 
+void	ft_wait(pid_t pid)
+{
+	waitpid(pid, &g_current_status, 0);
+	if (WIFEXITED(g_current_status))
+		g_current_status = WEXITSTATUS(g_current_status);
+}
+
 int	exec_one_commande(t_command cmd, char **envp)
 {
 	pid_t	pid;
@@ -63,9 +70,8 @@ int	exec_one_commande(t_command cmd, char **envp)
 		error_msg("minishell: command not found\n");
 		exit(127);
 	}
-	waitpid(pid, &g_current_status, 0);
-	if (WIFEXITED(g_current_status))
-        g_current_status = WEXITSTATUS(g_current_status);
+	signal(SIGCHLD, child);
+	ft_wait(pid);
 	return (0);
 }
 
@@ -79,13 +85,13 @@ void	one_command(t_minishell mini)
 	command.exec = 0;
 	if (nb_command(mini->cmd_line) == 0)
 		return (zero_command(mini));
-	sauvegarde_stdout = dup(STDOUT_FILENO);
-	sauvegarde_stdin = dup(STDIN_FILENO);
 	command.args = take_args(&mini->cmd_line, &command);
 	if (command.args == NULL)
 		return ;
 	if (redirection(&command, &mini->cmd_line, mini) == 0 || command.exec)
-		return (free(command.args));// fermer fd et free
+		return (end_command(command));// fermer fd et free
+	sauvegarde_stdout = dup(STDOUT_FILENO);
+	sauvegarde_stdin = dup(STDIN_FILENO);
 	if (command.infile != -2)
 		dup2(command.infile, STDIN_FILENO);
 	if (command.outfile != -2)
@@ -106,10 +112,12 @@ void	wait_child(pid_t *g_lst_pid, int n)
 	i = -1;
 	while (++i < n)
 	{
-		waitpid(g_lst_pid[i], &g_current_status, 0);
+		if (g_lst_pid[i] != -1)
+			waitpid(g_lst_pid[i], &g_current_status, 0);
 	}
 	if (WIFEXITED(g_current_status))
         g_current_status = WEXITSTATUS(g_current_status);
+	signal(SIGCHLD, child);
 		//wait(&g_lst_pid[i]);
 	free(g_lst_pid);
 }
@@ -125,21 +133,18 @@ void	start_exe(t_minishell mini)
 	if (!mini->envp)
 		return ;
 	if (nb_pipe(mini->cmd_line) == 1)
-		one_command(mini);
-	else
-	{
-		lst = ft_calloc(sizeof(pid_t), (n = nb_pipe(mini->cmd_line)));
-		if (!lst)
-			return (free_tab(mini->envp));
-		i = 0;
-		if (pipe(pipefd) == -1)
-			return (free_tab(mini->envp));
-		lst[i++] = first_command(mini, pipefd);
-		while (i + 1 < n)
-			lst[i++] = mid_command(mini, pipefd);
-		lst[i++] = last_command(mini, pipefd);
-		wait_child(lst, n);
-	}
+		return (one_command(mini), free_tab(mini->envp));
+	lst = ft_calloc(sizeof(pid_t), (n = nb_pipe(mini->cmd_line)));
+	if (!lst)
+		return (free_tab(mini->envp));
+	i = 0;
+	if (pipe(pipefd) == -1)
+		return (free_tab(mini->envp));
+	lst[i++] = first_command(mini, pipefd);
+	while (i + 1 < n)
+		lst[i++] = mid_command(mini, pipefd);
+	lst[i++] = last_command(mini, pipefd);
+	wait_child(lst, n);
 	assign_sig_handler(SIG_MAIN);
 	free_tab(mini->envp);
 }

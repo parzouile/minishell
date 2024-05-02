@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:01:03 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 22:59:44 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:23:43 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	write_here_doc(char *limiter, int fd, t_minishell mini)
 
 	while (1)
 	{
-		s = readline(">> ");
+		s = get_next_line(0);
 		if (s == NULL || ft_strcmpn(s, limiter) == 0 || g_current_status == 130)
 			break;
 		s = expand_heredoc(mini, s);
@@ -42,7 +42,11 @@ int	write_here_doc(char *limiter, int fd, t_minishell mini)
 	}
 	close(fd);
 	if (g_current_status == 130)
+	{
+		if (s)
+			free(s);
 		return (1);
+	}
 	if (s)
 		free(s);
 	else

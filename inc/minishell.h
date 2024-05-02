@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 22:24:13 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:06:53 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int			get_here_doc(char *limiter, t_minishell mini, t_command *cmd);
 
 //SIGNALS
 void		assign_sig_handler(int mod);
+void	    child(int sig);
 
 //DEBUG
 void		print_token(t_token t);

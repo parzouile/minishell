@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 14:42:43 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/30 14:50:09 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:25:40 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ char	*expand_heredoc(t_minishell mini, char *str)
 	expanded_str = lst_to_str(expanded_lst);
 	ft_lstclear(&expanded_lst, free);
 	treat_quote_expanded(expanded_str, 1);
+	free(str);
 	return (expanded_str);
 }
