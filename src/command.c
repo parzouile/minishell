@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 00:59:49 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 14:59:21 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:32:58 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ pid_t	first_command(t_minishell mini, int pipefd[2])
 		// printf("first no cmd\n");
 		return (zero_command(mini), 0);
 	}
-	command.args = take_args(&mini->cmd_line, &command);	
+	command.args = take_args(&mini->cmd_line, &command);
 	if (command.args == NULL)
 		return (go_next_pipe(mini), 0);
 	if (redirection(&command, &mini->cmd_line, mini) == 0 || command.exec)
@@ -132,7 +132,6 @@ pid_t	mid_command(t_minishell mini, int pipefd[2])
 		pipefd[1] = newpipe[1];
 		return (zero_command(mini), 0);
 	}
-	
 	command.args = take_args(&mini->cmd_line, &command);
 	if (command.args == NULL)
 		return (go_next_pipe(mini), 0);

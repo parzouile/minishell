@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:01:03 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 15:03:17 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:35:04 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	write_here_doc(char *limiter, int fd, t_minishell mini, int n)
 		write(1, "> ", 2);
 		s = get_next_line(0);
 		if (s == NULL || ft_strcmpn(s, limiter) == 0 || g_current_status == 130)
-			break;
+			break ;
 		if (!n)
 			s = expand_heredoc(mini, s);
 		write(fd, s, ft_strlen(s));
@@ -73,7 +73,7 @@ int	get_here_doc(char *limiter, t_minishell mini, t_command *cmd, int n)
 
 void	zero_command(t_minishell mini)
 {
-	t_command command;
+	t_command	command;
 
 	command.exec = 0;
 	if (redirection(&command, &mini->cmd_line, mini) == 0)
@@ -81,8 +81,8 @@ void	zero_command(t_minishell mini)
 	go_next_pipe(mini);
 	if (command.infile != -2)
 		close(command.infile);
-	if (command.outfile != -2)																					
-		close(command.outfile);	
+	if (command.outfile != -2)
+		close(command.outfile);
 }
 
 void	ft_denied(t_command cmd, t_minishell mini)

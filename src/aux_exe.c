@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aux_exe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 09:41:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 14:27:14 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:32:14 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,15 @@ int	redirection(t_command *cmd, t_token *line, t_minishell mini)
 		{
 			if (cmd->outfile != -2)
 				close(cmd->outfile);
-			g_current_status = 1, error_msg("minishell: ");
-			return (perror((*line)->str), 0);
+			g_current_status = 1;
+			return ((void) error_msg("minishell: "), perror((*line)->str), 0);
 		}
 		if (cmd->outfile == -1)
 		{
 			if (cmd->infile != -2)
 				close(cmd->infile);
-			g_current_status = 1, error_msg("minishell: ");
-			return (perror((*line)->str), 0);
+			g_current_status = 1;
+			return ((void) error_msg("minishell: "), perror((*line)->str), 0);
 		}
 		if (!(*line)->next || cmd->exec == 1)
 			break ;

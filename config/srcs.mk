@@ -1,13 +1,14 @@
 
-SRCS = main.c start_exe.c builtins.c here_doc.c find_bin.c command.c aux_exe.c aux_builtins.c\
-		error.c ft_exit.c\
+SRCS = main.c start_exe.c here_doc.c find_bin.c command.c aux_exe.c \
+		error.c \
 		$(PARSING) \
 		$(SETUP) \
 		$(TOKENS_SRCS) \
 		$(ENV) \
 		$(DEBUG) \
 		$(SIGNALS_SRCS) \
-		$(HEREDOC_SRCS)
+		$(HEREDOC_SRCS) \
+		$(BUILTINS_SRCS)
 
 PARSING = parsing/tokenize.c \
 			parsing/expand_token.c \
@@ -30,3 +31,7 @@ SIGNALS_SRCS = signals/signals.c \
 				signals/signals_funcs.c
 
 HEREDOC_SRCS = heredoc/expand_heredoc.c
+
+BUILTINS_SRCS = builtins/ft_exit.c \
+					builtins/aux_builtins.c \
+					builtins/builtins.c

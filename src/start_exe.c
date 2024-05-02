@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 14:50:09 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:35:43 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	wait_child(pid_t *g_lst_pid, int n)
 			waitpid(g_lst_pid[i], &g_current_status, 0);
 	}
 	if (WIFEXITED(g_current_status))
-        g_current_status = WEXITSTATUS(g_current_status);
+		g_current_status = WEXITSTATUS(g_current_status);
 	signal(SIGCHLD, child);
 }
 
