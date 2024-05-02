@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 00:59:49 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 11:29:27 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:59:21 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ pid_t	ft_exec(t_minishell mini, t_command command, int pipefd[2])
 		{
 			execve(command.cmd, command.args, mini->envp);
 			if (access(command.cmd, F_OK) == 0)
-				ft_denied(command.cmd);
+				ft_denied(command, mini);
 			error_msg("minishell: command not found\n");
-			exit(127);
+			quit(command, mini, 127);
 		}
-		exit(0);
+		quit(command, mini, g_current_status);
 	}
 	signal(SIGCHLD, child);
 	end_command(command);
@@ -59,11 +59,11 @@ pid_t	ft_exec3(t_minishell mini, t_command command)
 		{
 			execve(command.cmd, command.args, mini->envp);
 			if (access(command.cmd, F_OK) == 0)
-				ft_denied(command.cmd);
+				ft_denied(command, mini);
 			error_msg("minishell: command not found\n");
-			exit(127);
+			quit(command, mini, 127);
 		}
-		exit(0);
+		quit(command, mini, g_current_status);
 	}
 	signal(SIGCHLD, child);
 	end_command(command);
@@ -99,7 +99,7 @@ pid_t	first_command(t_minishell mini, int pipefd[2])
 	if (command.args == NULL)
 		return (go_next_pipe(mini), 0);
 	if (redirection(&command, &mini->cmd_line, mini) == 0 || command.exec)
-		return (go_next_pipe(mini), free(command.args), 0);
+		return (go_next_pipe(mini), end_command(command), 0);
 	if (command.outfile == -2)
 		command.outfile = pipefd[1];
 	else
@@ -118,6 +118,11 @@ pid_t	mid_command(t_minishell mini, int pipefd[2])
 
 	close(pipefd[1]);
 	command.exec = 0;
+	if (g_current_status == 130)
+	{
+		close(pipefd[0]);
+		return (0);
+	}
 	if (pipe(newpipe) == -1)
 		return (close(pipefd[0]), 1);
 	if (nb_command(mini->cmd_line) == 0)
@@ -132,7 +137,7 @@ pid_t	mid_command(t_minishell mini, int pipefd[2])
 	if (command.args == NULL)
 		return (go_next_pipe(mini), 0);
 	if (redirection(&command, &mini->cmd_line, mini) == 0 || command.exec)
-		return (go_next_pipe(mini), free(command.args), 0);
+		return (go_next_pipe(mini), end_command(command), 0);
 	if (command.infile == -2)
 		command.infile = pipefd[0];
 	else
@@ -157,6 +162,11 @@ pid_t	last_command(t_minishell mini, int pipefd[2])
 	// print_token(mini->cmd_line);
 	// printf("last nb command %d\n", nb_command(mini->cmd_line));
 	cmd.exec = 0;
+	if (g_current_status == 130)
+	{
+		close(pipefd[0]);
+		return (0);
+	}
 	if (nb_command(mini->cmd_line) == 0)
 	{
 		close(pipefd[0]);
@@ -166,7 +176,7 @@ pid_t	last_command(t_minishell mini, int pipefd[2])
 	if (cmd.args == NULL)
 		return (0);
 	if (redirection(&cmd, &mini->cmd_line, mini) == 0 || cmd.exec)
-		return (free(cmd.args), 0); // fermer fd et free
+		return (end_command(cmd), 0); // fermer fd et free
 	if (cmd.infile == -2)
 		cmd.infile = pipefd[0];
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aux_exe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 09:41:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 13:21:49 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:27:14 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,7 @@ void	open_file(t_command *cmd, t_token *line, t_minishell mini)
 	{
 		if (cmd->infile != -2)
 			close(cmd->infile);
-		
-		cmd->infile = get_here_doc((*line)->str, mini, cmd);
+		cmd->infile = get_here_doc((*line)->str, mini, cmd, (*line)->type == 8);
 	}
 	else if ((*line) && (*line)->type == 5)
 	{

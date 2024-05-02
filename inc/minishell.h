@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 13:21:30 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:41:53 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ extern int	g_current_status;
 //errors
 void		ft_error(char *s);
 int			error_msg(char *s);
-void		ft_denied(char *s);
+void	    ft_denied(t_command cmd, t_minishell mini);
+void	    quit(t_command cmd, t_minishell mini, int n);
 
 //tokens
 t_token		new_token(char *str);
@@ -85,7 +86,7 @@ int			parse(t_minishell mini, char *str);
 
 //HEREDOC
 char		*expand_heredoc(t_minishell mini, char *str);
-int			get_here_doc(char *limiter, t_minishell mini, t_command *cmd);
+int	        get_here_doc(char *limiter, t_minishell mini, t_command *cmd, int n);
 
 //SIGNALS
 void		assign_sig_handler(int mod);

@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:01:03 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 12:23:43 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:03:17 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,19 @@ int	ft_strcmpn(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-int	write_here_doc(char *limiter, int fd, t_minishell mini)
+int	write_here_doc(char *limiter, int fd, t_minishell mini, int n)
 {
 	char	*s;
 
 	while (1)
 	{
+		write(1, "> ", 2);
 		s = get_next_line(0);
 		if (s == NULL || ft_strcmpn(s, limiter) == 0 || g_current_status == 130)
 			break;
-		s = expand_heredoc(mini, s);
+		if (!n)
+			s = expand_heredoc(mini, s);
 		write(fd, s, ft_strlen(s));
-		write(fd, "\n", 1);
 		free(s);
 	}
 	close(fd);
@@ -59,14 +60,14 @@ int	write_here_doc(char *limiter, int fd, t_minishell mini)
 	return (0);
 }
 
-int	get_here_doc(char *limiter, t_minishell mini, t_command *cmd)
+int	get_here_doc(char *limiter, t_minishell mini, t_command *cmd, int n)
 {
 	int	pipefd[2];
 
 	if (pipe(pipefd) == -1)
-		ft_error("Pipe");
+		ft_error("Pipe"); /// error pipe
 	assign_sig_handler(SIG_HEREDOC);
-	cmd->exec = write_here_doc(limiter, pipefd[1], mini);
+	cmd->exec = write_here_doc(limiter, pipefd[1], mini, n);
 	return (pipefd[0]);
 }
 
@@ -84,10 +85,10 @@ void	zero_command(t_minishell mini)
 		close(command.outfile);	
 }
 
-void	ft_denied(char *s)
+void	ft_denied(t_command cmd, t_minishell mini)
 {
 	error_msg("minishell: ");
-	error_msg(s);
+	error_msg(cmd.cmd);
 	error_msg(": Permission denied\n");
-	exit(126);
+	quit(cmd, mini, 126);
 }

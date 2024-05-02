@@ -1,0 +1,8 @@
+config
+inc
+libft
+Makefile
+minishell
+src
+test
+valgrind_ignore_leaks
