@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:48:49 by jules             #+#    #+#             */
-/*   Updated: 2024/05/02 17:29:39 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 17:31:28 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@ void	error_here_doc(char *s)
 
 void	error_cd(void)
 {
-	error_msg("minishell: ");
+	error_msg("minishell: cd: error retrieving current directory: getcwd: \
+	cannot access parent directories: No such file or directory");
 }
