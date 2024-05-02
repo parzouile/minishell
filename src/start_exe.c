@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jules <jules@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 21:03:46 by jules            ###   ########.fr       */
+/*   Updated: 2024/05/02 10:45:19 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ int	nb_command(t_token line)
 	}
 	return (n);
 }
-
-
 
 int	exec_one_commande(t_command cmd, char **envp)
 {
@@ -138,4 +136,5 @@ void	start_exe(t_minishell mini)
 	}
 	assign_sig_handler(SIG_MAIN);
 	free_tab(mini->envp);
+	mini->envp = NULL;
 }
