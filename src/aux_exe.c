@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 09:41:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 18:06:09 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:21:43 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ char	**take_args(t_token *line, t_command *command)
 void	end_command(t_command cmd)
 {
 	free(cmd.args);
-	if (cmd.outfile != -2 && cmd.outfile != 1)
+	if (cmd.outfile >= 0 && cmd.outfile != 1)
 		close(cmd.outfile);
-	if (cmd.infile != -2)
+	if (cmd.infile >= 0)
 		close(cmd.infile);
 }
 

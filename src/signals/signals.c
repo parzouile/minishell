@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:54:37 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/05/01 18:27:02 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:33:14 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,18 @@ void	assign_sig_handler(int mod)
 		signal(SIGQUIT, SIG_IGN);
 	}
 	sigaction(SIGINT, &sa, NULL);
+}
+
+void	child(int sig)
+{
+	(void)sig;
+	if (g_current_status == 2)
+	{
+		g_current_status = 130;
+		write(1, "\n", 1);
+	}
+	if (g_current_status == 131)
+		write(1, "Quit (core dumped)\n", 19);
 }
 
 // signal(SIGINT, SIG_IGN);
