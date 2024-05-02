@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 12:38:14 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:40:49 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,17 @@ void	wait_child(pid_t *g_lst_pid, int n)
 	free(g_lst_pid);
 }
 
+void	ft_freeenv(t_minishell mini)
+{
+	int	i;
+
+	i = -1;
+	while (mini->envp[++i])
+		free(mini->envp[i]);
+	free(mini->envp);
+	mini->envp = NULL;
+}
+
 void	start_exe(t_minishell mini)
 {
 	int		pipefd[2];
@@ -133,19 +144,18 @@ void	start_exe(t_minishell mini)
 	if (!mini->envp)
 		return ;
 	if (nb_pipe(mini->cmd_line) == 1)
-		return (one_command(mini), free_tab(mini->envp));
+		return (one_command(mini), ft_freeenv(mini));
 	lst = ft_calloc(sizeof(pid_t), (n = nb_pipe(mini->cmd_line)));
 	if (!lst)
-		return (free_tab(mini->envp));
+		return (ft_freeenv(mini));
 	i = 0;
 	if (pipe(pipefd) == -1)
-		return (free_tab(mini->envp));
+		return (ft_freeenv(mini));
 	lst[i++] = first_command(mini, pipefd);
 	while (i + 1 < n)
 		lst[i++] = mid_command(mini, pipefd);
 	lst[i++] = last_command(mini, pipefd);
 	wait_child(lst, n);
 	assign_sig_handler(SIG_MAIN);
-	free_tab(mini->envp);
-	mini->envp = NULL;
+	ft_freeenv(mini);
 }
