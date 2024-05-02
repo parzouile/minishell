@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 16:19:16 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:25:34 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ pid_t		ft_exec(t_minishell mini, t_command command, int pipefd[2]);
 void		one_command(t_minishell mini);
 
 // builtins
+void		cut_last_slash(char *str);	
 void		ft_echo(t_command command);
 void		ft_envp(char **envp);
 void		ft_pwd(void);

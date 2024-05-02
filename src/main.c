@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 13:21:54 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:54:23 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	run_minishell(t_minishell mini)
 		add_history(mini->s);
 		if (!parse(mini, mini->s))
 		{
-			print_token(mini->cmd_line);
 			find_cmd(mini);
 			if (mini->cmd_line)
 				start_exe(mini);

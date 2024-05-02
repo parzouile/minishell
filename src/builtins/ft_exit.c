@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 16:30:45 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/05/02 14:38:43 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:51:12 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ long long	ft_atoll(char *s, int *err_code)
 	n = 0;
 	sign = 1;
 	i = 0;
-	if (s[i] == '-')
+	if (s[i] == '-' || s[i] == '+')
 	{
-		sign = -1;
+		if (s[i] == '-')
+			sign = -1;
 		i++;
 	}
 	if ((s[i] < '0') || ('9' < s[i]))
