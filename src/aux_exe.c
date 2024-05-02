@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aux_exe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 09:41:21 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 18:06:09 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 13:15:18 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	open_file(t_command *cmd, t_token *line, t_minishell mini)
 			close(cmd->infile);
 		cmd->infile = open((*line)->str, O_RDONLY, 0644);
 	}
-	else if ((*line) && (*line)->type == 4)
+	else if ((*line) && ((*line)->type == 4 || (*line)->type == 8))
 	{
 		if (cmd->infile != -2)
 			close(cmd->infile);
@@ -92,7 +92,7 @@ int	redirection(t_command *cmd, t_token *line, t_minishell mini)
 	cmd->infile = -2;
 	cmd->outfile = -2;
 	while ((*line) && ((*line)->type == 3 || (*line)->type == 4
-			|| (*line)->type == 5 || (*line)->type == 6))
+			|| (*line)->type == 5 || (*line)->type == 6 || (*line)->type == 8))
 	{
 		open_file(cmd, line, mini);
 		if (cmd->infile == -1)
