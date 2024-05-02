@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aux_builtins.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:14:03 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 16:26:03 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 17:20:45 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,23 @@ void	cut_last_slash(char *str)
 		i++;
 	}
 	str[index_last_slash + 1] = 0;
+}
+
+char	*get_value_cd(t_env env, char *key)
+{
+	if (!key)
+	{
+		return (NULL);
+	}
+	if (!env)
+	{
+		return (NULL);
+	}
+	if (ft_strcmp(env->name, key) == 0)
+	{
+		return (ft_strdup(env->value));
+	}
+	return (get_value_cd(env->next, key));
 }
 
 void	ft_envp(char **envp)

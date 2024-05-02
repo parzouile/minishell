@@ -6,7 +6,7 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:01:03 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 16:17:01 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:36:57 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	get_here_doc(char *limiter, t_minishell mini, t_command *cmd, int n)
 	int	pipefd[2];
 
 	if (pipe(pipefd) == -1)
-		ft_error("Pipe"); /// error pipe
+		return (-1);
 	assign_sig_handler(SIG_HEREDOC);
 	cmd->exec = write_here_doc(limiter, pipefd[1], mini, n);
 	return (pipefd[0]);

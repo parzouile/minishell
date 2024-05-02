@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 16:25:34 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 17:27:01 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@
 extern int	g_current_status;
 
 //errors
-void		ft_error(char *s);
 int			error_msg(char *s);
 void		ft_denied(t_command cmd, t_minishell mini);
 void		quit(t_command cmd, t_minishell mini, int n);
@@ -107,7 +106,6 @@ void		ft_pipe(int argc, char **argv, char **envp);
 void		command(char *cmd, char **envp);
 void		processus(int new_pipe[2], int pipefd[2], char *cmd, char **envp);
 int			ft_lentab(char **tab);
-void		ft_error(char *s);
 void		free_tab(char **path);
 char		*ft_join(char *s1, char *s2);
 void		ft_ctrlc(int sig);
@@ -139,9 +137,11 @@ void		ft_echo(t_command command);
 void		ft_envp(char **envp);
 void		ft_pwd(void);
 int			ft_cd(t_command command, t_minishell mini);
-void		change_pwd(t_minishell mini);
+int			change_pwd(t_minishell mini);
 void		ft_export(t_minishell mini, t_command cmd);
 void		ft_unset(t_minishell mini, t_command cmd);
 void		ft_exit(t_command cmd, t_minishell mini);
+void		error_cd(void);
+char		*get_value_cd(t_env env, char *key);
 
 #endif

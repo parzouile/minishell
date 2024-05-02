@@ -6,53 +6,35 @@
 /*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:08:39 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 16:10:24 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 17:28:00 by aschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	change_pwd(t_minishell mini)
+int	change_pwd(t_minishell mini)
 {
-	char	buffer[2048];
 	char	*tmp;
-	char	*s;
+	char	*pwd;
 
-	getcwd(buffer, 2048);
 	mini->env = remove_from_env(mini->env, "OLDPWD");
-	s = get_value(mini->env, "PWD");
-	tmp = ft_strjoin("OLDPWD=", s);
+	tmp = get_value_cd(mini->env, "PWD");
 	if (!tmp)
-		return ;
-	if (s)
-		free(s);
-	add_value(&(mini->env), tmp);
-	if (tmp)
-		free(tmp);
-	mini->env = remove_from_env(mini->env, "PWD");
-	getcwd(buffer, 2048);
-	tmp = ft_strjoin("PWD=", buffer);
-	if (!tmp)
-		return ;
-	add_value(&(mini->env), tmp);
+		return (0);
+	pwd = ft_strjoin("OLDPWD=", tmp);
+	if (!pwd)
+		return (free(tmp), 0);
+	add_value(&(mini->env), pwd);
+	free(pwd);
 	free(tmp);
-}
-
-char	*get_value_cd(t_env env, char *key)
-{
-	if (!key)
-	{
-		return (NULL);
-	}
-	if (!env)
-	{
-		return (NULL);
-	}
-	if (ft_strcmp(env->name, key) == 0)
-	{
-		return (ft_strdup(env->value));
-	}
-	return (get_value_cd(env->next, key));
+	mini->env = remove_from_env(mini->env, "PWD");
+	tmp = getcwd(NULL, 0);
+	pwd = ft_strjoin("PWD=", tmp);
+	if (!pwd)
+		return (free(tmp), 0);
+	free(tmp);
+	add_value(&(mini->env), pwd);
+	return (0);
 }
 
 int	cd_home(t_minishell mini)
@@ -69,11 +51,27 @@ int	cd_home(t_minishell mini)
 	{
 		g_current_status = 1;
 		perror("minishell: cd");
-		if (s)
-			free(s);
+		free(s);
 		return (1);
 	}
 	free(s);
+	change_pwd(mini);
+	return (0);
+}
+
+int	builtin_cd(char *s, t_minishell mini)
+{
+	char	*pwd;
+
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (error_cd(), 1);
+	free(pwd);
+	if (chdir(s) != 0)
+	{
+		g_current_status = 1;
+		return (perror("minishell: cd"), 1);
+	}
 	change_pwd(mini);
 	return (0);
 }
@@ -88,17 +86,10 @@ int	cd_old(t_minishell mini)
 		g_current_status = 1;
 		return (error_msg("minishell: cd: OLDPWD not set\n"), 1);
 	}
-	if (chdir(s) != 0)
-	{
-		g_current_status = 1;
-		perror("minishell: cd");
-		if (s)
-			free(s);
-		return (1);
-	}
+	if (builtin_cd(s, mini) == 1)
+		return (free(s), 1);
 	printf("%s\n", s);
 	free(s);
-	change_pwd(mini);
 	return (0);
 }
 
@@ -116,11 +107,6 @@ int	ft_cd(t_command command, t_minishell mini)
 		return (cd_home(mini));
 	if (ft_strcmp(command.args[1], "-") == 0)
 		return (cd_old(mini));
-	else if (chdir(command.args[1]) != 0)
-	{
-		g_current_status = 1;
-		return (perror("minishell: cd"), 1);
-	}
-	change_pwd(mini);
+	builtin_cd(command.args[1], mini);
 	return (0);
 }
