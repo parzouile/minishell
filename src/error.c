@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:48:49 by jules             #+#    #+#             */
-/*   Updated: 2024/05/02 17:31:28 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 19:05:15 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	error_msg(char *s)
 
 void	error_here_doc(char *s)
 {
-	error_msg("minishell: warning: here-document at line 1 delimited");
+	error_msg("minishell: warning: here-document delimited");
 	error_msg("by end-of-file (wanted `");
 	error_msg(s);
 	error_msg("')\n");

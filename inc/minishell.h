@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:12:37 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 17:27:01 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 19:29:35 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_env		get_node(t_env env, char *key);
 int			modify_node_value(t_env env, char *key, char *new_value);
 
 //setup minishell
-int			setup_env(t_env *env, char **envp);
+int			setup_env(t_env *env, char **envp, int top);
 int			incr_shlvl(t_env env);
 
 t_minishell	create_minishell(char **envp);

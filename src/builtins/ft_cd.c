@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:08:39 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 17:28:00 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 18:53:46 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	change_pwd(t_minishell mini)
 		return (free(tmp), 0);
 	free(tmp);
 	add_value(&(mini->env), pwd);
+	free(pwd);
 	return (0);
 }
 

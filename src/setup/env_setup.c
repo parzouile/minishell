@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 23:26:18 by jules             #+#    #+#             */
-/*   Updated: 2024/05/01 16:45:53 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 19:32:03 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,17 @@ int	setup_empty_env(t_env *env)
 	return (0);
 }
 
-int	setup_env(t_env *env, char **envp)
+int	setup_env(t_env *env, char **envp, int top)
 {
 	if (!envp)
 		return (1);
-	if (!envp[0])
+	if (!envp[0] && top)
 		return (setup_empty_env(env));
+	if (!envp[0])
+		return (0);
 	if (add_value(env, envp[0]))
 		return (1);
-	return (setup_env(&((*env)->next), envp + 1));
+	return (setup_env(&((*env)->next), envp + 1, 0));
 }
 
 int	incr_shlvl(t_env env)

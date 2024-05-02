@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 18:14:07 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 19:20:00 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,21 @@ int	nb_pipe(t_token line)
 void	wait_child(pid_t *g_lst_pid, int n)
 {
 	int	i;
-	int	t;
 
 	i = -1;
 	while (++i < n)
 	{
 		if (g_lst_pid[i] != -1 && g_lst_pid[i] != 0)
-			waitpid(g_lst_pid[i], &t, 0);
+		{
+			waitpid(g_lst_pid[i], &g_current_status, 0);
+			if (WIFEXITED(g_current_status))
+				g_current_status = WEXITSTATUS(g_current_status);
+			else if (WIFSIGNALED(g_current_status))
+				g_current_status = WTERMSIG(g_current_status) + 128;
+		}
 	}
-	if (g_lst_pid[n - 1] != 0)
-		g_current_status = t;
-	if (WIFEXITED(g_current_status))
-		g_current_status = WEXITSTATUS(g_current_status);
+	// if (g_lst_pid[n - 1] != 0)
+	// 	g_current_status = t;
 	signal(SIGCHLD, child);
 }
 

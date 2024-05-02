@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 16:38:51 by jules             #+#    #+#             */
-/*   Updated: 2024/05/02 14:51:56 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 19:29:15 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_minishell	create_minishell(char **envp)
 	mini->fd1 = -2;
 	mini->fd2 = -2;
 	mini->lst = NULL;
-	error = setup_env(&(mini->env), envp);
+	error = setup_env(&(mini->env), envp, 1);
 	if (error)
 		return (free_minishell(mini), NULL);
 	if (incr_shlvl(mini->env))
