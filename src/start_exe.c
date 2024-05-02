@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:13 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 22:11:54 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:07:48 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,16 +130,25 @@ void	start_exe(t_minishell mini)
 	{
 		lst = ft_calloc(sizeof(pid_t), (n = nb_pipe(mini->cmd_line)));
 		if (!lst)
-			return (free_tab(mini->envp));
-		i = 0;
+		{
+			free_tab(mini->envp);
+			mini->envp = NULL;
+			return ;
+		}
+		i = -1;
 		if (pipe(pipefd) == -1)
-			return (free_tab(mini->envp));
-		lst[i++] = first_command(mini, pipefd);
-		while (i + 1 < n)
-			lst[i++] = mid_command(mini, pipefd);
-		lst[i++] = last_command(mini, pipefd);
+		{
+			free_tab(mini->envp);
+			mini->envp = NULL;
+			return ;
+		}
+		lst[++i] = first_command(mini, pipefd);
+		while (nb_command(mini->cmd_line) >= 2)
+			lst[++i] = mid_command(mini, pipefd);
+		lst[++i] = last_command(mini, pipefd);
 		wait_child(lst, n);
 	}
 	assign_sig_handler(SIG_MAIN);
 	free_tab(mini->envp);
+	mini->envp = NULL;
 }

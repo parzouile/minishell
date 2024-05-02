@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:38:06 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 18:17:26 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:02:08 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ typedef struct s_minishell
 	t_env	env;
 	char	*s;
 	char	**envp;
+	int		fd1;
+	int		fd2;
 }	*t_minishell;
 
 typedef struct s_command
