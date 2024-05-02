@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 10:38:06 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/02 11:02:08 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:32:28 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define OUTFILE 5
 # define OUTFILE_APPEND 6
 # define PIPE 7
+# define INFILE_HEREDOC_NO_EXPAND 8
 
 typedef struct s_token	*t_token;
 typedef struct s_env	*t_env;

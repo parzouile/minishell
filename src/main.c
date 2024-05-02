@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmitt <aschmitt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:13:51 by aschmitt          #+#    #+#             */
-/*   Updated: 2024/05/01 18:22:01 by aschmitt         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:55:33 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	run_minishell(t_minishell mini)
 		add_history(mini->s);
 		if (!parse(mini, mini->s))
 		{
+			print_token(mini->cmd_line);
 			find_cmd(mini);
 			if (mini->cmd_line)
 				start_exe(mini);

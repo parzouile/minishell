@@ -6,11 +6,25 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 12:08:31 by jules             #+#    #+#             */
-/*   Updated: 2024/04/30 09:58:06 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 13:05:22 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	has_quotes(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if ((s[i] == '"') || (s[i] == '\''))
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 void	str_remove_quotes(char *str)
 {
@@ -47,6 +61,8 @@ int	remove_tokens_quotes(t_token tok)
 
 	if (!tok)
 		return (0);
+	if (has_quotes(tok->str) && (tok->type == INFILE_HEREDOC))
+		tok->type = INFILE_HEREDOC_NO_EXPAND;
 	str_remove_quotes(tok->str);
 	n_str = ft_strdup(tok->str);
 	if (!n_str)

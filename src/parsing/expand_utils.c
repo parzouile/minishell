@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 11:56:08 by jules             #+#    #+#             */
-/*   Updated: 2024/04/30 10:11:37 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:56:24 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ int	next_dollar_sign(char *str, int *in_dquotes)
 		}
 		if (str[i] == '\"')
 			*in_dquotes = !(*in_dquotes);
+		if (!(*in_dquotes) && (str[i] == '<') && double_chevrons(str + i))
+		{
+			i += 2 + skip_spaces(str + i + 2);
+			i += next_special_char(str + i) - 1;
+		}
 		if (str[i] == '$')
 			break ;
 		i++;

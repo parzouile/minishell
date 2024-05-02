@@ -6,7 +6,7 @@
 /*   By: jbanacze <jbanacze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 14:42:43 by jbanacze          #+#    #+#             */
-/*   Updated: 2024/04/30 14:50:09 by jbanacze         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:33:55 by jbanacze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	find_next(char *str, char c)
 	return (i);
 }
 
-int	add_next_node(t_minishell mini, t_list **lst, char *str, int *in_dquotes)
+int	add_next_node_hd(t_minishell mini, t_list **lst, char *str, int *in_dquotes)
 {
 	int		next;
 	int		len_var;
@@ -64,7 +64,7 @@ char	*expand_heredoc(t_minishell mini, char *str)
 	i = 0;
 	while (str[i])
 	{
-		step = add_next_node(mini, &expanded_lst, str + i, &in_dquotes);
+		step = add_next_node_hd(mini, &expanded_lst, str + i, &in_dquotes);
 		if (step == -1)
 			return (ft_lstclear(&expanded_lst, free), NULL);
 		i += step;
